@@ -2,12 +2,10 @@ package com.saltpgp.notionproxy.controller;
 
 
 import com.saltpgp.notionproxy.service.NotionService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("notion")
@@ -21,9 +19,9 @@ public class NotionController {
     }
 
 
-    @GetMapping
-    public ResponseEntity<String> getNotion() {
-        notionService.getResponsiblePerson();
+    @GetMapping("{id}")
+    public ResponseEntity<String> getNotion(@PathVariable UUID id) {
+        notionService.getResponsiblePersonNameByUserId(id);
         return ResponseEntity.ok("Notion proxy available" );
     }
 
