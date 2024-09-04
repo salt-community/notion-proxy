@@ -1,10 +1,15 @@
 package com.saltpgp.notionproxy.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.saltpgp.notionproxy.dtos.ConsultantDto;
+import com.saltpgp.notionproxy.models.Consultant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -64,5 +69,24 @@ public class NotionService {
             return null;
         }
         return "hello";
+    }
+
+    public List<Consultant> getConsultants() {
+        JsonNode response = restClient.post()
+                .uri(String.format("/databases/%s/query", DATABASE_ID))
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + API_KEY)
+                .header("Notion-Version", NOTION_VERSION)
+                .retrieve()
+                .body(JsonNode.class);
+        List<Consultant> consultants = new ArrayList<>();
+                response.get("results").elements().forEachRemaining(element -> {
+           if(element.get("properties").get("Name").get("title").get(0) == null) return;
+           Consultant consultant = new Consultant(element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),UUID.fromString(element.get("id").asText()));
+           consultants.add(consultant);
+        });
+        System.out.println(consultants);
+
+        return consultants;
     }
 }

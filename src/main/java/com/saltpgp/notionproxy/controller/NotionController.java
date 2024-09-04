@@ -1,10 +1,13 @@
 package com.saltpgp.notionproxy.controller;
 
 
+import com.saltpgp.notionproxy.dtos.ConsultantDto;
+import com.saltpgp.notionproxy.models.Consultant;
 import com.saltpgp.notionproxy.service.NotionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -25,9 +28,10 @@ public class NotionController {
         return ResponseEntity.ok("Notion proxy available" );
     }
 
-//    @GetMapping
-//    public ResponseEntity<StudentDto> getStudentIds() {
-//
-//    }
+    @GetMapping("consultants")
+    public ResponseEntity<List<Consultant>> getConsultants() {
+        return ResponseEntity.ok(notionService.getConsultants());
+    }
+
 
 }
