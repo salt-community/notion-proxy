@@ -1,11 +1,10 @@
 package com.saltpgp.notionproxy.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+
+import java.util.UUID;
 
 
 @Service
@@ -24,6 +23,18 @@ public class NotionService {
                 .build();
     }
 
+    public String getResponsiblePersonNameByUserId(UUID id) {
+        String response = restClient.get()
+                .uri(String.format("/pages/%s", id))
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + API_KEY)
+                .header("Notion-Version", NOTION_VERSION)
+                .retrieve()
+                .body(String.class);
+
+        System.out.println("response = " + response);
+        return "hi";
+    }
 
     public String getResponsiblePerson() {
         try {
