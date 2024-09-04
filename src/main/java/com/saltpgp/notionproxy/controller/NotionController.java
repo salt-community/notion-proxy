@@ -1,7 +1,7 @@
 package com.saltpgp.notionproxy.controller;
 
 
-import com.saltpgp.notionproxy.dtos.ConsultantDto;
+import com.saltpgp.notionproxy.exceptions.NotionExceptions;
 import com.saltpgp.notionproxy.models.Consultant;
 import com.saltpgp.notionproxy.service.NotionService;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +23,8 @@ public class NotionController {
 
 
     @GetMapping("{id}")
-    public ResponseEntity<String> getNotion(@PathVariable UUID id) {
-        notionService.getResponsiblePersonNameByUserId(id);
-        return ResponseEntity.ok("Notion proxy available" );
+    public ResponseEntity<List<String>> getNotion(@PathVariable UUID id) throws NotionExceptions {
+        return ResponseEntity.ok(notionService.getResponsiblePersonNameByUserId(id));
     }
 
     @GetMapping("consultants")

@@ -3,12 +3,14 @@ package com.saltpgp.notionproxy.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saltpgp.notionproxy.dtos.ConsultantDto;
+import com.saltpgp.notionproxy.exceptions.NotionExceptions;
 import com.saltpgp.notionproxy.models.Consultant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,7 +31,7 @@ public class NotionService {
                 .build();
     }
 
-    public String getResponsiblePersonNameByUserId(UUID id) {
+    public List<String> getResponsiblePersonNameByUserId(UUID id) throws NotionExceptions {
         JsonNode response = restClient.get()
                 .uri(String.format("/pages/%s", id))
                 .header("Content-Type", "application/json")
@@ -38,38 +40,20 @@ public class NotionService {
                 .retrieve()
                 .body(JsonNode.class);
 
-
-        System.out.println("response = " + response);
-        System.out.println("response.get(\"properties\").get(\"Responsible\").get(\"people\").get(0).get(\"name\") = " + response.get("properties").get("Responsible").get("people").get(0).get("name"));
-        return "hi";
-    }
-
-    public String getResponsiblePerson() {
-        try {
-            String response = restClient.post()
-                    .uri(String.format("/databases/%s/query", DATABASE_ID))
-                    .header("Content-Type", "application/json")
-                    .header("Authorization", "Bearer " + API_KEY)
-                    .header("Notion-Version", NOTION_VERSION)
-                    .body("{\n" +
-                            "  \"filter\": {\n" +
-                            "    \"property\": \"Name\",\n" +
-                            "    \"title\": {\n" +
-                            "      \"equals\": \"John Doe\"\n" +
-                            "    }\n" +
-                            "  }\n" +
-                            "}")
-                    .retrieve()
-                    .body(String.class);
-
-            System.out.println("response = " + response);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        if(response == null){
+             throw new NotionExceptions();
         }
-        return "hello";
+        if ((response.get("properties").get("Responsible").get("people").get(0)) == null){
+            return Collections.emptyList();
+        }
+        List<String> responsibleNames = new ArrayList<>();
+        response.get("properties").get("Responsible").get("people").elements().forEachRemaining(element -> {
+            responsibleNames.add(element.get("name").asText());
+        });
+
+        return responsibleNames;
     }
+
 
     public List<Consultant> getConsultants() {
         JsonNode response = restClient.post()
