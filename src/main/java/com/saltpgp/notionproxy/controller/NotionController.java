@@ -1,6 +1,5 @@
 package com.saltpgp.notionproxy.controller;
 
-
 import com.saltpgp.notionproxy.exceptions.NotionExceptions;
 import com.saltpgp.notionproxy.models.Consultant;
 import com.saltpgp.notionproxy.service.NotionService;
@@ -21,16 +20,23 @@ public class NotionController {
         this.notionService = notionService;
     }
 
-
     @GetMapping("{id}")
-    public ResponseEntity<List<String>> getNotion(@PathVariable UUID id) throws NotionExceptions {
-        return ResponseEntity.ok(notionService.getResponsiblePersonNameByUserId(id));
+    public ResponseEntity<List<String>> getNotion(@PathVariable UUID id) {
+        try {
+            return ResponseEntity.ok(notionService.getResponsiblePersonNameByUserId(id));
+        }
+        catch (NotionExceptions e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @GetMapping("consultants")
     public ResponseEntity<List<Consultant>> getConsultants() {
-        return ResponseEntity.ok(notionService.getConsultants());
+        try {
+            return ResponseEntity.ok(notionService.getConsultants());
+        } catch (NotionExceptions e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
-
 
 }
