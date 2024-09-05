@@ -1,10 +1,9 @@
 package com.saltpgp.notionproxy.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.saltpgp.notionproxy.dtos.ConsultantDto;
 import com.saltpgp.notionproxy.exceptions.NotionExceptions;
 import com.saltpgp.notionproxy.models.Consultant;
+import com.saltpgp.notionproxy.models.ResponsiblePerson;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -66,7 +65,17 @@ public class NotionService {
         List<Consultant> consultants = new ArrayList<>();
                 response.get("results").elements().forEachRemaining(element -> {
            if(element.get("properties").get("Name").get("title").get(0) == null) return;
-           Consultant consultant = new Consultant(element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),UUID.fromString(element.get("id").asText()));
+
+
+           List<ResponsiblePerson> responsiblePersonList = new ArrayList<>();
+           if(element.get("properties").get("Responsible").get("people").get(0) != null) {
+           element.get("properties").get("Responsible").get("people").elements().forEachRemaining(element2 -> {
+               ResponsiblePerson responsiblePerson = new ResponsiblePerson(element2.get("name").asText(),UUID.fromString(element2.get("id").asText()));
+
+               responsiblePersonList.add(responsiblePerson);
+                    });
+           }
+           Consultant consultant = new Consultant(element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),UUID.fromString(element.get("id").asText()),responsiblePersonList);
            consultants.add(consultant);
         });
         System.out.println(consultants);
