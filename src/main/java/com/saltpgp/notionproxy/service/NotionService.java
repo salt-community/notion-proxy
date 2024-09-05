@@ -50,9 +50,12 @@ public class NotionService {
         }
 
         List<String> responsibleNames = new ArrayList<>();
-        response.get("properties").get("Responsible").get("people").elements().forEachRemaining(element -> {
-            responsibleNames.add(element.get("name").asText());
-        });
+        response
+                .get("properties")
+                .get("Responsible")
+                .get("people")
+                .elements()
+                .forEachRemaining(element -> responsibleNames.add(element.get("name").asText()));
 
         return responsibleNames;
     }
