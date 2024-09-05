@@ -1,6 +1,6 @@
 package com.saltpgp.notionproxy.controller;
 
-import com.saltpgp.notionproxy.exceptions.NotionExceptions;
+import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.models.Consultant;
 import com.saltpgp.notionproxy.service.NotionService;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,7 @@ public class NotionController {
         try {
             return ResponseEntity.ok(notionService.getResponsiblePersonNameByUserId(id));
         }
-        catch (NotionExceptions e) {
+        catch (NotionException e) {
             return ResponseEntity.internalServerError().build();
         }
     }
@@ -34,7 +34,7 @@ public class NotionController {
     public ResponseEntity<List<Consultant>> getConsultants() {
         try {
             return ResponseEntity.ok(notionService.getConsultants());
-        } catch (NotionExceptions e) {
+        } catch (NotionException e) {
             return ResponseEntity.internalServerError().build();
         }
     }

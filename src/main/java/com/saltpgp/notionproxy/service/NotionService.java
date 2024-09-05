@@ -1,7 +1,7 @@
 package com.saltpgp.notionproxy.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.saltpgp.notionproxy.exceptions.NotionExceptions;
+import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.models.Consultant;
 import com.saltpgp.notionproxy.models.ResponsiblePerson;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +31,7 @@ public class NotionService {
         restClient = RestClient.builder().baseUrl("https://api.notion.com/v1").build();
     }
 
-    public List<String> getResponsiblePersonNameByUserId(UUID id) throws NotionExceptions {
+    public List<String> getResponsiblePersonNameByUserId(UUID id) throws NotionException {
         JsonNode response = restClient
                 .get()
                 .uri(String.format("/pages/%s", id))
@@ -42,7 +42,7 @@ public class NotionService {
                 .body(JsonNode.class);
 
         if (response == null) {
-            throw new NotionExceptions();
+            throw new NotionException();
         }
 
         if ((response.get("properties").get("Responsible").get("people").get(0)) == null) {
@@ -57,7 +57,7 @@ public class NotionService {
         return responsibleNames;
     }
 
-    public List<Consultant> getConsultants() throws NotionExceptions {
+    public List<Consultant> getConsultants() throws NotionException {
         JsonNode response = restClient
                 .post()
                 .uri(String.format("/databases/%s/query", DATABASE_ID))
@@ -68,7 +68,7 @@ public class NotionService {
                 .body(JsonNode.class);
 
         if (response == null) {
-            throw new NotionExceptions();
+            throw new NotionException();
         }
 
         List<Consultant> consultants = new ArrayList<>();
