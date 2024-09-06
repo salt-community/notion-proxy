@@ -24,7 +24,6 @@ public class SecurityConfig {
                         .anyRequest().permitAll() // Require authentication for all other requests
                 )
                 .addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class); // Add the custom API key filter
-        System.out.println("Security Configuration set up successfully.");
         return http.build();
     }
 }

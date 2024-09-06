@@ -17,15 +17,9 @@ public class ApiKeyFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
         String requestApiKey = request.getHeader(API_KEY_HEADER);
-        String requestUri = request.getRequestURI();
-        // Skip API key check for the login page
         if (API_KEY.equals(requestApiKey)) {
-            System.out.println("API Key is valid. Proceeding...");
-            // Continue with the filter chain if API key matches
             filterChain.doFilter(request, response);
         } else {
-            System.out.println("Invalid API Key.");
-            // Reject the request if the API key does not match
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("Unauthorized: Invalid API Key");
         }
