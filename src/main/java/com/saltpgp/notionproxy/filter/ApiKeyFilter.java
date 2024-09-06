@@ -19,10 +19,6 @@ public class ApiKeyFilter extends OncePerRequestFilter {
         String requestApiKey = request.getHeader(API_KEY_HEADER);
         String requestUri = request.getRequestURI();
         // Skip API key check for the login page
-        if ("/login".equals(requestUri)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
         if (API_KEY.equals(requestApiKey)) {
             System.out.println("API Key is valid. Proceeding...");
             // Continue with the filter chain if API key matches

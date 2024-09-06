@@ -21,8 +21,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable) // Disable CSRF protection
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/login").permitAll() // Permit access to the login page
-                        .anyRequest().authenticated() // Require authentication for all other requests
+                        .anyRequest().permitAll() // Require authentication for all other requests
                 )
                 .addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class); // Add the custom API key filter
         System.out.println("Security Configuration set up successfully.");
