@@ -50,7 +50,7 @@ public class NotionService {
 
         if (response.get("properties").get("Name").get("title").get(0) == null) {
             return null;
-        };
+        }
 
         List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(response);
 
