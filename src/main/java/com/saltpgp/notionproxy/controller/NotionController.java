@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("notion")
+@RequestMapping("responsible")
 @CrossOrigin
 public class NotionController {
 
@@ -30,7 +30,7 @@ public class NotionController {
         }
     }
 
-    @GetMapping("consultants")
+    @GetMapping()
     public ResponseEntity<List<Consultant>> getConsultants() {
         try {
             return ResponseEntity.ok(notionService.getConsultants());
