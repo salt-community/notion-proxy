@@ -52,21 +52,25 @@ public class NotionService {
             return null;
         };
 
+        List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(response);
+
+        return new Consultant(
+                response.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
+                UUID.fromString(response.get("id").asText()),
+                responsiblePersonList);
+    }
+
+    private List<ResponsiblePerson> getResponsiblePersonsFromResponse(JsonNode response) {
         List<ResponsiblePerson> responsiblePersonList = new ArrayList<>();
         if (response.get("properties").get("Responsible").get("people").get(0) != null) {
             response.get("properties").get("Responsible").get("people").elements().forEachRemaining(element2 -> {
                 ResponsiblePerson responsiblePerson = new ResponsiblePerson(
                         element2.get("name").asText(),
                         UUID.fromString(element2.get("id").asText()));
-
                 responsiblePersonList.add(responsiblePerson);
             });
         }
-
-        return new Consultant(
-                response.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
-                UUID.fromString(response.get("id").asText()),
-                responsiblePersonList);
+        return responsiblePersonList;
     }
 
     public List<Consultant> getConsultants() throws NotionException {
@@ -87,16 +91,7 @@ public class NotionService {
         response.get("results").elements().forEachRemaining(element -> {
             if (element.get("properties").get("Name").get("title").get(0) == null) return;
 
-            List<ResponsiblePerson> responsiblePersonList = new ArrayList<>();
-            if (element.get("properties").get("Responsible").get("people").get(0) != null) {
-                element.get("properties").get("Responsible").get("people").elements().forEachRemaining(element2 -> {
-                    ResponsiblePerson responsiblePerson = new ResponsiblePerson(
-                            element2.get("name").asText(),
-                            UUID.fromString(element2.get("id").asText()));
-
-                    responsiblePersonList.add(responsiblePerson);
-                });
-            }
+            List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(response);
 
             Consultant consultant = new Consultant(
                     element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
