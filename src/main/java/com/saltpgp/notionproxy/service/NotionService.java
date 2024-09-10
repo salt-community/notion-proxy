@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,7 +30,7 @@ public class NotionService {
         restClient = RestClient.builder().baseUrl("https://api.notion.com/v1").build();
     }
 
-    public List<String> getResponsiblePersonNameByUserId(UUID id) throws NotionException {
+    public Consultant getResponsiblePersonNameByUserId(UUID id) throws NotionException {
         JsonNode response = restClient
                 .get()
                 .uri(String.format("/pages/%s", id))
@@ -46,18 +45,32 @@ public class NotionService {
         }
 
         if ((response.get("properties").get("Responsible").get("people").get(0)) == null) {
-            return Collections.emptyList();
+            return null;
         }
 
-        List<String> responsibleNames = new ArrayList<>();
-        response
-                .get("properties")
-                .get("Responsible")
-                .get("people")
-                .elements()
-                .forEachRemaining(element -> responsibleNames.add(element.get("name").asText()));
+        if (response.get("properties").get("Name").get("title").get(0) == null) {
+            return null;
+        }
 
-        return responsibleNames;
+        List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(response);
+
+        return new Consultant(
+                response.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
+                UUID.fromString(response.get("id").asText()),
+                responsiblePersonList);
+    }
+
+    private List<ResponsiblePerson> getResponsiblePersonsFromResponse(JsonNode response) {
+        List<ResponsiblePerson> responsiblePersonList = new ArrayList<>();
+        if (response.get("properties").get("Responsible").get("people").get(0) != null) {
+            response.get("properties").get("Responsible").get("people").elements().forEachRemaining(element2 -> {
+                ResponsiblePerson responsiblePerson = new ResponsiblePerson(
+                        element2.get("name").asText(),
+                        UUID.fromString(element2.get("id").asText()));
+                responsiblePersonList.add(responsiblePerson);
+            });
+        }
+        return responsiblePersonList;
     }
 
     public List<Consultant> getConsultants() throws NotionException {
@@ -78,16 +91,7 @@ public class NotionService {
         response.get("results").elements().forEachRemaining(element -> {
             if (element.get("properties").get("Name").get("title").get(0) == null) return;
 
-            List<ResponsiblePerson> responsiblePersonList = new ArrayList<>();
-            if (element.get("properties").get("Responsible").get("people").get(0) != null) {
-                element.get("properties").get("Responsible").get("people").elements().forEachRemaining(element2 -> {
-                    ResponsiblePerson responsiblePerson = new ResponsiblePerson(
-                            element2.get("name").asText(),
-                            UUID.fromString(element2.get("id").asText()));
-
-                    responsiblePersonList.add(responsiblePerson);
-                });
-            }
+            List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(element);
 
             Consultant consultant = new Consultant(
                     element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
