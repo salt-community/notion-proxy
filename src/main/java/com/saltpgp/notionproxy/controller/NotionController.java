@@ -30,11 +30,9 @@ public class NotionController {
                 return ResponseEntity.notFound().build();
             }
             return ResponseEntity.ok(ConsultantDto.fromModel(consultant));
-        }
-        catch (NotionException e) {
+        } catch (NotionException e) {
             return ResponseEntity.internalServerError().build();
-        }
-        catch (HttpClientErrorException.NotFound e) {
+        } catch (HttpClientErrorException.NotFound e) {
             return ResponseEntity.notFound().build();
         }
     }
