@@ -91,7 +91,7 @@ public class NotionService {
         response.get("results").elements().forEachRemaining(element -> {
             if (element.get("properties").get("Name").get("title").get(0) == null) return;
 
-            List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(response);
+            List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(element);
 
             Consultant consultant = new Consultant(
                     element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
