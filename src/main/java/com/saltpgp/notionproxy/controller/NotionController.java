@@ -38,9 +38,10 @@ public class NotionController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<ConsultantDto>> getConsultants() {
+    public ResponseEntity<List<ConsultantDto>> getConsultants(
+            @RequestParam(required = false, defaultValue = "false") boolean includeEmpty) {
         try {
-            return ResponseEntity.ok(notionService.getConsultants().stream().map(ConsultantDto::fromModel).toList());
+            return ResponseEntity.ok(notionService.getConsultants(includeEmpty).stream().map(ConsultantDto::fromModel).toList());
         } catch (NotionException e) {
             return ResponseEntity.internalServerError().build();
         }

@@ -78,7 +78,7 @@ public class NotionService {
         return responsiblePersonList;
     }
 
-    public List<Consultant> getConsultants() throws NotionException {
+    public List<Consultant> getConsultants(boolean includeEmpty) throws NotionException {
         List<Consultant> allConsultants = new ArrayList<>();
         String nextCursor = null;
         boolean hasMore = true;
@@ -102,7 +102,7 @@ public class NotionService {
                 if (element.get("properties").get("Name").get("title").get(0) == null) return;
 
                 List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(element);
-                if (responsiblePersonList.isEmpty()) {
+                if (responsiblePersonList.isEmpty() && !includeEmpty) {
                     return;
                 }
 
