@@ -54,7 +54,7 @@ public class NotionService {
             return null;
         }
 
-        List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(response);
+        List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(response, false);
 
         return new Consultant(
                 response.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
@@ -62,15 +62,18 @@ public class NotionService {
                 responsiblePersonList);
     }
 
-    private List<ResponsiblePerson> getResponsiblePersonsFromResponse(JsonNode response) {
+    private List<ResponsiblePerson> getResponsiblePersonsFromResponse(JsonNode response, boolean includeNull) {
         List<ResponsiblePerson> responsiblePersonList = new ArrayList<>();
         if (response.get("properties").get("Responsible").get("people").get(0) != null) {
             response.get("properties").get("Responsible").get("people").elements().forEachRemaining(element2 -> {
-                if (element2.get("name") == null) {
+                String name = null;
+                if (element2.get("name") != null) {
+                    name = element2.get("name").asText();
+                } else if (!includeNull) {
                     return;
                 }
                 ResponsiblePerson responsiblePerson = new ResponsiblePerson(
-                        element2.get("name").asText(),
+                        name,
                         UUID.fromString(element2.get("id").asText()));
                 responsiblePersonList.add(responsiblePerson);
             });
@@ -78,7 +81,7 @@ public class NotionService {
         return responsiblePersonList;
     }
 
-    public List<Consultant> getConsultants(boolean includeEmpty) throws NotionException {
+    public List<Consultant> getConsultants(boolean includeEmpty, boolean includeNull) throws NotionException {
         List<Consultant> allConsultants = new ArrayList<>();
         String nextCursor = null;
         boolean hasMore = true;
@@ -101,7 +104,7 @@ public class NotionService {
             response.get("results").elements().forEachRemaining(element -> {
                 if (element.get("properties").get("Name").get("title").get(0) == null) return;
 
-                List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(element);
+                List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(element, includeNull);
                 if (responsiblePersonList.isEmpty() && !includeEmpty) {
                     return;
                 }
