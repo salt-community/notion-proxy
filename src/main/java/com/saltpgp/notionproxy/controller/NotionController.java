@@ -23,9 +23,11 @@ public class NotionController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ConsultantDto> getNotion(@PathVariable UUID id) {
+    public ResponseEntity<ConsultantDto> getNotion(
+            @PathVariable UUID id,
+            @RequestParam(required = false, defaultValue = "false") boolean includeNull) {
         try {
-            Consultant consultant = notionService.getResponsiblePersonNameByUserId(id);
+            Consultant consultant = notionService.getResponsiblePersonNameByUserId(id, includeNull);
             if (consultant == null) {
                 return ResponseEntity.notFound().build();
             }

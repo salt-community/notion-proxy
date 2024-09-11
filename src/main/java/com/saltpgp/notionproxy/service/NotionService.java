@@ -32,7 +32,7 @@ public class NotionService {
         restClient = RestClient.builder().baseUrl("https://api.notion.com/v1").build();
     }
 
-    public Consultant getResponsiblePersonNameByUserId(UUID id) throws NotionException {
+    public Consultant getResponsiblePersonNameByUserId(UUID id, boolean includeNull) throws NotionException {
         JsonNode response = restClient
                 .get()
                 .uri(String.format("/pages/%s", id))
@@ -54,7 +54,7 @@ public class NotionService {
             return null;
         }
 
-        List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(response, false);
+        List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(response, includeNull);
 
         return new Consultant(
                 response.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
