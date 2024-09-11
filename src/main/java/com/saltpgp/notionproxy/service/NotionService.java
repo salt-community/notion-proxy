@@ -46,10 +46,6 @@ public class NotionService {
             throw new NotionException();
         }
 
-        if ((response.get("properties").get("Responsible").get("people").get(0)) == null) {
-            return null;
-        }
-
         if (response.get("properties").get("Name").get("title").get(0) == null) {
             return null;
         }
