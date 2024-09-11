@@ -1,6 +1,8 @@
 package com.saltpgp.notionproxy.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.models.Consultant;
 import com.saltpgp.notionproxy.models.ResponsiblePerson;
@@ -64,6 +66,9 @@ public class NotionService {
         List<ResponsiblePerson> responsiblePersonList = new ArrayList<>();
         if (response.get("properties").get("Responsible").get("people").get(0) != null) {
             response.get("properties").get("Responsible").get("people").elements().forEachRemaining(element2 -> {
+                if (element2.get("name") == null) {
+                    return;
+                }
                 ResponsiblePerson responsiblePerson = new ResponsiblePerson(
                         element2.get("name").asText(),
                         UUID.fromString(element2.get("id").asText()));
@@ -74,33 +79,56 @@ public class NotionService {
     }
 
     public List<Consultant> getConsultants() throws NotionException {
-        JsonNode response = restClient
-                .post()
-                .uri(String.format("/databases/%s/query", DATABASE_ID))
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + API_KEY)
-                .header("Notion-Version", NOTION_VERSION)
-                .retrieve()
-                .body(JsonNode.class);
+        List<Consultant> allConsultants = new ArrayList<>();
+        String nextCursor = null;
+        boolean hasMore = true;
 
-        if (response == null) {
-            throw new NotionException();
+        while (hasMore) {
+            JsonNode response = restClient
+                    .post()
+                    .uri(String.format("/databases/%s/query", DATABASE_ID))
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", "Bearer " + API_KEY)
+                    .header("Notion-Version", NOTION_VERSION)
+                    .body(createQueryRequestBody(nextCursor))
+                    .retrieve()
+                    .body(JsonNode.class);
+
+            if (response == null) {
+                throw new NotionException();
+            }
+
+            response.get("results").elements().forEachRemaining(element -> {
+                if (element.get("properties").get("Name").get("title").get(0) == null) return;
+
+                List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(element);
+                if (responsiblePersonList.isEmpty()) {
+                    return;
+                }
+
+                Consultant consultant = new Consultant(
+                        element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
+                        UUID.fromString(element.get("id").asText()),
+                        responsiblePersonList);
+
+                allConsultants.add(consultant);
+            });
+
+            nextCursor = response.get("next_cursor").asText();
+            hasMore = response.get("has_more").asBoolean();
         }
 
-        List<Consultant> consultants = new ArrayList<>();
-        response.get("results").elements().forEachRemaining(element -> {
-            if (element.get("properties").get("Name").get("title").get(0) == null) return;
+        return allConsultants;
+    }
 
-            List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(element);
+    private JsonNode createQueryRequestBody(String nextCursor) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode body = objectMapper.createObjectNode();
 
-            Consultant consultant = new Consultant(
-                    element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
-                    UUID.fromString(element.get("id").asText()),
-                    responsiblePersonList);
+        if (nextCursor != null) {
+            body.put("start_cursor", nextCursor); // Pass the next cursor for pagination
+        }
 
-            consultants.add(consultant);
-        });
-
-        return consultants;
+        return body;
     }
 }
