@@ -32,7 +32,7 @@ public class NotionService {
         restClient = RestClient.builder().baseUrl("https://api.notion.com/v1").build();
     }
 
-    public Consultant getResponsiblePersonNameByUserId(UUID id) throws NotionException {
+    public Consultant getResponsiblePersonNameByUserId(UUID id, boolean includeNull) throws NotionException {
         JsonNode response = restClient
                 .get()
                 .uri(String.format("/pages/%s", id))
@@ -46,15 +46,11 @@ public class NotionService {
             throw new NotionException();
         }
 
-        if ((response.get("properties").get("Responsible").get("people").get(0)) == null) {
-            return null;
-        }
-
         if (response.get("properties").get("Name").get("title").get(0) == null) {
             return null;
         }
 
-        List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(response);
+        List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(response, includeNull);
 
         return new Consultant(
                 response.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
@@ -62,15 +58,18 @@ public class NotionService {
                 responsiblePersonList);
     }
 
-    private List<ResponsiblePerson> getResponsiblePersonsFromResponse(JsonNode response) {
+    private List<ResponsiblePerson> getResponsiblePersonsFromResponse(JsonNode response, boolean includeNull) {
         List<ResponsiblePerson> responsiblePersonList = new ArrayList<>();
         if (response.get("properties").get("Responsible").get("people").get(0) != null) {
             response.get("properties").get("Responsible").get("people").elements().forEachRemaining(element2 -> {
-                if (element2.get("name") == null) {
+                String name = null;
+                if (element2.get("name") != null) {
+                    name = element2.get("name").asText();
+                } else if (!includeNull) {
                     return;
                 }
                 ResponsiblePerson responsiblePerson = new ResponsiblePerson(
-                        element2.get("name").asText(),
+                        name,
                         UUID.fromString(element2.get("id").asText()));
                 responsiblePersonList.add(responsiblePerson);
             });
@@ -78,7 +77,7 @@ public class NotionService {
         return responsiblePersonList;
     }
 
-    public List<Consultant> getConsultants() throws NotionException {
+    public List<Consultant> getConsultants(boolean includeEmpty, boolean includeNull) throws NotionException {
         List<Consultant> allConsultants = new ArrayList<>();
         String nextCursor = null;
         boolean hasMore = true;
@@ -101,8 +100,8 @@ public class NotionService {
             response.get("results").elements().forEachRemaining(element -> {
                 if (element.get("properties").get("Name").get("title").get(0) == null) return;
 
-                List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(element);
-                if (responsiblePersonList.isEmpty()) {
+                List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(element, includeNull);
+                if (responsiblePersonList.isEmpty() && !includeEmpty) {
                     return;
                 }
 

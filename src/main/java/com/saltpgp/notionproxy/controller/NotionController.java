@@ -23,9 +23,11 @@ public class NotionController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ConsultantDto> getNotion(@PathVariable UUID id) {
+    public ResponseEntity<ConsultantDto> getNotion(
+            @PathVariable UUID id,
+            @RequestParam(required = false, defaultValue = "false") boolean includeNull) {
         try {
-            Consultant consultant = notionService.getResponsiblePersonNameByUserId(id);
+            Consultant consultant = notionService.getResponsiblePersonNameByUserId(id, includeNull);
             if (consultant == null) {
                 return ResponseEntity.notFound().build();
             }
@@ -38,9 +40,11 @@ public class NotionController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<ConsultantDto>> getConsultants() {
+    public ResponseEntity<List<ConsultantDto>> getConsultants(
+            @RequestParam(required = false, defaultValue = "false") boolean includeEmpty,
+            @RequestParam(required = false, defaultValue = "false") boolean includeNull) {
         try {
-            return ResponseEntity.ok(notionService.getConsultants().stream().map(ConsultantDto::fromModel).toList());
+            return ResponseEntity.ok(notionService.getConsultants(includeEmpty, includeNull).stream().map(ConsultantDto::fromModel).toList());
         } catch (NotionException e) {
             return ResponseEntity.internalServerError().build();
         }
