@@ -1,4 +1,4 @@
-package com.saltpgp.notionproxy.dtos;
+package com.saltpgp.notionproxy.dtos.outgoing;
 
 import com.saltpgp.notionproxy.models.Consultant;
 
