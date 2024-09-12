@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public record ScoreDto(String name, int score, List<String>categories) {
+
     public static List<ScoreDto> fromModel(List<Score> scores) {
         List<ScoreDto> scoresDto = new ArrayList<>();
         for (Score score : scores) {

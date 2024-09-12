@@ -3,14 +3,17 @@ package com.saltpgp.notionproxy.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.saltpgp.notionproxy.dtos.outgoing.SaltiesDto;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.models.Consultant;
+import com.saltpgp.notionproxy.models.Developer;
 import com.saltpgp.notionproxy.models.ResponsiblePerson;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -125,9 +128,49 @@ public class NotionService {
         ObjectNode body = objectMapper.createObjectNode();
 
         if (nextCursor != null) {
-            body.put("start_cursor", nextCursor); // Pass the next cursor for pagination
+            body.put("start_cursor", nextCursor);
         }
 
         return body;
+    }
+
+
+    public List<Developer> getSalties() throws NotionException {
+        List<Developer> allSalties = new ArrayList<>();
+        String nextCursor = null;
+        boolean hasMore = true;
+
+        while (hasMore) {
+            JsonNode response = restClient
+                    .post()
+                    .uri(String.format("/databases/%s/query", DATABASE_ID))
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", "Bearer " + API_KEY)
+                    .header("Notion-Version", NOTION_VERSION)
+                    .body(createQueryRequestBody(nextCursor))
+                    .retrieve()
+                    .body(JsonNode.class);
+
+            if (response == null) {
+                throw new NotionException();
+            }
+
+            response.get("results").elements().forEachRemaining(element -> {
+                if (element.get("properties").get("Name").get("title").get(0) == null) return;
+
+                Developer saltie = new Developer(
+                        element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
+                        UUID.fromString(element.get("id").asText()),
+                        "",
+                        "",
+                        Collections.emptyList());
+
+                allSalties.add(saltie);
+            });
+
+            nextCursor = response.get("next_cursor").asText();
+            hasMore = response.get("has_more").asBoolean();
+        }
+        return allSalties;
     }
 }
