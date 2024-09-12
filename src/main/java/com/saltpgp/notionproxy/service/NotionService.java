@@ -3,11 +3,13 @@ package com.saltpgp.notionproxy.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.saltpgp.notionproxy.dtos.outgoing.DeveloperDto;
 import com.saltpgp.notionproxy.dtos.outgoing.SaltiesDto;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.models.Consultant;
 import com.saltpgp.notionproxy.models.Developer;
 import com.saltpgp.notionproxy.models.ResponsiblePerson;
+import com.saltpgp.notionproxy.models.Score;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -30,6 +32,9 @@ public class NotionService {
 
     @Value("${NOTION_VERSION}")
     private String NOTION_VERSION;
+
+    @Value("${SCORE_DATABASE_ID}")
+    private String SCORE_DATABASE_ID;
 
     public NotionService() {
         restClient = RestClient.builder().baseUrl("https://api.notion.com/v1").build();
@@ -172,5 +177,63 @@ public class NotionService {
             hasMore = response.get("has_more").asBoolean();
         }
         return allSalties;
+    }
+
+    public List <Score> getDeveloperScores(UUID id) throws NotionException {
+        List<Score> allScores = new ArrayList<>();
+        String nextCursor = null;
+        boolean hasMore = true;
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        ObjectNode relationNode = objectMapper.createObjectNode();
+        relationNode.put("contains", String.valueOf(id));
+
+        ObjectNode filterNode = objectMapper.createObjectNode();
+        filterNode.put("property", "💽 Developer");
+        filterNode.set("relation", relationNode);
+
+        ObjectNode bodyNode = objectMapper.createObjectNode();
+        bodyNode.set("filter", filterNode);
+
+        while (hasMore) {
+            JsonNode response = restClient
+                    .post()
+                    .uri(String.format("/databases/%s/query", SCORE_DATABASE_ID))
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", "Bearer " + API_KEY)
+                    .header("Notion-Version", NOTION_VERSION)
+                    .body(bodyNode)
+                    .body(createQueryRequestBody(nextCursor))
+                    .retrieve()
+                    .body(JsonNode.class);
+
+            if (response == null) {
+                throw new NotionException();
+            }
+
+            response.get("results").elements().forEachRemaining(element -> {
+                System.out.println(element.get("properties").get("Score").get("number").asInt());
+                System.out.println(element.get("properties").get("Name").get("title").get(0).get("plain_text").asText());
+                System.out.println(element.get("id"));
+                System.out.println(bodyNode);
+                if (element.get("properties").get("Score").get("number") == null) return;
+                List<String> categories = new ArrayList<>();
+                element.get("properties").get("Categories").get("multi_select").forEach(category ->
+                        categories.add(category.get("name").asText()));
+
+                Score score = new Score(
+                        element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
+                        element.get("properties").get("Score").get("number").asInt(),
+                        categories
+                );
+
+                allScores.add(score);
+            });
+
+            nextCursor = response.get("next_cursor").asText();
+            hasMore = response.get("has_more").asBoolean();
+        }
+        return allScores;
     }
 }

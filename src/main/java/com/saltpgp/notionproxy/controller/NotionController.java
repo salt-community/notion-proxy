@@ -1,9 +1,11 @@
 package com.saltpgp.notionproxy.controller;
 
 import com.saltpgp.notionproxy.dtos.outgoing.ConsultantDto;
+import com.saltpgp.notionproxy.dtos.outgoing.DeveloperDto;
 import com.saltpgp.notionproxy.dtos.outgoing.SaltiesDto;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.models.Consultant;
+import com.saltpgp.notionproxy.models.Score;
 import com.saltpgp.notionproxy.service.NotionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,15 @@ public class NotionController {
 
     public NotionController(NotionService notionService) {
         this.notionService = notionService;
+    }
+
+    @GetMapping("")
+    public ResponseEntity<List<SaltiesDto>> getAllSalties() {
+        try {
+            return ResponseEntity.ok(SaltiesDto.fromModel(notionService.getSalties()));
+        } catch (NotionException e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @GetMapping("responsible/{id}")
@@ -51,14 +62,18 @@ public class NotionController {
         }
     }
 
-    @GetMapping("")
-
-    public ResponseEntity<List<SaltiesDto>> getAllSalties() {
-        try {
-            return ResponseEntity.ok(SaltiesDto.fromModel(notionService.getSalties()));
+    @GetMapping("developer/{id}/score")
+    public ResponseEntity <List<Score>> getScores(
+            @PathVariable UUID id
+    ){
+        try{
+            return ResponseEntity.ok(notionService.getDeveloperScores(id));
         } catch (NotionException e) {
             return ResponseEntity.internalServerError().build();
         }
+
     }
+
+
 
 }
