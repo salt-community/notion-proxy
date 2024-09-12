@@ -1,6 +1,6 @@
 package com.saltpgp.notionproxy.controller;
 
-import com.saltpgp.notionproxy.dtos.ConsultantDto;
+import com.saltpgp.notionproxy.dtos.outgoing.ConsultantDto;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.models.Consultant;
 import com.saltpgp.notionproxy.service.NotionService;
