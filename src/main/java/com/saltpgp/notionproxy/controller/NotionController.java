@@ -1,7 +1,6 @@
 package com.saltpgp.notionproxy.controller;
 
 import com.saltpgp.notionproxy.dtos.outgoing.ConsultantDto;
-import com.saltpgp.notionproxy.dtos.outgoing.DeveloperDto;
 import com.saltpgp.notionproxy.dtos.outgoing.SaltiesDto;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.models.Consultant;
@@ -73,7 +72,5 @@ public class NotionController {
         }
 
     }
-
-
 
 }
