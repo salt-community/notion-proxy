@@ -1,4 +1,5 @@
 package com.saltpgp.notionproxy.models;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,4 @@ public class Developer {
     private String githubImageUrl;
     private String email;
     private List<Score> scores;
-
-
 }
