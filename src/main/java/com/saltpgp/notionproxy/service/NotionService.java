@@ -159,13 +159,20 @@ public class NotionService {
 
             response.get("results").elements().forEachRemaining(element -> {
                 if (element.get("properties").get("Name").get("title").get(0) == null) return;
+                String githubUrl = element.get("properties").get("GitHub").get("url").asText().equals("null") ? null
+                        : element.get("properties").get("GitHub").get("url").asText();
+
+                String githubImageUrl = githubUrl == null ? null : githubUrl + ".png";
+
+                String email = element.get("properties").get("Private Email").get("email").asText().equals("null") ? null
+                        : element.get("properties").get("Private Email").get("email").asText();
 
                 Developer saltie = new Developer(
                         element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
                         UUID.fromString(element.get("id").asText()),
-                        "",
-                        "",
-                        "",
+                        githubUrl,
+                        githubImageUrl,
+                        email,
                         Collections.emptyList());
 
                 allSalties.add(saltie);
