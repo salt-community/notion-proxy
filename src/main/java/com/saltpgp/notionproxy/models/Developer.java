@@ -14,6 +14,7 @@ public class Developer {
     private String name;
     private UUID id;
     private String githubUrl;
+    private String githubImageUrl;
     private String email;
     private List<Score> scores;
 
