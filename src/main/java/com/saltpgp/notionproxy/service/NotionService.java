@@ -135,7 +135,6 @@ public class NotionService {
         if (nextCursor != null) {
             body.put("start_cursor", nextCursor);
         }
-
         return body;
     }
 
@@ -183,20 +182,22 @@ public class NotionService {
         List<Score> allScores = new ArrayList<>();
         String nextCursor = null;
         boolean hasMore = true;
-
         ObjectMapper objectMapper = new ObjectMapper();
 
-        ObjectNode relationNode = objectMapper.createObjectNode();
-        relationNode.put("contains", String.valueOf(id));
-
-        ObjectNode filterNode = objectMapper.createObjectNode();
-        filterNode.put("property", "💽 Developer");
-        filterNode.set("relation", relationNode);
-
-        ObjectNode bodyNode = objectMapper.createObjectNode();
-        bodyNode.set("filter", filterNode);
-
         while (hasMore) {
+            ObjectNode relationNode = objectMapper.createObjectNode();
+            relationNode.put("contains", String.valueOf(id));
+
+            ObjectNode filterNode = objectMapper.createObjectNode();
+            filterNode.put("property", "💽 Developer");
+            filterNode.set("relation", relationNode);
+
+            ObjectNode bodyNode = objectMapper.createObjectNode();
+            bodyNode.set("filter", filterNode);
+
+            if (nextCursor != null) {
+                bodyNode.put("start_cursor", nextCursor);
+            }
             JsonNode response = restClient
                     .post()
                     .uri(String.format("/databases/%s/query", SCORE_DATABASE_ID))
@@ -204,20 +205,24 @@ public class NotionService {
                     .header("Authorization", "Bearer " + API_KEY)
                     .header("Notion-Version", NOTION_VERSION)
                     .body(bodyNode)
-                    .body(createQueryRequestBody(nextCursor))
                     .retrieve()
                     .body(JsonNode.class);
 
             if (response == null) {
                 throw new NotionException();
             }
-
+            if(response.get("results").isEmpty()) {
+                throw new NotionException();
+            }
             response.get("results").elements().forEachRemaining(element -> {
                 System.out.println(element.get("properties").get("Score").get("number").asInt());
                 System.out.println(element.get("properties").get("Name").get("title").get(0).get("plain_text").asText());
                 System.out.println(element.get("id"));
                 System.out.println(bodyNode);
+
                 if (element.get("properties").get("Score").get("number") == null) return;
+                if (element.get("properties").get("Score") == null) return;
+
                 List<String> categories = new ArrayList<>();
                 element.get("properties").get("Categories").get("multi_select").forEach(category ->
                         categories.add(category.get("name").asText()));
@@ -236,4 +241,6 @@ public class NotionService {
         }
         return allScores;
     }
+
 }
+
