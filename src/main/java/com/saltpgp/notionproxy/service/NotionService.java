@@ -167,6 +167,7 @@ public class NotionService {
                         UUID.fromString(element.get("id").asText()),
                         "",
                         "",
+                        "",
                         Collections.emptyList());
 
                 allSalties.add(saltie);
