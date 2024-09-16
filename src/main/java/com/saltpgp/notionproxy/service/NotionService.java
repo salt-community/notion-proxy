@@ -250,7 +250,7 @@ public class NotionService {
         Developer developer = allSalties.stream()
                 .filter(dev -> dev.getId().equals(id))
                 .findFirst()
-                .orElseThrow(() -> new NotionException());
+                .orElseThrow(NotionException::new);
 
         return new Developer(
                 developer.getName(),
