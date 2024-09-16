@@ -136,7 +136,6 @@ public class NotionService {
         return body;
     }
 
-
     public List<Developer> getSalties() throws NotionException {
         List<Developer> allSalties = new ArrayList<>();
         String nextCursor = null;
@@ -156,7 +155,6 @@ public class NotionService {
             if (response == null) {
                 throw new NotionException();
             }
-
             response.get("results").elements().forEachRemaining(element -> {
                 if (element.get("properties").get("Name").get("title").get(0) == null) return;
                 String githubUrl = element.get("properties").get("GitHub").get("url").asText().equals("null") ? null
@@ -184,11 +182,12 @@ public class NotionService {
         return allSalties;
     }
 
-    public List<Score> getDeveloperScores(UUID id) throws NotionException {
+    public Developer getDeveloperScoreCard(UUID id) throws NotionException {
         List<Score> allScores = new ArrayList<>();
         String nextCursor = null;
         boolean hasMore = true;
         ObjectMapper objectMapper = new ObjectMapper();
+
         ObjectNode relationNode = objectMapper.createObjectNode();
         relationNode.put("contains", String.valueOf(id));
 
@@ -225,7 +224,6 @@ public class NotionService {
                 System.out.println(element.get("id"));
                 System.out.println(bodyNode);
 
-                //if (element.get("properties").get("Score").get("number") == null) return;
                 if (element.get("properties").get("Score") == null) return;
 
                 List<String> categories = new ArrayList<>();
@@ -246,8 +244,23 @@ public class NotionService {
             nextCursor = response.get("next_cursor").asText();
             hasMore = response.get("has_more").asBoolean();
         }
-        return allScores;
+
+        List<Developer> allSalties = getSalties();
+
+        Developer developer = allSalties.stream()
+                .filter(dev -> dev.getId().equals(id))
+                .findFirst()
+                .orElseThrow(NotionException::new);
+
+        return new Developer(
+                developer.getName(),
+                developer.getId(),
+                developer.getGithubUrl(),
+                developer.getGithubImageUrl(),
+                developer.getEmail(),
+                allScores
+        );
     }
 
-}
 
+}
