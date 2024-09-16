@@ -1,6 +1,6 @@
-# Proxy API for Notion
+# Notion Proxy API
 
-This API provides information about consultants and their respective responsible people. Below are the available endpoints, the structure of their responses, and usage examples.
+This API provides access to data related to developers ("Salties"), consultants, and their responsible people, as well as developer scores. Below are the available endpoints, their usage, and sample responses.
 
 ## Base URL
 The API is deployed and can be accessed at:
@@ -12,170 +12,125 @@ The API is deployed and can be accessed at:
 All requests to this API must include an API key in the request header. The API key should be passed using the `X-API-KEY` header.
 Currently, the only way to get an API key is to be given one directly from us.
 
-### Example:
-
-```bash
-X-API-KEY: your-api-key
-```
-
-Without a valid API key, requests will receive a `401 Unauthorized` response.
-
 ## Endpoints
 
-### 1. `/api/responsible`
+### 1. `/api/notion`
 **Method**: `GET`
 
 **Description**:  
-Returns a list of all consultants, each with their respective responsible people.
+Returns a list of all developers (referred to as "Salties") with their basic details such as name, email, and GitHub information.
 
-**Headers**:
-- `X-API-KEY`: Your API key.
-
-**Response**:
+**Sample Response**:
 ```json
 [
   {
-    "name": "John Steven",
-    "uuid": "860af135-00a8-422e-8eab-bffba946991f",
-    "responsiblePersonList": [
-      {
-        "name": "Stålknapp",
-        "uuid": "219b1e41-b7d2-4eee-bbaf-57d2248b77f7"
-      },
-      {
-        "name": "Maggy",
-        "uuid": "8b44b8f0-c1a5-46ab-a5c6-236d241cdb68"
-      }
-    ]
-  },
+    "name": "John Doe",
+    "id": "860af135-00a8-422e-8eab-bffba946991f",
+    "email": "john.doe@example.com",
+    "githubUrl": "https://github.com/johndoe",
+    "githubImageUrl": "https://github.com/johndoe.png"
+  }
+]
+```
+
+---
+
+### 2. `/api/notion/responsible`
+**Method**: `GET`
+
+**Description**:  
+Returns a list of consultants and their respective responsible people.
+
+**Query Parameters**:
+- `includeEmpty` (optional, default: `false`): When `true`, includes consultants who have no responsible people.
+- `includeNull` (optional, default: `false`): When `true`, includes consultants with responsible people whose name is `null`.
+
+**Sample Response**:
+```json
+[
   {
-    "name": "Jane Doe",
-    "uuid": "962f9af1-a9bf-4e28-b16b-335c5231e941",
+    "name": "Jane Smith",
+    "id": "962f9af1-a9bf-4e28-b16b-335c5231e941",
     "responsiblePersonList": [
       {
         "name": "Markus",
-        "uuid": "97a2b820-5b63-437d-917d-9f85c6a839a5"
+        "id": "97a2b820-5b63-437d-917d-9f85c6a839a5"
       }
     ]
   }
 ]
 ```
 
-### 2. `/api/responsible/{id}`
+---
+
+### 3. `/api/notion/responsible/{id}`
 **Method**: `GET`
 
 **Description**:  
-Returns details of a specific consultant and their responsible people, identified by the consultant's `id`.
+Returns the details of a single consultant, identified by their `id`, including the list of responsible people assigned to them.
 
-**Path Parameter**:
-- `id` (string): The unique identifier (`uuid`) of the consultant.
+**Path Parameters**:
+- `id` (string, UUID): The unique identifier of the consultant.
 
-**Headers**:
-- `X-API-KEY`: Your API key.
+**Query Parameters**:
+- `includeNull` (optional, default: `false`): When `true`, includes consultants with `null` values in some fields.
 
-**Response**:
+**Sample Response**:
 ```json
 {
-  "name": "John Steven",
-  "uuid": "860af135-00a8-422e-8eab-bffba946991f",
+  "name": "Jane Smith",
+  "id": "962f9af1-a9bf-4e28-b16b-335c5231e941",
   "responsiblePersonList": [
     {
-      "name": "Stålknapp",
-      "uuid": "219b1e41-b7d2-4eee-bbaf-57d2248b77f7"
-    },
-    {
-      "name": "Maggy",
-      "uuid": "8b44b8f0-c1a5-46ab-a5c6-236d241cdb68"
+      "name": "Markus",
+      "id": "97a2b820-5b63-437d-917d-9f85c6a839a5"
     }
   ]
 }
 ```
 
-## Usage Examples
+---
 
-1. **Get all consultants and their responsible people:**
+### 4. `/api/notion/developer/{id}/score`
+**Method**: `GET`
 
-   ```bash
-   GET /api/responsible
-   ```
+**Description**:  
+Returns the scorecard of a developer, including their name, GitHub information, and a list of scores with categories.
 
-   **Headers**:
-   ```bash
-   X-API-KEY: your-api-key
-   ```
+**Path Parameters**:
+- `id` (string, UUID): The unique identifier of the developer.
 
-   Response:
-   ```json
-   [
-     {
-       "name": "John Steven",
-       "uuid": "860af135-00a8-422e-8eab-bffba946991f",
-       "responsiblePersonList": [
-         {
-           "name": "Stålknapp",
-           "uuid": "219b1e41-b7d2-4eee-bbaf-57d2248b77f7"
-         },
-         {
-           "name": "Maggy",
-           "uuid": "8b44b8f0-c1a5-46ab-a5c6-236d241cdb68"
-         }
-       ]
-     },
-     {
-       "name": "Jane Doe",
-       "uuid": "962f9af1-a9bf-4e28-b16b-335c5231e941",
-       "responsiblePersonList": [
-         {
-           "name": "Markus",
-           "uuid": "97a2b820-5b63-437d-917d-9f85c6a839a5"
-         }
-       ]
-     }
-   ]
-   ```
-
-2. **Get a specific consultant by `id`:**
-
-   ```bash
-   GET /api/responsible/860af135-00a8-422e-8eab-bffba946991f
-   ```
-
-   **Headers**:
-   ```bash
-   X-API-KEY: your-api-key
-   ```
-
-   Response:
-   ```json
-   {
-     "name": "John Steven",
-     "uuid": "860af135-00a8-422e-8eab-bffba946991f",
-     "responsiblePersonList": [
-       {
-         "name": "Stålknapp",
-         "uuid": "219b1e41-b7d2-4eee-bbaf-57d2248b77f7"
-       },
-       {
-         "name": "Maggy",
-         "uuid": "8b44b8f0-c1a5-46ab-a5c6-236d241cdb68"
-       }
-     ]
-   }
-   ```
-
-## Error Handling
-
-- If a consultant with the given `id` is not found, a `404 Not Found` status code will be returned.
-- Invalid or missing API keys will result in a `401 Unauthorized` response.
-- Invalid requests will return appropriate error codes (e.g., `400 Bad Request` for malformed requests).
-
-## Response Codes
-
-- `200 OK`: Request was successful, and the data is returned in the response body.
-- `401 Unauthorized`: The request was missing or had an invalid API key.
-- `404 Not Found`: The requested resource (consultant or responsible person) was not found.
-- `500 Internal Server Error`: There was an error processing the request.
+**Sample Response**:
+```json
+{
+  "name": "John Doe",
+  "id": "860af135-00a8-422e-8eab-bffba946991f",
+  "githubUrl": "https://github.com/johndoe",
+  "githubImageUrl": "https://github.com/johndoe.png",
+  "email": "john.doe@example.com",
+  "scores": [
+    {
+      "name": "Coding",
+      "score": 95,
+      "categories": ["Java", "Spring Boot", "REST APIs"]
+    },
+    {
+      "name": "Problem Solving",
+      "score": 85,
+      "categories": ["frontend", "backend"]
+    }
+  ]
+}
+```
 
 ---
 
-This API is designed to provide easy access to consultant information and their responsible parties, with secure access through API key-based authorization.
+## Error Handling
+
+- **500 Internal Server Error**: Returned when there is an issue processing the request.
+- **404 Not Found**: Returned if the requested resource (consultant or developer) is not found.
+- **400 Bad Request**: Returned if the provided parameters are invalid.
+
+---
+
+This API is designed to streamline access to data for internal tools and systems, providing clear endpoints for managing and retrieving information about developers, consultants, and their scores.
