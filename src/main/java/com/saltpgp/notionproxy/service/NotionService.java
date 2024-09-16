@@ -219,10 +219,6 @@ public class NotionService {
                 throw new NotionException();
             }
             response.get("results").elements().forEachRemaining(element -> {
-                System.out.println(element.get("properties").get("Score").get("number").asInt());
-                System.out.println(element.get("properties").get("Name").get("title").get(0).get("plain_text").asText());
-                System.out.println(element.get("id"));
-                System.out.println(bodyNode);
 
                 if (element.get("properties").get("Score") == null) return;
 
