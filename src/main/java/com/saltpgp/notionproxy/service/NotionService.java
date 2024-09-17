@@ -8,7 +8,10 @@ import com.saltpgp.notionproxy.models.Consultant;
 import com.saltpgp.notionproxy.models.Developer;
 import com.saltpgp.notionproxy.models.ResponsiblePerson;
 import com.saltpgp.notionproxy.models.Score;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -33,6 +36,10 @@ public class NotionService {
 
     @Value("${SCORE_DATABASE_ID}")
     private String SCORE_DATABASE_ID;
+
+    @Autowired
+    @Lazy
+    private NotionService self;
 
     public NotionService() {
         restClient = RestClient.builder().baseUrl("https://api.notion.com/v1").build();
@@ -136,6 +143,7 @@ public class NotionService {
         return body;
     }
 
+    @Cacheable(value = "saltiesInformation")
     public List<Developer> getSalties() throws NotionException {
         List<Developer> allSalties = new ArrayList<>();
         String nextCursor = null;
@@ -182,6 +190,7 @@ public class NotionService {
         return allSalties;
     }
 
+    @Cacheable(value = "developerScoreCard", key = "#id")
     public Developer getDeveloperScoreCard(UUID id) throws NotionException {
         List<Score> allScores = new ArrayList<>();
         String nextCursor = null;
@@ -241,7 +250,7 @@ public class NotionService {
             hasMore = response.get("has_more").asBoolean();
         }
 
-        List<Developer> allSalties = getSalties();
+        List<Developer> allSalties = self.getSalties();
 
         Developer developer = allSalties.stream()
                 .filter(dev -> dev.getId().equals(id))
@@ -257,6 +266,5 @@ public class NotionService {
                 allScores
         );
     }
-
 
 }

@@ -3,7 +3,11 @@ spring:
     name: notionproxy
   config:
     import: optional:file:.env[.properties]
+logging:
+  level:
+    org.springframework.cache: DEBUG
 
 server:
   servlet:
     context-path: /api/
+
