@@ -9,6 +9,7 @@ import com.saltpgp.notionproxy.models.Developer;
 import com.saltpgp.notionproxy.models.ResponsiblePerson;
 import com.saltpgp.notionproxy.models.Score;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -136,7 +137,9 @@ public class NotionService {
         return body;
     }
 
+    @Cacheable(value = "salties")
     public List<Developer> getSalties() throws NotionException {
+        System.out.println("Fetching data from Notion API...");
         List<Developer> allSalties = new ArrayList<>();
         String nextCursor = null;
         boolean hasMore = true;
