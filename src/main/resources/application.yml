@@ -3,9 +3,16 @@ spring:
     name: notionproxy
   config:
     import: optional:file:.env[.properties]
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
+
+
+
 logging:
   level:
-    org.springframework.cache: DEBUG
+    org.springframework.cache: TRACE
+    org.ehcache: TRACE
 
 server:
   servlet:

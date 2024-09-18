@@ -10,17 +10,18 @@ import com.saltpgp.notionproxy.models.ResponsiblePerson;
 import com.saltpgp.notionproxy.models.Score;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
+@Lazy
 public class NotionService {
 
     private final RestClient restClient;
@@ -40,6 +41,10 @@ public class NotionService {
     @Autowired
     @Lazy
     private NotionService self;
+
+    
+    
+
 
     public NotionService() {
         restClient = RestClient.builder().baseUrl("https://api.notion.com/v1").build();
@@ -143,6 +148,7 @@ public class NotionService {
         return body;
     }
 
+    @Lazy
     @Cacheable(value = "saltiesInformation")
     public List<Developer> getSalties() throws NotionException {
         List<Developer> allSalties = new ArrayList<>();
@@ -192,6 +198,11 @@ public class NotionService {
 
     @Cacheable(value = "developerScoreCard", key = "#id")
     public Developer getDeveloperScoreCard(UUID id) throws NotionException {
+
+//        if (true) {
+//            return new Developer("", UUID.fromString("74460ce9-c192-4dee-a7ce-62bc9d33b25a"),
+//                    "", "", "", new ArrayList());
+//        }
         List<Score> allScores = new ArrayList<>();
         String nextCursor = null;
         boolean hasMore = true;

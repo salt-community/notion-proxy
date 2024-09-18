@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+
+    <xs:element name="ehcache">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="cache" maxOccurs="unbounded" minOccurs="1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="cacheEventListenerFactory" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="cacheLoaderFactory" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="cacheWriterFactory" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="bootstrapCacheLoaderFactory" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="cacheExceptionHandlerFactory" minOccurs="0" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                        <xs:attribute name="name" type="xs:string" use="required"/>
+                        <xs:attribute name="maxEntriesLocalHeap" type="xs:int" use="required"/>
+                        <xs:attribute name="timeToLiveSeconds" type="xs:int" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>
