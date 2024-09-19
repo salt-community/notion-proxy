@@ -8,14 +8,13 @@ import java.util.List;
 import java.util.UUID;
 
 @Lazy
-public record ResponsiblePersonDto(String name, UUID id, String email, List<ConsultantDto> consultants) {
+public record ResponsiblePersonDto(String name, UUID id, String email) {
 
     static ResponsiblePersonDto fromModel(ResponsiblePerson responsiblePerson) {
         return new ResponsiblePersonDto(
                 responsiblePerson.getName(),
                 responsiblePerson.getId(),
-                responsiblePerson.getEmail(),
-                responsiblePerson.getConsultants().stream().map(ConsultantDto::fromModel).toList()
+                responsiblePerson.getEmail()
 
         );
     }

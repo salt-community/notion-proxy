@@ -15,5 +15,4 @@ public class ResponsiblePerson {
     String name;
     UUID id;
     String email;
-    List<Consultant> consultants;
 }

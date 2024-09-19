@@ -84,7 +84,7 @@ public class NotionService {
                 ResponsiblePerson responsiblePerson = new ResponsiblePerson(
                         name,
                         UUID.fromString(element2.get("id").asText()),
-                        email,Collections.emptyList());
+                        email);
                 responsiblePersonList.add(responsiblePerson);
             });
         }
@@ -107,7 +107,6 @@ public class NotionService {
                         }
                     });
                 });
-                responsiblePerson.setConsultants(consultants1);
             });
         }
         return responsiblePersonList;
