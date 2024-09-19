@@ -6,6 +6,7 @@ import com.saltpgp.notionproxy.dtos.outgoing.SaltiesDto;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.models.Consultant;
 import com.saltpgp.notionproxy.models.Developer;
+import com.saltpgp.notionproxy.models.ResponsiblePerson;
 import com.saltpgp.notionproxy.models.Score;
 import com.saltpgp.notionproxy.service.NotionService;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -59,6 +61,15 @@ public class NotionController {
             @RequestParam(required = false, defaultValue = "false") boolean includeNull) {
         try {
             return ResponseEntity.ok(notionService.getConsultants(includeEmpty, includeNull).stream().map(ConsultantDto::fromModel).toList());
+        } catch (NotionException e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping("allresponsible")
+    public ResponseEntity<Set<ResponsiblePerson>> getResponsiblePeople() {
+        try {
+            return ResponseEntity.ok(notionService.getAllResponsiblePeople());
         } catch (NotionException e) {
             return ResponseEntity.internalServerError().build();
         }
