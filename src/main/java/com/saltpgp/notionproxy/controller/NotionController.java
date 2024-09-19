@@ -67,9 +67,11 @@ public class NotionController {
     }
 
     @GetMapping("allresponsible")
-    public ResponseEntity<Set<ResponsiblePerson>> getResponsiblePeople() {
+    public ResponseEntity<Set<ResponsiblePerson>> getResponsiblePeople(
+            @RequestParam(required = false, defaultValue = "false") boolean includeNull
+    ) {
         try {
-            return ResponseEntity.ok(notionService.getAllResponsiblePeople());
+            return ResponseEntity.ok(notionService.getAllResponsiblePeople(includeNull));
         } catch (NotionException e) {
             return ResponseEntity.internalServerError().build();
         }
