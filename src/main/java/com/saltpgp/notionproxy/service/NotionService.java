@@ -71,9 +71,20 @@ public class NotionService {
                 } else if (!includeNull) {
                     return;
                 }
+
+                String email = null;
+                if (element2.get("person") != null) {
+                    if (element2.get("person").get("email") != null) {
+                        email = element2.get("person").get("email").asText();
+                    } else if (!includeNull) {
+                        return;
+                    }
+                }
+
                 ResponsiblePerson responsiblePerson = new ResponsiblePerson(
                         name,
-                        UUID.fromString(element2.get("id").asText()));
+                        UUID.fromString(element2.get("id").asText()),
+                        email);
                 responsiblePersonList.add(responsiblePerson);
             });
         }
