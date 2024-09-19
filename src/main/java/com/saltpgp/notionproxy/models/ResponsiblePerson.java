@@ -8,11 +8,5 @@ import java.util.List;
 import java.util.UUID;
 
 
-@Getter
-@Setter
-@AllArgsConstructor
-public class ResponsiblePerson {
-    String name;
-    UUID id;
-    String email;
+public record ResponsiblePerson(String name, UUID id, String email, List<Consultant> consultants) {
 }

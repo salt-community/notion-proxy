@@ -2,6 +2,7 @@ package com.saltpgp.notionproxy.controller;
 
 import com.saltpgp.notionproxy.dtos.outgoing.ConsultantDto;
 import com.saltpgp.notionproxy.dtos.outgoing.DeveloperDto;
+import com.saltpgp.notionproxy.dtos.outgoing.ResponsiblePerson2Dto;
 import com.saltpgp.notionproxy.dtos.outgoing.SaltiesDto;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.models.Consultant;
@@ -64,11 +65,11 @@ public class NotionController {
     }
 
     @GetMapping("allresponsible")
-    public ResponseEntity<Set<ResponsiblePerson>> getResponsiblePeople(
+    public ResponseEntity<List<ResponsiblePerson2Dto>> getResponsiblePeople(
             @RequestParam(required = false, defaultValue = "false") boolean includeNull
     ) {
         try {
-            return ResponseEntity.ok(notionService.getAllResponsiblePeople(includeNull));
+            return ResponseEntity.ok(ResponsiblePerson2Dto.fromModel(notionService.getAllResponsiblePeople(includeNull)));
         } catch (NotionException e) {
             return ResponseEntity.internalServerError().build();
         }
