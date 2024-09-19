@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class NotionService {
@@ -80,6 +77,13 @@ public class NotionService {
                 responsiblePersonList.add(responsiblePerson);
             });
         }
+        return responsiblePersonList;
+    }
+
+    public Set<ResponsiblePerson> getAllResponsiblePeople() throws NotionException {
+        List<Consultant> consultants = getConsultants(true, true);
+        Set<ResponsiblePerson> responsiblePersonList = new HashSet<>();
+        consultants.forEach(c -> responsiblePersonList.addAll(c.responsiblePersonList()));
         return responsiblePersonList;
     }
 
