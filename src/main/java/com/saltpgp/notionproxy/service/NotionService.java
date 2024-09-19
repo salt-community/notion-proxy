@@ -91,8 +91,8 @@ public class NotionService {
         return responsiblePersonList;
     }
 
-    public Set<ResponsiblePerson> getAllResponsiblePeople() throws NotionException {
-        List<Consultant> consultants = getConsultants(true, true);
+    public Set<ResponsiblePerson> getAllResponsiblePeople(boolean includeNull) throws NotionException {
+        List<Consultant> consultants = getConsultants(true, includeNull);
         Set<ResponsiblePerson> responsiblePersonList = new HashSet<>();
         consultants.forEach(c -> responsiblePersonList.addAll(c.responsiblePersonList()));
         return responsiblePersonList;
