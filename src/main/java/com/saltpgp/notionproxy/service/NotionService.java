@@ -84,7 +84,7 @@ public class NotionService {
                 ResponsiblePerson responsiblePerson = new ResponsiblePerson(
                         name,
                         UUID.fromString(element2.get("id").asText()),
-                        email);
+                        email,Collections.emptyList());
                 responsiblePersonList.add(responsiblePerson);
             });
         }
@@ -95,6 +95,21 @@ public class NotionService {
         List<Consultant> consultants = getConsultants(true, includeNull);
         Set<ResponsiblePerson> responsiblePersonList = new HashSet<>();
         consultants.forEach(c -> responsiblePersonList.addAll(c.responsiblePersonList()));
+        if(false){
+            responsiblePersonList.forEach(responsiblePerson -> {
+                List<Consultant> consultants1 = new ArrayList<>();
+                consultants.forEach(consultant -> {
+                    System.out.println(consultant.name());
+                     consultant.responsiblePersonList().forEach(responsiblePerson1 -> {
+
+                        if(responsiblePerson1.getId().equals(responsiblePerson.getId())){
+                            consultants1.add(consultant);
+                        }
+                    });
+                });
+                responsiblePerson.setConsultants(consultants1);
+            });
+        }
         return responsiblePersonList;
     }
 
