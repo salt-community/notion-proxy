@@ -25,7 +25,7 @@ public class NotionController {
     @GetMapping("")
     public ResponseEntity<List<SaltiesDto>> getAllSalties() {
         try {
-            return ResponseEntity.ok(SaltiesDto.fromModel(notionService.getSalties()));
+            return ResponseEntity.ok(SaltiesDto.fromModel(notionService.getAllDevelopers()));
         } catch (NotionException e) {
             return ResponseEntity.internalServerError().build();
         }
@@ -36,7 +36,7 @@ public class NotionController {
             @PathVariable UUID id,
             @RequestParam(required = false, defaultValue = "false") boolean includeNull) {
         try {
-            Consultant consultant = notionService.getResponsiblePersonNameByUserId(id, includeNull);
+            Consultant consultant = notionService.getConsultantById(id, includeNull);
             if (consultant == null) {
                 return ResponseEntity.notFound().build();
             }
@@ -53,7 +53,7 @@ public class NotionController {
             @RequestParam(required = false, defaultValue = "false") boolean includeEmpty,
             @RequestParam(required = false, defaultValue = "false") boolean includeNull) {
         try {
-            return ResponseEntity.ok(notionService.getConsultants(includeEmpty, includeNull).stream().map(ConsultantWithResponsibleDto::fromModel).toList());
+            return ResponseEntity.ok(notionService.getAllConsultants(includeEmpty, includeNull).stream().map(ConsultantWithResponsibleDto::fromModel).toList());
         } catch (NotionException e) {
             return ResponseEntity.internalServerError().build();
         }
@@ -103,7 +103,7 @@ public class NotionController {
     @GetMapping("developer/{id}/score")
     public ResponseEntity <DeveloperDto> getScoreCard(@PathVariable UUID id){
         try{
-            return ResponseEntity.ok(DeveloperDto.fromModel(notionService.getDeveloperScoreCard(id)));
+            return ResponseEntity.ok(DeveloperDto.fromModel(notionService.getDeveloperByIdWithScore(id)));
         } catch (NotionException e) {
             return ResponseEntity.internalServerError().build();
         }
