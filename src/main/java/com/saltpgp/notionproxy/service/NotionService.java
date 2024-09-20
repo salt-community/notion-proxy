@@ -92,11 +92,12 @@ public class NotionService {
         return responsiblePersonList;
     }
 
-    public Set<ResponsiblePerson> getAllResponsiblePeople(boolean includeNull) throws NotionException {
+    public Set<ResponsiblePerson> getAllResponsiblePeople(boolean includeNull, boolean includeConsultants) throws NotionException {
         List<Consultant> consultants = getConsultants(true, includeNull);
         Set<ResponsiblePerson> responsiblePersonList = new HashSet<>();
         consultants.forEach(c -> responsiblePersonList.addAll(c.responsiblePersonList()));
-        if(true){
+
+        if(includeConsultants){
             responsiblePersonList.forEach(responsiblePerson -> {
                 List<Consultant> consultants1 = new ArrayList<>();
                 consultants.forEach(consultant -> {
@@ -112,6 +113,14 @@ public class NotionService {
             });
         }
         return responsiblePersonList;
+    }
+
+    public ResponsiblePerson getResponsiblePersonById(UUID id, boolean includeNull, boolean includeConsultants) throws NotionException {
+        Set<ResponsiblePerson> responsiblePersonList = getAllResponsiblePeople(includeNull, includeConsultants);
+        return responsiblePersonList.stream()
+                .filter(responsiblePerson -> responsiblePerson.id().equals(id))
+                .findFirst()
+                .orElse(null);
     }
 
     public List<Consultant> getConsultants(boolean includeEmpty, boolean includeNull) throws NotionException {

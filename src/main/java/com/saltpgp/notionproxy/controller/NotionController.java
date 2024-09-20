@@ -1,19 +1,14 @@
 package com.saltpgp.notionproxy.controller;
 
-import com.saltpgp.notionproxy.dtos.outgoing.ConsultantDto;
-import com.saltpgp.notionproxy.dtos.outgoing.DeveloperDto;
-import com.saltpgp.notionproxy.dtos.outgoing.ResponsiblePerson2Dto;
-import com.saltpgp.notionproxy.dtos.outgoing.SaltiesDto;
+import com.saltpgp.notionproxy.dtos.outgoing.*;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.models.Consultant;
-import com.saltpgp.notionproxy.models.ResponsiblePerson;
 import com.saltpgp.notionproxy.service.NotionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -37,7 +32,7 @@ public class NotionController {
     }
 
     @GetMapping("responsible/{id}")
-    public ResponseEntity<ConsultantDto> getConsultant(
+    public ResponseEntity<ConsultantWithResponsibleDto> getConsultant(
             @PathVariable UUID id,
             @RequestParam(required = false, defaultValue = "false") boolean includeNull) {
         try {
@@ -45,7 +40,7 @@ public class NotionController {
             if (consultant == null) {
                 return ResponseEntity.notFound().build();
             }
-            return ResponseEntity.ok(ConsultantDto.fromModel(consultant));
+            return ResponseEntity.ok(ConsultantWithResponsibleDto.fromModel(consultant));
         } catch (NotionException e) {
             return ResponseEntity.internalServerError().build();
         } catch (HttpClientErrorException.NotFound e) {
@@ -54,26 +49,56 @@ public class NotionController {
     }
 
     @GetMapping("responsible")
-    public ResponseEntity<List<ConsultantDto>> getConsultants(
+    public ResponseEntity<List<ConsultantWithResponsibleDto>> getConsultants(
             @RequestParam(required = false, defaultValue = "false") boolean includeEmpty,
             @RequestParam(required = false, defaultValue = "false") boolean includeNull) {
         try {
-            return ResponseEntity.ok(notionService.getConsultants(includeEmpty, includeNull).stream().map(ConsultantDto::fromModel).toList());
+            return ResponseEntity.ok(notionService.getConsultants(includeEmpty, includeNull).stream().map(ConsultantWithResponsibleDto::fromModel).toList());
         } catch (NotionException e) {
             return ResponseEntity.internalServerError().build();
         }
     }
 
-    @GetMapping("allresponsible")
-    public ResponseEntity<List<ResponsiblePerson2Dto>> getResponsiblePeople(
-            @RequestParam(required = false, defaultValue = "false") boolean includeNull
+    @GetMapping("responsibles")
+    public <T> ResponseEntity<List<T>> getResponsiblePeople(
+            @RequestParam(required = false, defaultValue = "false") boolean includeNull,
+            @RequestParam(required = false, defaultValue = "false") boolean includeConsultants
     ) {
         try {
-            return ResponseEntity.ok(ResponsiblePerson2Dto.fromModel(notionService.getAllResponsiblePeople(includeNull)));
+            if(includeConsultants){
+                List<ResponsibleWithConsultantsDto> dtos = ResponsibleWithConsultantsDto.fromModelSet(notionService.getAllResponsiblePeople(includeNull, includeConsultants));
+                return ResponseEntity.ok((List<T>) dtos);
+            }
+            else{
+                List<BasicResponsiblePersonDto> dtos = BasicResponsiblePersonDto.fromModelSet(notionService.getAllResponsiblePeople(includeNull, includeConsultants));
+                return ResponseEntity.ok((List<T>) dtos);
+            }
         } catch (NotionException e) {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+    @GetMapping("responsibles/{id}")
+    public <T> ResponseEntity<T> getResponsiblePeopleById(
+            @PathVariable UUID id,
+            @RequestParam(required = false, defaultValue = "false") boolean includeNull,
+            @RequestParam(required = false, defaultValue = "false") boolean includeConsultants
+    ) {
+        try {
+            if(includeConsultants){
+                ResponsibleWithConsultantsDto dtos = ResponsibleWithConsultantsDto.fromModel(notionService.getResponsiblePersonById(id, includeNull, true));
+                return ResponseEntity.ok((T) dtos);
+            }
+            else{
+                BasicResponsiblePersonDto dtos = BasicResponsiblePersonDto.fromModel(notionService.getResponsiblePersonById(id,includeNull, false));
+                return ResponseEntity.ok((T) dtos);
+            }
+        } catch (NotionException e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+
 
     @GetMapping("developer/{id}/score")
     public ResponseEntity <DeveloperDto> getScoreCard(@PathVariable UUID id){
