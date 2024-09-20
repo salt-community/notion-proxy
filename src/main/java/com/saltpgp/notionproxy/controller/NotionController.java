@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("notion")
+@RequestMapping("salt")
 @CrossOrigin
 public class NotionController {
 
@@ -31,7 +31,7 @@ public class NotionController {
         }
     }
 
-    @GetMapping("responsible/{id}")
+    @GetMapping("consultant/{id}")
     public ResponseEntity<ConsultantWithResponsibleDto> getConsultant(
             @PathVariable UUID id,
             @RequestParam(required = false, defaultValue = "false") boolean includeNull) {
@@ -48,7 +48,7 @@ public class NotionController {
         }
     }
 
-    @GetMapping("responsible")
+    @GetMapping("consultant")
     public ResponseEntity<List<ConsultantWithResponsibleDto>> getConsultants(
             @RequestParam(required = false, defaultValue = "false") boolean includeEmpty,
             @RequestParam(required = false, defaultValue = "false") boolean includeNull) {
@@ -59,7 +59,7 @@ public class NotionController {
         }
     }
 
-    @GetMapping("responsibles")
+    @GetMapping("responsible")
     public <T> ResponseEntity<List<T>> getResponsiblePeople(
             @RequestParam(required = false, defaultValue = "false") boolean includeNull,
             @RequestParam(required = false, defaultValue = "false") boolean includeConsultants
@@ -78,7 +78,7 @@ public class NotionController {
         }
     }
 
-    @GetMapping("responsibles/{id}")
+    @GetMapping("responsible/{id}")
     public <T> ResponseEntity<T> getResponsiblePeopleById(
             @PathVariable UUID id,
             @RequestParam(required = false, defaultValue = "false") boolean includeNull,
