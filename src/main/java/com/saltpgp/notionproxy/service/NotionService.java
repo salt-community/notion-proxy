@@ -107,13 +107,13 @@ public class NotionService {
 
         responsiblePersonList.forEach(responsiblePerson -> {
             List<Consultant> consultants1 = new ArrayList<>();
-            consultants.forEach(consultant -> {
+            consultants.forEach(consultant ->
                  consultant.responsiblePersonList().forEach(responsiblePerson1 -> {
                     if(responsiblePerson1.id().equals(responsiblePerson.id())){
                         consultants1.add(consultant);
                     }
-                });
-            });
+                })
+            );
             consultants1.forEach(consultant -> responsiblePerson.consultants().add(consultant));
         });
 
