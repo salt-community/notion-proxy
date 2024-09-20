@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class NotionService {
@@ -74,13 +71,56 @@ public class NotionService {
                 } else if (!includeNull) {
                     return;
                 }
+
+                String email = null;
+                if (element2.get("person") != null) {
+                    if (element2.get("person").get("email") != null) {
+                        email = element2.get("person").get("email").asText();
+                    } else if (!includeNull) {
+                        return;
+                    }
+                }
+                List<Consultant> consultants = new ArrayList<>();
                 ResponsiblePerson responsiblePerson = new ResponsiblePerson(
                         name,
-                        UUID.fromString(element2.get("id").asText()));
+                        UUID.fromString(element2.get("id").asText()),
+                        email,
+                        consultants);
                 responsiblePersonList.add(responsiblePerson);
             });
         }
         return responsiblePersonList;
+    }
+
+    public Set<ResponsiblePerson> getAllResponsiblePeople(boolean includeNull, boolean includeConsultants) throws NotionException {
+        List<Consultant> consultants = getConsultants(true, includeNull);
+        Set<ResponsiblePerson> responsiblePersonList = new HashSet<>();
+        consultants.forEach(c -> responsiblePersonList.addAll(c.responsiblePersonList()));
+
+        if(includeConsultants){
+            responsiblePersonList.forEach(responsiblePerson -> {
+                List<Consultant> consultants1 = new ArrayList<>();
+                consultants.forEach(consultant -> {
+                    System.out.println(consultant.name());
+                     consultant.responsiblePersonList().forEach(responsiblePerson1 -> {
+
+                        if(responsiblePerson1.id().equals(responsiblePerson.id())){
+                            consultants1.add(consultant);
+                        }
+                    });
+                });
+                consultants1.forEach(consultant -> responsiblePerson.consultants().add(consultant));
+            });
+        }
+        return responsiblePersonList;
+    }
+
+    public ResponsiblePerson getResponsiblePersonById(UUID id, boolean includeNull, boolean includeConsultants) throws NotionException {
+        Set<ResponsiblePerson> responsiblePersonList = getAllResponsiblePeople(includeNull, includeConsultants);
+        return responsiblePersonList.stream()
+                .filter(responsiblePerson -> responsiblePerson.id().equals(id))
+                .findFirst()
+                .orElse(null);
     }
 
     public List<Consultant> getConsultants(boolean includeEmpty, boolean includeNull) throws NotionException {
