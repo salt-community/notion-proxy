@@ -35,7 +35,7 @@ public class NotionService {
         restClient = RestClient.builder().baseUrl("https://api.notion.com/v1").build();
     }
 
-    public Consultant getResponsiblePersonNameByUserId(UUID id, boolean includeNull) throws NotionException {
+    public Consultant getConsultantById(UUID id, boolean includeNull) throws NotionException {
         JsonNode response = restClient
                 .get()
                 .uri(String.format("/pages/%s", id))
@@ -93,7 +93,7 @@ public class NotionService {
     }
 
     public Set<ResponsiblePerson> getAllResponsiblePeople(boolean includeNull, boolean includeConsultants) throws NotionException {
-        List<Consultant> consultants = getConsultants(true, includeNull);
+        List<Consultant> consultants = getAllConsultants(true, includeNull);
         Set<ResponsiblePerson> responsiblePersonList = new HashSet<>();
         consultants.forEach(c -> responsiblePersonList.addAll(c.responsiblePersonList()));
 
@@ -123,7 +123,7 @@ public class NotionService {
                 .orElse(null);
     }
 
-    public List<Consultant> getConsultants(boolean includeEmpty, boolean includeNull) throws NotionException {
+    public List<Consultant> getAllConsultants(boolean includeEmpty, boolean includeNull) throws NotionException {
         List<Consultant> allConsultants = new ArrayList<>();
         String nextCursor = null;
         boolean hasMore = true;
@@ -176,7 +176,7 @@ public class NotionService {
         return body;
     }
 
-    public List<Developer> getSalties() throws NotionException {
+    public List<Developer> getAllDevelopers() throws NotionException {
         List<Developer> allSalties = new ArrayList<>();
         String nextCursor = null;
         boolean hasMore = true;
@@ -222,7 +222,7 @@ public class NotionService {
         return allSalties;
     }
 
-    public Developer getDeveloperScoreCard(UUID id) throws NotionException {
+    public Developer getDeveloperByIdWithScore(UUID id) throws NotionException {
         List<Score> allScores = new ArrayList<>();
         String nextCursor = null;
         boolean hasMore = true;
@@ -281,7 +281,7 @@ public class NotionService {
             hasMore = response.get("has_more").asBoolean();
         }
 
-        List<Developer> allSalties = getSalties();
+        List<Developer> allSalties = getAllDevelopers();
 
         Developer developer = allSalties.stream()
                 .filter(dev -> dev.getId().equals(id))
