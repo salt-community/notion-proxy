@@ -31,7 +31,7 @@ public class NotionController {
         }
     }
 
-    @GetMapping("consultant")
+    @GetMapping("consultants")
     public ResponseEntity<List<ConsultantWithResponsibleDto>> getConsultants(
             @RequestParam(required = false, defaultValue = "false") boolean includeEmpty,
             @RequestParam(required = false, defaultValue = "false") boolean includeNull) {
@@ -43,7 +43,7 @@ public class NotionController {
         }
     }
 
-    @GetMapping("consultant/{id}")
+    @GetMapping("consultants/{id}")
     public ResponseEntity<ConsultantWithResponsibleDto> getConsultant(
             @PathVariable UUID id,
             @RequestParam(required = false, defaultValue = "false") boolean includeNull) {
@@ -103,7 +103,7 @@ public class NotionController {
         }
     }
 
-    @GetMapping("developer/{id}/score")
+    @GetMapping("developers/{id}/scores")
     public ResponseEntity <DeveloperDto> getScoreCard(@PathVariable UUID id){
         try{
             return ResponseEntity.ok(DeveloperDto.fromModel(notionService.getDeveloperByIdWithScore(id)));
