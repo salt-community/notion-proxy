@@ -18,7 +18,6 @@ import org.springframework.web.client.RestClient;
 import java.util.*;
 
 @Service
-@Lazy
 public class NotionService {
 
     private final RestClient restClient;
