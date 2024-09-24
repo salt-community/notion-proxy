@@ -1,0 +1,31 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.ehcache.org/v3"
+        xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd">
+
+    <cache alias="saltiesInformation">
+        <key-type>org.springframework.cache.interceptor.SimpleKey</key-type>
+        <value-type>java.util.List</value-type>
+        <expiry>
+            <ttl>10</ttl>
+        </expiry>
+
+        <resources>
+            <heap>2</heap>
+            <!--            <offheap unit="MB">1</offheap>--><!-- if you want extra heap memory off JVM -->
+        </resources>
+    </cache>
+
+    <cache alias="developerScoreCard">
+        <key-type>java.util.UUID</key-type>
+        <value-type>com.saltpgp.notionproxy.models.Developer</value-type>
+        <expiry>
+            <ttl>10</ttl>
+        </expiry>
+
+        <resources>
+            <heap>2</heap>
+            <!--            <offheap unit="MB">1</offheap>--><!-- if you want extra heap memory off JVM -->
+        </resources>
+    </cache>
+
+</config>

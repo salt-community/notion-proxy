@@ -3,6 +3,9 @@ spring:
     name: notionproxy
   config:
     import: optional:file:.env[.properties]
+  cache:
+    jcache:
+      config: "classpath:ehcache.xml"
 
 server:
   servlet:
