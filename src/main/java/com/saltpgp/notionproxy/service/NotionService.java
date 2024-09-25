@@ -20,7 +20,7 @@ import java.util.*;
 @Service
 public class NotionService {
 
-    private final RestClient restClient;
+    public RestClient restClient;
 
     @Value("${NOTION_API_KEY}")
     private String API_KEY;
