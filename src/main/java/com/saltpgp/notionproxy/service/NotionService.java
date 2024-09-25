@@ -8,6 +8,7 @@ import com.saltpgp.notionproxy.models.Consultant;
 import com.saltpgp.notionproxy.models.Developer;
 import com.saltpgp.notionproxy.models.ResponsiblePerson;
 import com.saltpgp.notionproxy.models.Score;
+import com.saltpgp.notionproxy.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -83,11 +84,8 @@ public class NotionService {
                     return;
                 }
 
-                List<String> ptPeople = List.of(PEOPLE_AND_TALENT.split(","));
-                System.out.println("All names: " + ptPeople);
-                System.out.println("Name: " + name);
+                List<String> ptPeople = List.of(StringUtils.normalizeSwedishAlphabet(PEOPLE_AND_TALENT).split(","));
                 if (!ptPeople.contains(name)) {
-                    System.out.println("Ignoring name: " + name);
                     return;
                 }
 
