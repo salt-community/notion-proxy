@@ -34,6 +34,9 @@ public class NotionService {
     @Value("${SCORE_DATABASE_ID}")
     private String SCORE_DATABASE_ID;
 
+    @Value("${PEOPLE_AND_TALENT}")
+    private String PEOPLE_AND_TALENT;
+
     @Autowired
     @Lazy
     private NotionService self;
@@ -77,6 +80,14 @@ public class NotionService {
                 if (element2.get("name") != null) {
                     name = element2.get("name").asText();
                 } else if (!includeNull) {
+                    return;
+                }
+
+                List<String> ptPeople = List.of(PEOPLE_AND_TALENT.split(","));
+                System.out.println("All names: " + ptPeople);
+                System.out.println("Name: " + name);
+                if (!ptPeople.contains(name)) {
+                    System.out.println("Ignoring name: " + name);
                     return;
                 }
 
