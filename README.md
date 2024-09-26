@@ -4,11 +4,11 @@ This API provides access to developer, consultant, and responsible person data, 
 
 ## Base URL
 
-All endpoints are prefixed with `/salt`.
+All endpoints are prefixed with `/api/salt`.
 
 ## Endpoints
 
-### 1. **`GET /salt`**
+### 1. **`GET /api/salt`**
 Returns a list of all developers ("Salties") with their basic details such as name, email, and GitHub information.
 
 **Sample Response**:
@@ -26,7 +26,7 @@ Returns a list of all developers ("Salties") with their basic details such as na
 
 ---
 
-### 2. **`GET /salt/consultants`**
+### 2. **`GET /api/salt/consultants`**
 Returns a list of consultants and their respective responsible people.
 
 **Query Parameters**:
@@ -51,7 +51,7 @@ Returns a list of consultants and their respective responsible people.
 
 ---
 
-### 3. **`GET /salt/consultants/{id}`**
+### 3. **`GET /api/salt/consultants/{id}`**
 Returns a single consultant identified by their `id`, along with the responsible people assigned to them.
 
 **Path Parameters**:
@@ -76,7 +76,7 @@ Returns a single consultant identified by their `id`, along with the responsible
 
 ---
 
-### 4. **`GET /salt/responsible`**
+### 4. **`GET /api/salt/responsible`**
 Returns a list of responsible people. You can choose to include associated consultants or return a simplified list of responsible people only.
 
 **Query Parameters**:
@@ -111,7 +111,7 @@ Returns a list of responsible people. You can choose to include associated consu
 
 ---
 
-### 5. **`GET /salt/responsible/{id}`**
+### 5. **`GET /api/salt/responsible/{id}`**
 Returns a single responsible person by their `id`. You can choose to include or exclude the consultants associated with this responsible person.
 
 **Path Parameters**:
@@ -145,7 +145,7 @@ Returns a single responsible person by their `id`. You can choose to include or 
 
 ---
 
-### 6. **`GET /salt/developers/{id}/scores`**
+### 6. **`GET /api/salt/developers/{id}/scores`**
 Returns the scorecard of a developer, including their name, email, GitHub information, and a list of scores along with categories.
 
 **Path Parameters**:
