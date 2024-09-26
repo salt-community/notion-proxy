@@ -48,7 +48,8 @@ Returns a list of consultants and their respective responsible people.
     "responsiblePersonList": [
       {
         "name": "Markus",
-        "id": "97a2b820-5b63-437d-917d-9f85c6a839a5"
+        "id": "97a2b820-5b63-437d-917d-9f85c6a839a5",
+        "email": "markustest@gmail.com"
       }
     ]
   }
@@ -74,7 +75,8 @@ Returns a single consultant identified by their `id`, along with the responsible
   "responsiblePersonList": [
     {
       "name": "Markus",
-      "id": "97a2b820-5b63-437d-917d-9f85c6a839a5"
+      "id": "97a2b820-5b63-437d-917d-9f85c6a839a5",
+      "email": "markustest@gmail.com"
     }
   ]
 }
@@ -94,7 +96,8 @@ Returns a list of responsible people. You can choose to include associated consu
 [
   {
     "name": "Markus",
-    "id": "97a2b820-5b63-437d-917d-9f85c6a839a5"
+    "id": "97a2b820-5b63-437d-917d-9f85c6a839a5",
+    "email": "markustest@gmail.com"
   }
 ]
 ```
@@ -105,6 +108,7 @@ Returns a list of responsible people. You can choose to include associated consu
   {
     "name": "Markus",
     "id": "97a2b820-5b63-437d-917d-9f85c6a839a5",
+    "email": "markustest@gmail.com",
     "consultants": [
       {
         "name": "Jane Smith",
@@ -131,7 +135,8 @@ Returns a single responsible person by their `id`. You can choose to include or 
 ```json
 {
   "name": "Markus",
-  "id": "97a2b820-5b63-437d-917d-9f85c6a839a5"
+  "id": "97a2b820-5b63-437d-917d-9f85c6a839a5",
+  "email": "markustest@gmail.com"
 }
 ```
 
@@ -140,6 +145,7 @@ Returns a single responsible person by their `id`. You can choose to include or 
 {
   "name": "Markus",
   "id": "97a2b820-5b63-437d-917d-9f85c6a839a5",
+  "email": "markustest@gmail.com",
   "consultants": [
     {
       "name": "Jane Smith",
