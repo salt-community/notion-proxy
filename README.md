@@ -10,7 +10,7 @@ The API is deployed and can be accessed at: `https://notion-proxy-735865474111.e
 ## Authorization
 
 All requests to this API must include an API key in the request header. The API key should be passed using the `X-API-KEY` header.
-Currently, the only way to get an API key is to be given one directly from us.
+Currently, the only way to get an API key is to ask us directly.
 
 ## Endpoints
 
