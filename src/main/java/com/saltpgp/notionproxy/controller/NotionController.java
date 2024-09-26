@@ -3,6 +3,7 @@ package com.saltpgp.notionproxy.controller;
 import com.saltpgp.notionproxy.dtos.outgoing.*;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.models.Consultant;
+import com.saltpgp.notionproxy.models.ResponsiblePerson;
 import com.saltpgp.notionproxy.service.NotionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -88,14 +89,19 @@ public class NotionController {
             @RequestParam(required = false, defaultValue = "false") boolean includeConsultants
     ) {
         try {
+            ResponsiblePerson responsiblePerson = notionService.getResponsiblePersonById(id, includeNull, true);
+            if (responsiblePerson == null) {
+                return ResponseEntity.notFound().build();
+            }
+
             if(includeConsultants){
                 ResponsibleWithConsultantsDto dtos = ResponsibleWithConsultantsDto
-                        .fromModel(notionService.getResponsiblePersonById(id, includeNull, true));
+                        .fromModel(responsiblePerson);
                 return ResponseEntity.ok((T) dtos);
             }
             else{
                 BasicResponsiblePersonDto dtos = BasicResponsiblePersonDto
-                        .fromModel(notionService.getResponsiblePersonById(id,includeNull, false));
+                        .fromModel(responsiblePerson);
                 return ResponseEntity.ok((T) dtos);
             }
         } catch (NotionException e) {

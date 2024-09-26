@@ -8,6 +8,7 @@ import com.saltpgp.notionproxy.models.Consultant;
 import com.saltpgp.notionproxy.models.Developer;
 import com.saltpgp.notionproxy.models.ResponsiblePerson;
 import com.saltpgp.notionproxy.models.Score;
+import com.saltpgp.notionproxy.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -20,7 +21,7 @@ import java.util.*;
 @Service
 public class NotionService {
 
-    private final RestClient restClient;
+    public RestClient restClient;
 
     @Value("${NOTION_API_KEY}")
     private String API_KEY;
@@ -33,6 +34,9 @@ public class NotionService {
 
     @Value("${SCORE_DATABASE_ID}")
     private String SCORE_DATABASE_ID;
+
+    @Value("${PEOPLE_AND_TALENT}")
+    private String PEOPLE_AND_TALENT;
 
     @Autowired
     @Lazy
@@ -77,6 +81,11 @@ public class NotionService {
                 if (element2.get("name") != null) {
                     name = element2.get("name").asText();
                 } else if (!includeNull) {
+                    return;
+                }
+
+                List<String> ptPeople = List.of(StringUtils.normalizeSwedishAlphabet(PEOPLE_AND_TALENT).split(","));
+                if (!ptPeople.contains(name)) {
                     return;
                 }
 

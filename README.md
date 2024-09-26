@@ -1,11 +1,11 @@
 # Notion Proxy API
 
-This API provides access to data related to developers ("Salties"), consultants, and their responsible people, as well as developer scores. Below are the available endpoints, their usage, and sample responses.
+This API provides access to developer, consultant, and responsible person data, including scores for developers and relationships between consultants and their responsible people. Below are the details of the available endpoints.
 
 ## Base URL
-The API is deployed and can be accessed at:
+All endpoints are prefixed with `/api/salt`.
 
-`https://notion-proxy-735865474111.europe-west4.run.app`
+The API is deployed and can be accessed at: `https://notion-proxy-735865474111.europe-west4.run.app`
 
 ## Authorization
 
@@ -14,11 +14,8 @@ Currently, the only way to get an API key is to be given one directly from us.
 
 ## Endpoints
 
-### 1. `/api/notion`
-**Method**: `GET`
-
-**Description**:  
-Returns a list of all developers (referred to as "Salties") with their basic details such as name, email, and GitHub information.
+### 1. **`GET /api/salt`**
+Returns a list of all developers ("Salties") with their basic details such as name, email, and GitHub information.
 
 **Sample Response**:
 ```json
@@ -35,15 +32,12 @@ Returns a list of all developers (referred to as "Salties") with their basic det
 
 ---
 
-### 2. `/api/notion/responsible`
-**Method**: `GET`
-
-**Description**:  
+### 2. **`GET /api/salt/consultants`**
 Returns a list of consultants and their respective responsible people.
 
 **Query Parameters**:
-- `includeEmpty` (optional, default: `false`): When `true`, includes consultants who have no responsible people.
-- `includeNull` (optional, default: `false`): When `true`, includes consultants with responsible people whose name is `null`.
+- `includeEmpty` (optional, default: `false`): When `true`, includes consultants without responsible people.
+- `includeNull` (optional, default: `false`): When `true`, includes consultants with `null` values in some fields.
 
 **Sample Response**:
 ```json
@@ -54,7 +48,8 @@ Returns a list of consultants and their respective responsible people.
     "responsiblePersonList": [
       {
         "name": "Markus",
-        "id": "97a2b820-5b63-437d-917d-9f85c6a839a5"
+        "id": "97a2b820-5b63-437d-917d-9f85c6a839a5",
+        "email": "markustest@gmail.com"
       }
     ]
   }
@@ -63,11 +58,8 @@ Returns a list of consultants and their respective responsible people.
 
 ---
 
-### 3. `/api/notion/responsible/{id}`
-**Method**: `GET`
-
-**Description**:  
-Returns the details of a single consultant, identified by their `id`, including the list of responsible people assigned to them.
+### 3. **`GET /api/salt/consultants/{id}`**
+Returns a single consultant identified by their `id`, along with the responsible people assigned to them.
 
 **Path Parameters**:
 - `id` (string, UUID): The unique identifier of the consultant.
@@ -83,7 +75,8 @@ Returns the details of a single consultant, identified by their `id`, including 
   "responsiblePersonList": [
     {
       "name": "Markus",
-      "id": "97a2b820-5b63-437d-917d-9f85c6a839a5"
+      "id": "97a2b820-5b63-437d-917d-9f85c6a839a5",
+      "email": "markustest@gmail.com"
     }
   ]
 }
@@ -91,11 +84,81 @@ Returns the details of a single consultant, identified by their `id`, including 
 
 ---
 
-### 4. `/api/notion/developer/{id}/score`
-**Method**: `GET`
+### 4. **`GET /api/salt/responsible`**
+Returns a list of responsible people. You can choose to include associated consultants or return a simplified list of responsible people only.
 
-**Description**:  
-Returns the scorecard of a developer, including their name, GitHub information, and a list of scores with categories.
+**Query Parameters**:
+- `includeNull` (optional, default: `false`): When `true`, includes responsible people with `null` values.
+- `includeConsultants` (optional, default: `false`): When `true`, includes consultants assigned to the responsible people.
+
+**Sample Response** (without consultants):
+```json
+[
+  {
+    "name": "Markus",
+    "id": "97a2b820-5b63-437d-917d-9f85c6a839a5",
+    "email": "markustest@gmail.com"
+  }
+]
+```
+
+**Sample Response** (with consultants):
+```json
+[
+  {
+    "name": "Markus",
+    "id": "97a2b820-5b63-437d-917d-9f85c6a839a5",
+    "email": "markustest@gmail.com",
+    "consultants": [
+      {
+        "name": "Jane Smith",
+        "id": "962f9af1-a9bf-4e28-b16b-335c5231e941"
+      }
+    ]
+  }
+]
+```
+
+---
+
+### 5. **`GET /api/salt/responsible/{id}`**
+Returns a single responsible person by their `id`. You can choose to include or exclude the consultants associated with this responsible person.
+
+**Path Parameters**:
+- `id` (string, UUID): The unique identifier of the responsible person.
+
+**Query Parameters**:
+- `includeNull` (optional, default: `false`): When `true`, includes responsible people with `null` values.
+- `includeConsultants` (optional, default: `false`): When `true`, includes consultants assigned to the responsible person.
+
+**Sample Response** (without consultants):
+```json
+{
+  "name": "Markus",
+  "id": "97a2b820-5b63-437d-917d-9f85c6a839a5",
+  "email": "markustest@gmail.com"
+}
+```
+
+**Sample Response** (with consultants):
+```json
+{
+  "name": "Markus",
+  "id": "97a2b820-5b63-437d-917d-9f85c6a839a5",
+  "email": "markustest@gmail.com",
+  "consultants": [
+    {
+      "name": "Jane Smith",
+      "id": "962f9af1-a9bf-4e28-b16b-335c5231e941"
+    }
+  ]
+}
+```
+
+---
+
+### 6. **`GET /api/salt/developers/{id}/scores`**
+Returns the scorecard of a developer, including their name, email, GitHub information, and a list of scores along with categories.
 
 **Path Parameters**:
 - `id` (string, UUID): The unique identifier of the developer.
@@ -116,8 +179,8 @@ Returns the scorecard of a developer, including their name, GitHub information, 
     },
     {
       "name": "Problem Solving",
-      "score": 85,
-      "categories": ["frontend", "backend"]
+      "score": 88,
+      "categories": ["Algorithms", "Data Structures"]
     }
   ]
 }
@@ -128,9 +191,9 @@ Returns the scorecard of a developer, including their name, GitHub information, 
 ## Error Handling
 
 - **500 Internal Server Error**: Returned when there is an issue processing the request.
-- **404 Not Found**: Returned if the requested resource (consultant or developer) is not found.
+- **404 Not Found**: Returned if the requested resource (consultant, responsible person, or developer) is not found.
 - **400 Bad Request**: Returned if the provided parameters are invalid.
 
 ---
 
-This API is designed to streamline access to data for internal tools and systems, providing clear endpoints for managing and retrieving information about developers, consultants, and their scores.
+This API serves as a gateway to manage and retrieve data about developers, consultants, responsible people, and their relationships.
