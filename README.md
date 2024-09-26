@@ -3,8 +3,14 @@
 This API provides access to developer, consultant, and responsible person data, including scores for developers and relationships between consultants and their responsible people. Below are the details of the available endpoints.
 
 ## Base URL
-
 All endpoints are prefixed with `/api/salt`.
+
+The API is deployed and can be accessed at: `https://notion-proxy-735865474111.europe-west4.run.app`
+
+## Authorization
+
+All requests to this API must include an API key in the request header. The API key should be passed using the `X-API-KEY` header.
+Currently, the only way to get an API key is to be given one directly from us.
 
 ## Endpoints
 
