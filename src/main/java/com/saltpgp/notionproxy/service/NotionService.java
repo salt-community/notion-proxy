@@ -43,8 +43,8 @@ public class NotionService {
     private NotionService self;
 
 
-    public NotionService() {
-        restClient = RestClient.builder().baseUrl("https://api.notion.com/v1").build();
+    public NotionService(RestClient.Builder builder) {
+        this.restClient = builder.baseUrl("https://api.notion.com/v1").build();
     }
 
     public Consultant getConsultantById(UUID id, boolean includeNull) throws NotionException {
