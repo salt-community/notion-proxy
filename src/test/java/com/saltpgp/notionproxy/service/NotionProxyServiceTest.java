@@ -45,7 +45,7 @@ class NotionProxyServiceTest {
                     "results": [
                         {
                             "object": "page",
-                            "id": "55fa77df-612a-4644-a058-45b88934366a", 
+                            "id": "11111111-1111-1111-1111-111111111111", 
                             "properties": {
                                 "Name": {
                                     "id": "title",
@@ -58,12 +58,12 @@ class NotionProxyServiceTest {
                                     ]
                                 },
                                 "Responsible": {
-                                    "id": "55fa77df-612a-4644-a058-45b88934366a",
+                                    "id": "11111111-1000-1111-1111-111111111111",
                                     "type": "people",
                                     "people": [
                                         {
                                             "object": "user",
-                                            "id": "55fa77df-612a-4644-a058-45b88934366a",
+                                            "id": "11111111-1111-1111-2222-111111111111",
                                             "name": "Test Responsible1",
                                             "person": {
                                                 "email": "test1@appliedtechnology.se"
@@ -75,7 +75,7 @@ class NotionProxyServiceTest {
                         },
                 		{
                             "object": "page",
-                            "id": "55fa77df-612a-4644-a058-45b88934366a",
+                            "id": "11111111-1111-1111-1111-111111111112",
                             "properties": {
                                 "Name": {
                                     "id": "title",
@@ -88,12 +88,12 @@ class NotionProxyServiceTest {
                                     ]
                                 },
                                 "Responsible": {
-                                    "id": "55fa77df-612a-4644-a058-45b88934366a",
+                                    "id": "11111111-1000-1111-1111-111111111111",
                                     "type": "people",
                                     "people": [
                                         {
                                             "object": "user",
-                                            "id": "55fa77df-612a-4644-a058-45b88934366a",
+                                            "id": "11111111-1000-1111-2222-111111111112",
                                             "name": "Test Responsible2",
                                             "person": {
                                                 "email": "test2@appliedtechnology.se"
