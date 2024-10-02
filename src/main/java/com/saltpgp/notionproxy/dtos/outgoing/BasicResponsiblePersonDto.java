@@ -26,4 +26,12 @@ public record BasicResponsiblePersonDto(String name, UUID id, String email) {
         return basicResponsiblePersonDtos;
     }
 
+    public static List<BasicResponsiblePersonDto> fromModelList(List<ResponsiblePerson> responsiblePerson) {
+        List<BasicResponsiblePersonDto> basicResponsiblePersonDtos = new ArrayList<>();
+        for(ResponsiblePerson person : responsiblePerson) {
+            basicResponsiblePersonDtos.add(new BasicResponsiblePersonDto(person.name(),person.id(),person.email()));
+        }
+        return basicResponsiblePersonDtos;
+    }
+
 }
