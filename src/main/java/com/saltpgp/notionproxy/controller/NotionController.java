@@ -63,18 +63,17 @@ public class NotionController {
 
     @GetMapping("responsible")
     public <T> ResponseEntity<List<T>> getResponsiblePeople(
-            @RequestParam(required = false, defaultValue = "false") boolean includeNull,
             @RequestParam(required = false, defaultValue = "false") boolean includeConsultants
     ) {
         try {
             if(includeConsultants){
                 List<ResponsibleWithConsultantsDto> dtos = ResponsibleWithConsultantsDto
-                        .fromModelSet(notionService.getAllResponsiblePeople(includeNull, includeConsultants));
+                        .fromModelList(notionService.getAllResponsiblePeople(false,true));
                 return ResponseEntity.ok((List<T>) dtos);
             }
             else{
                 List<BasicResponsiblePersonDto> dtos = BasicResponsiblePersonDto
-                        .fromModelSet(notionService.getAllResponsiblePeople(includeNull, includeConsultants));
+                        .fromModelList(notionService.getAllResponsiblePeople(false,false));
                 return ResponseEntity.ok((List<T>) dtos);
             }
         } catch (NotionException e) {
@@ -110,7 +109,7 @@ public class NotionController {
     }
 
     @GetMapping("developers/{id}/scores")
-    public ResponseEntity <DeveloperDto> getScoreCard(@PathVariable UUID id){
+    public ResponseEntity <DeveloperDto> getScoreCard(@PathVariable UUID id) {
         try{
             return ResponseEntity.ok(DeveloperDto.fromModel(notionService.getDeveloperByIdWithScore(id)));
         } catch (NotionException e) {
