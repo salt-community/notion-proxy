@@ -87,9 +87,16 @@ public class NotionService {
                     return;
                 }
 
-                List<String> ptPeople = List.of(StringUtils.normalizeSwedishAlphabet(PEOPLE_AND_TALENT).split(","));
-                if (!ptPeople.contains(name)) {
-                    return;
+                if (name != null) {
+                    List<String> ptPeople;
+                    try {
+                        ptPeople = getAllResponsiblePeople(false, false).stream().map(ResponsiblePerson::name).toList();
+                    } catch (NotionException e) {
+                        throw new RuntimeException(e);
+                    }
+                    if (!ptPeople.contains(name)) {
+                        return;
+                    }
                 }
 
                 String email = null;
