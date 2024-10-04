@@ -17,7 +17,6 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.mock.http.server.reactive.MockServerHttpRequest.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
@@ -49,7 +48,7 @@ class NotionProxyServiceTest {
                     "results": [
                         {
                             "object": "page",
-                            "id": "11111111-1111-1111-1111-111111111111", 
+                            "id": "11111111-1111-1111-1111-111111111111",
                             "properties": {
                                 "Name": {
                                     "id": "title",
@@ -113,8 +112,6 @@ class NotionProxyServiceTest {
                 }
                 """;
 
-
-        JsonNode jsonNodeResponse = objectMapper.readTree(jsonResponse);
 
         server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", DATABASE_ID))) // Set expectation for request
                 .andRespond(withSuccess(jsonResponse, MediaType.APPLICATION_JSON)); // Mock response
@@ -206,7 +203,7 @@ class NotionProxyServiceTest {
     }
 
     @Test
-    void getAllResponsiblePeopleTests() throws NotionException, JsonProcessingException {
+    void getAllResponsiblePeopleTests() throws NotionException {
 
 //        Arrange
         String jsonResponse = """
