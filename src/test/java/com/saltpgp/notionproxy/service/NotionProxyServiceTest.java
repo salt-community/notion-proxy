@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.models.Consultant;
 import com.saltpgp.notionproxy.models.Developer;
+import com.saltpgp.notionproxy.models.ResponsiblePerson;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +36,9 @@ class NotionProxyServiceTest {
 
     @Value("${DATABASE_ID}")
     private String DATABASE_ID;
+
+    @Value("${CORE_DATABASE_ID}")
+    private String CORE_DATABASE_ID;
 
     @Test
     void shouldFindAllConsultantswithIncludeEmptyTrue() throws NotionException, JsonProcessingException {
@@ -199,5 +203,73 @@ class NotionProxyServiceTest {
         assertEquals("https://github.com/userB", developers.get(1).getGithubUrl());
 
 
+    }
+
+    @Test
+    void getAllResponsiblePeopleTests() throws NotionException, JsonProcessingException {
+
+//        Arrange
+        String jsonResponse = """
+            {
+                "object": "list",
+                "results": [
+                    {
+                        "object": "page",
+                        "id": "33333333-3333-3333-3333-333333333333",
+                        "properties": {
+                            "Person": {
+                                "id": "person_id",
+                                "type": "people",
+                                "people": [
+                                    {
+                                        "object": "user",
+                                        "id": "44444444-4444-4444-4444-444444444444",
+                                        "name": "Responsible Person 1",
+                                        "person": {
+                                            "email": "person1@appliedtechnology.se"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "object": "page",
+                        "id": "55555555-5555-5555-5555-555555555555",
+                        "properties": {
+                            "Person": {
+                                "id": "person_id",
+                                "type": "people",
+                                "people": [
+                                    {
+                                        "object": "user",
+                                        "id": "66666666-6666-6666-6666-666666666666",
+                                        "name": "Responsible Person 2",
+                                        "person": {
+                                            "email": "person2@appliedtechnology.se"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ],
+                "next_cursor": null,
+                "has_more": false
+            }
+            """;
+
+//        Act
+        server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", CORE_DATABASE_ID)))
+                .andRespond(withSuccess(jsonResponse, MediaType.APPLICATION_JSON));
+
+        List<ResponsiblePerson> responsiblePeople = notionService.getAllResponsiblePeople(false, false);
+
+//        Assert
+        assertEquals(2, responsiblePeople.size());
+        assertEquals("Responsible Person 1", responsiblePeople.get(0).name());
+        assertEquals("Responsible Person 2", responsiblePeople.get(1).name());
+        assertEquals("person1@appliedtechnology.se", responsiblePeople.get(0).email());
+        assertEquals("person2@appliedtechnology.se", responsiblePeople.get(1).email());
     }
 }
