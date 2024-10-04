@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
@@ -37,6 +38,9 @@ class NotionProxyServiceTest {
 
     @Value("${CORE_DATABASE_ID}")
     private String CORE_DATABASE_ID;
+
+    @Value("${SCORE_DATABASE_ID}")
+    private String SCORE_DATABASE_ID;
 
     @Test
     void shouldFindAllConsultantswithIncludeEmptyTrue() throws NotionException, JsonProcessingException {
@@ -268,4 +272,146 @@ class NotionProxyServiceTest {
         assertEquals("person1@appliedtechnology.se", responsiblePeople.get(0).email());
         assertEquals("person2@appliedtechnology.se", responsiblePeople.get(1).email());
     }
+
+    @Test
+    void shouldFindDeveloperByIdWithScore() throws NotionException {
+        //Given
+        String id= "11111111-1111-1111-1111-111111111111";
+        String jsonResponse = """
+                        {
+                        "object": "list",
+                        "results": [
+                {
+                    "object": "page",
+                     "id": "11111111-1111-1111-1111-111111111111",
+                        "properties": {
+                    "Categories": {
+                        "multi_select": [
+                        {
+                            "name": "backend"
+                        },
+                        {
+                            "name": "java"
+                        }
+                  ]
+                    },
+                    "Score": {
+                        "number": 100
+                    },
+                    "Name": {
+                        "title": [
+                        {
+                            "plain_text": "Three Small Methods"
+                        }
+                  ]
+                    }
+                }
+                },
+                {
+                    "object": "page",
+                        "properties": {
+                    "Categories": {
+                        "multi_select": [
+                        {
+                            "name": "frontend"
+                        },
+                        {
+                            "name": "javascript"
+                        }
+                  ]
+                    },
+                    "Score": {
+                        "number": 95
+                    },
+                    "Name": {
+                        "title": [
+                        {
+                            "plain_text": "UI Enhancement"
+                        }
+                  ]
+                    }
+                }
+                }
+          ],
+                "next_cursor": null,
+                        "has_more": false
+        }""";
+
+        String jsonResponse2 = """
+                            {
+                "object": "list",
+                "results": [
+                    {
+                        "object": "page",
+                        "id": "11111111-1111-1111-1111-111111111111",
+                        "properties": {
+                            "Name": {
+                                "id": "title",
+                                "type": "title",
+                                "title": [
+                                    {
+                                        "plain_text": "Desarrollador A",
+                                        "href": null
+                                    }
+                                ]
+                            },
+                            "GitHub": {
+                                "id": "github",
+                                "type": "url",
+                                "url": "https://github.com/userA"
+                            },
+                            "Private Email": {
+                                "id": "private_email",
+                                "type": "email",
+                                "email": "userA@example.com"
+                            }
+                        }
+                    },
+                    {
+                        "object": "page",
+                        "id": "22222222-2222-2222-2222-222222222222",
+                        "properties": {
+                            "Name": {
+                                "id": "title",
+                                "type": "title",
+                                "title": [
+                                    {
+                                        "plain_text": "Desarrollador B",
+                                        "href": null
+                                    }
+                                ]
+                            },
+                            "GitHub": {
+                                "id": "github",
+                                "type": "url",
+                                "url": "https://github.com/userB"
+                            },
+                            "Private Email": {
+                                "id": "private_email",
+                                "type": "email",
+                                "email": "userB@example.com"
+                            }
+                        }
+                    }
+                ],
+                "next_cursor": null,
+                "has_more": false
+            }
+            """;
+        //When
+        server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", SCORE_DATABASE_ID)))
+                .andRespond(withSuccess(jsonResponse, MediaType.APPLICATION_JSON));
+
+        server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", DATABASE_ID)))
+                .andRespond(withSuccess(jsonResponse2, MediaType.APPLICATION_JSON));
+        //Then
+        Developer developer = notionService.getDeveloperByIdWithScore(UUID.fromString(id));
+
+        assertEquals(100, developer.getScores().get(0).getScore());
+        assertEquals("Three Small Methods", developer.getScores().get(0).getName());
+        assertEquals(95, developer.getScores().get(1).getScore());
+        assertEquals("UI Enhancement", developer.getScores().get(1).getName());
+        assertEquals("https://github.com/userA", developer.getGithubUrl());
+    }
+
 }
