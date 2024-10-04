@@ -414,4 +414,130 @@ class NotionProxyServiceTest {
         assertEquals("https://github.com/userA", developer.getGithubUrl());
     }
 
+    @Test
+    void shouldGetConsultantById() throws NotionException {
+        // Given
+        UUID consultantId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+        String jsonResponse = """
+            {
+                       "object": "page",
+                       "id": "11111111-1111-1111-1111-111111111111",
+                       "properties": {
+                         "Name": {
+                           "id": "title",
+                           "type": "title",
+                           "title": [
+                             {
+                               "plain_text": "Adam West",
+                               "href": null
+                             }
+                           ]
+                         },
+                         "Responsible": {
+                           "id": "responsible_persons",
+                           "type": "multi_select",
+                   "people": [
+           {
+                 "name": "Anne Mary",
+                 "id": "22222222-2222-2222-2222-222222222222",
+                 "email": "anna@test.se"
+               }
+           ],
+                           "multi_select": [
+                             {
+                               "id": "22222222-2222-2222-2222-222222222222",
+                               "name": "Anne Mary",
+                               "color": "default"
+                             }
+                           ]
+                         },
+                         "Responsible Persons": {
+                           "id": "responsible_persons",
+                           "type": "multi_select",
+                           "multi_select": [
+                             {
+                               "id": "22222222-2222-2222-2222-222222222222",
+                               "name": "Anne Mary",
+                               "color": "default"
+                             }
+                           ]
+                         }
+                       }
+                     }
+        """;
+
+        String databaseResponse = """
+                {
+                  "object": "list",
+                  "results": [
+                    {
+                      "object": "page",
+                      "id": "33333333-3333-3333-3333-333333333333",
+                      "created_time": "2024-09-23T07:41:00.000Z",
+                      "last_edited_time": "2024-09-26T11:40:00.000Z",
+                      "created_by": {
+                        "object": "user",
+                        "id": "e62df52d-08bf-4a76-a0c4-7cff3cef7adf"
+                      },
+                      "last_edited_by": {
+                        "object": "user",
+                        "id": "44444444-4444-4444-4444-444444444444"
+                      },
+                      "cover": null,
+                      "icon": null,
+                      "parent": {
+                        "type": "database_id",
+                        "database_id": "44444444-4444-4444-4444-444444444444"
+                      },
+                      "archived": false,
+                      "in_trash": false,
+                      "properties": {
+                        "Person": {
+                  "people" : [
+              {
+        "name": "Anne Mary",
+                 "id": "22222222-2222-2222-2222-222222222222",
+                 "email": "anna@test.se",
+      "person": {
+                 "name": "Anne Mary",
+                 "id": "22222222-2222-2222-2222-222222222222",
+                 "email": "anna@test.se"
+               }
+      }
+          ]
+                },
+                        "Company": {
+                          "id": "%3B%3EoG",
+                          "type": "rollup",
+                          "rollup": {
+                            "type": "array",
+                            "array": [],
+                            "function": "show_original"
+                          }
+                        }
+                        }
+                        }
+        ]}
+      """;
+        // When
+        server.expect(requestTo(String.format("https://api.notion.com/v1/pages/%s", consultantId)))
+                .andRespond(withSuccess(jsonResponse, MediaType.APPLICATION_JSON));
+
+        server.expect(requestTo("https://api.notion.com/v1/databases/1100064bbb9a806f9c81e1e478d7bbe0/query"))
+                .andRespond(withSuccess(databaseResponse, MediaType.APPLICATION_JSON)); // Respond with a valid JSON
+
+        // Then
+        Consultant consultant = notionService.getConsultantById(consultantId, true);
+
+        assertNotNull(consultant);
+        assertEquals("Adam West", consultant.name());
+        assertEquals(consultantId, consultant.uuid());
+
+        // may want to assert responsiblePersonList content if applicable
+        assertNotNull(consultant.responsiblePersonList());
+        assertEquals(1, consultant.responsiblePersonList().size());
+        assertEquals("Anne Mary", consultant.responsiblePersonList().getFirst().name()); // Adjust based on your ResponsiblePerson class structure
+    }
+
+
 }
