@@ -60,6 +60,13 @@ public class NotionService {
                 .retrieve()
                 .body(JsonNode.class);
 
+        List<String> ptPeople;
+        try {
+            ptPeople = getAllResponsiblePeople(false, false).stream().map(ResponsiblePerson::name).toList();
+        } catch (NotionException e) {
+            throw new RuntimeException(e);
+        }
+
         if (response == null) {
             throw new NotionException();
         }
@@ -68,7 +75,7 @@ public class NotionService {
             return null;
         }
 
-        List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(response, includeNull);
+        List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(response, includeNull,ptPeople);
 
         return new Consultant(
                 response.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
@@ -76,7 +83,7 @@ public class NotionService {
                 responsiblePersonList);
     }
 
-    private List<ResponsiblePerson> getResponsiblePersonsFromResponse(JsonNode response, boolean includeNull) {
+    private List<ResponsiblePerson> getResponsiblePersonsFromResponse(JsonNode response, boolean includeNull, List<String> ptPeople) {
         List<ResponsiblePerson> responsiblePersonList = new ArrayList<>();
         if (response.get("properties").get("Responsible").get("people").get(0) != null) {
             response.get("properties").get("Responsible").get("people").elements().forEachRemaining(element2 -> {
@@ -88,12 +95,6 @@ public class NotionService {
                 }
 
                 if (name != null) {
-                    List<String> ptPeople;
-                    try {
-                        ptPeople = getAllResponsiblePeople(false, false).stream().map(ResponsiblePerson::name).toList();
-                    } catch (NotionException e) {
-                        throw new RuntimeException(e);
-                    }
                     if (!ptPeople.contains(name)) {
                         return;
                     }
@@ -208,6 +209,13 @@ public class NotionService {
                     .retrieve()
                     .body(JsonNode.class);
 
+            List<String> ptPeople;
+            try {
+                ptPeople = getAllResponsiblePeople(false, false).stream().map(ResponsiblePerson::name).toList();
+            } catch (NotionException e) {
+                throw new RuntimeException(e);
+            }
+
             if (response == null) {
                 throw new NotionException();
             }
@@ -216,7 +224,7 @@ public class NotionService {
                 if (element.get("properties").get("Name") == null) return;
                 if (element.get("properties").get("Name").get("title").get(0) == null) return;
 
-                List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(element, includeNull);
+                List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(element, includeNull,ptPeople);
                 if (responsiblePersonList.isEmpty() && !includeEmpty) {
                     return;
                 }
