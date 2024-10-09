@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saltpgp.notionproxy.exceptions.NotionException;
+import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import com.saltpgp.notionproxy.models.Consultant;
 import com.saltpgp.notionproxy.models.Developer;
 import com.saltpgp.notionproxy.models.ResponsiblePerson;
@@ -324,7 +325,7 @@ class NotionProxyServiceTest {
         server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", CORE_DATABASE_ID)))
                 .andRespond(withSuccess(coreDatabaseResponse, MediaType.APPLICATION_JSON));
 
-        List<Consultant> consultants = notionService.getAllConsultants(false, false);
+        List<Consultant> consultants = notionService.getAllConsultants( false);
 
         assertEquals(2, consultants.size());
         assertEquals("Test Saltie 1", consultants.get(0).name());
@@ -354,7 +355,7 @@ class NotionProxyServiceTest {
         server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", CORE_DATABASE_ID)))
                 .andRespond(withSuccess(coreDatabaseResponse, MediaType.APPLICATION_JSON));
 
-        List<ResponsiblePerson> responsiblePeople = notionService.getAllResponsiblePeople(false, false);
+        List<ResponsiblePerson> responsiblePeople = notionService.getAllResponsiblePeople( false);
 
 //        Assert
         assertEquals(2, responsiblePeople.size());
@@ -365,7 +366,7 @@ class NotionProxyServiceTest {
     }
 
     @Test
-    void shouldFindDeveloperByIdWithScore() throws NotionException {
+    void shouldFindDeveloperByIdWithScore() throws NotionException, NotionNotFoundException {
         //Given
         String id = "11111111-1111-1111-1111-111111111111";
 
@@ -397,7 +398,7 @@ class NotionProxyServiceTest {
                 .andRespond(withSuccess(coreDatabaseResponse, MediaType.APPLICATION_JSON));
 
         // Then
-        Consultant consultant = notionService.getConsultantById(consultantId, true);
+        Consultant consultant = notionService.getConsultantById(consultantId);
 
         assertNotNull(consultant);
         assertEquals("Test Saltie 1", consultant.name());

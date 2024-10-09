@@ -39,8 +39,8 @@
     <cache alias="allconsultants">
 
         <!-- These can be removed -->
-        <key-type>org.springframework.cache.interceptor.SimpleKey</key-type>
-        <value-type>java.util.List</value-type>
+<!--        <key-type>org.springframework.cache.interceptor.SimpleKey</key-type>-->
+<!--        <value-type>java.util.List</value-type>-->
         <!-- These can be removed -->
 
         <expiry>
