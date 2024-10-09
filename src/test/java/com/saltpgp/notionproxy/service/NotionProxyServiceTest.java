@@ -93,6 +93,14 @@ class NotionProxyServiceTest {
                                             "person": {
                                                 "email": "responsibleperson1@appliedtechnology.se"
                                             }
+                                        },
+                                        {
+                                            "object": "user",
+                                            "id": "44444444-4444-4444-4444-444444444445",
+                                            "name": "Sales Person 1",
+                                            "person": {
+                                                "email": "salesperson1@appliedtechnology.se"
+                                            }
                                         }
                                     ]
                                 }
@@ -275,7 +283,7 @@ class NotionProxyServiceTest {
                                 "Private Email": {
                                     "id": "private_email",
                                     "type": "email",
-                                    "email": "saltie@example.com"
+                                    "email": "saltie1@example.com"
                                 },
                                 "Responsible": {
                                     "id": "33333333-3333-3333-3333-333333333333",
@@ -400,6 +408,7 @@ class NotionProxyServiceTest {
         assertEquals(1, consultant.responsiblePersonList().size());
         assertEquals("Responsible Person 1", consultant.responsiblePersonList().getFirst().name());
     }
+    
 
 
 }
