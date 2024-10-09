@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.saltpgp.notionproxy.exceptions.NotionException;
+import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import com.saltpgp.notionproxy.models.Consultant;
 import com.saltpgp.notionproxy.models.Developer;
 import com.saltpgp.notionproxy.models.ResponsiblePerson;
@@ -35,6 +36,9 @@ public class NotionService {
     @Value("${SCORE_DATABASE_ID}")
     private String SCORE_DATABASE_ID;
 
+    @Value("${CORE_DATABASE_ID}")
+    private String CORE_DATABASE_ID;
+
     @Value("${PEOPLE_AND_TALENT}")
     private String PEOPLE_AND_TALENT;
 
@@ -47,7 +51,7 @@ public class NotionService {
         this.restClient = builder.baseUrl("https://api.notion.com/v1").build();
     }
 
-    public Consultant getConsultantById(UUID id, boolean includeNull) throws NotionException {
+    public Consultant getConsultantById(UUID id) throws NotionException {
         JsonNode response = restClient
                 .get()
                 .uri(String.format("/pages/%s", id))
@@ -57,6 +61,13 @@ public class NotionService {
                 .retrieve()
                 .body(JsonNode.class);
 
+        List<String> ptPeople;
+        try {
+            ptPeople = getAllResponsiblePeople( false).stream().map(ResponsiblePerson::name).toList();
+        } catch (NotionException e) {
+            throw new RuntimeException(e);
+        }
+
         if (response == null) {
             throw new NotionException();
         }
@@ -65,7 +76,7 @@ public class NotionService {
             return null;
         }
 
-        List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(response, includeNull);
+        List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(response,ptPeople);
 
         return new Consultant(
                 response.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
@@ -73,30 +84,28 @@ public class NotionService {
                 responsiblePersonList);
     }
 
-    private List<ResponsiblePerson> getResponsiblePersonsFromResponse(JsonNode response, boolean includeNull) {
+    private List<ResponsiblePerson> getResponsiblePersonsFromResponse(JsonNode response,List<String> ptPeople) {
         List<ResponsiblePerson> responsiblePersonList = new ArrayList<>();
         if (response.get("properties").get("Responsible").get("people").get(0) != null) {
             response.get("properties").get("Responsible").get("people").elements().forEachRemaining(element2 -> {
-                String name = null;
-                if (element2.get("name") != null) {
-                    name = element2.get("name").asText();
-                } else if (!includeNull) {
-                    return;
-                }
 
-                List<String> ptPeople = List.of(StringUtils.normalizeSwedishAlphabet(PEOPLE_AND_TALENT).split(","));
-                if (!ptPeople.contains(name)) {
-                    return;
+                if (element2.get("name") == null) return;
+
+                String name = element2.get("name").asText();
+
+                if (name != null) {
+                    if (!ptPeople.contains(name)) {
+                        return;
+                    }
                 }
 
                 String email = null;
                 if (element2.get("person") != null) {
                     if (element2.get("person").get("email") != null) {
                         email = element2.get("person").get("email").asText();
-                    } else if (!includeNull) {
-                        return;
                     }
                 }
+
                 List<Consultant> consultants = new ArrayList<>();
                 ResponsiblePerson responsiblePerson = new ResponsiblePerson(
                         name,
@@ -109,38 +118,80 @@ public class NotionService {
         return responsiblePersonList;
     }
 
-    public Set<ResponsiblePerson> getAllResponsiblePeople(boolean includeNull, boolean includeConsultants) throws NotionException {
-        List<Consultant> consultants = getAllConsultants(true, includeNull);
-        Set<ResponsiblePerson> responsiblePersonList = new HashSet<>();
-        consultants.forEach(c -> responsiblePersonList.addAll(c.responsiblePersonList()));
+    public List<ResponsiblePerson> getAllResponsiblePeople(boolean includeConsultants) throws NotionException {
+        List<ResponsiblePerson> responsiblePersonList = new ArrayList<>();
+
+        String jsonBody = """
+        {
+            "filter": {
+                "property": "Guild",
+                "multi_select": {
+                    "contains": "P&T"
+                }
+            }
+        }
+        """;
+        
+        JsonNode response = restClient
+                .post()
+                .uri(String.format("/databases/%s/query", CORE_DATABASE_ID))
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + API_KEY)
+                .header("Notion-Version", NOTION_VERSION)
+                .body(jsonBody)
+                .retrieve()
+                .body(JsonNode.class);
+
+
+        response.get("results").elements().forEachRemaining(element -> {
+            if (element.get("properties").get("Person").get("people").get(0) == null) return;
+
+//          If you add these lines then you can filter out inactive P&T
+//            List<String> ptPeople = List.of(StringUtils.normalizeSwedishAlphabet(PEOPLE_AND_TALENT).split(","));
+//            if (!ptPeople.contains(element.get("properties").get("Person").get("people").get(0).get("name").asText())) {
+//                return;
+//            }
+            ResponsiblePerson responsiblePerson = new ResponsiblePerson(
+                    element.get("properties").get("Person").get("people").get(0).get("name").asText(),
+                    UUID.fromString(element.get("properties").get("Person").get("people").get(0).get("id").asText()),
+                    element.get("properties").get("Person").get("people").get(0).get("person").get("email").asText(),
+                    new ArrayList<>());
+
+            responsiblePersonList.add(responsiblePerson);
+        });
 
         if(includeConsultants){
+            List<Consultant> consultants = self.getAllConsultants(true);
             responsiblePersonList.forEach(responsiblePerson -> {
-                List<Consultant> consultants1 = new ArrayList<>();
+                List<Consultant> newConsultantsList = new ArrayList<>();
                 consultants.forEach(consultant -> {
-                    System.out.println(consultant.name());
-                     consultant.responsiblePersonList().forEach(responsiblePerson1 -> {
-
-                        if(responsiblePerson1.id().equals(responsiblePerson.id())){
-                            consultants1.add(consultant);
+                    consultant.responsiblePersonList().forEach(consultantsResponsiblePerson -> {
+                        if(consultantsResponsiblePerson.name()==null) return;
+                        if(consultantsResponsiblePerson.id().equals(responsiblePerson.id())){
+                            newConsultantsList.add(consultant);
                         }
                     });
                 });
-                consultants1.forEach(consultant -> responsiblePerson.consultants().add(consultant));
+                newConsultantsList.forEach(consultant -> {
+                    responsiblePerson.consultants().add(consultant);
+                });
             });
         }
+
         return responsiblePersonList;
     }
 
-    public ResponsiblePerson getResponsiblePersonById(UUID id, boolean includeNull, boolean includeConsultants) throws NotionException {
-        Set<ResponsiblePerson> responsiblePersonList = getAllResponsiblePeople(includeNull, includeConsultants);
+    public ResponsiblePerson getResponsiblePersonById(UUID id, boolean includeConsultants) throws NotionException {
+        List<ResponsiblePerson> responsiblePersonList = getAllResponsiblePeople(includeConsultants);
         return responsiblePersonList.stream()
                 .filter(responsiblePerson -> responsiblePerson.id().equals(id))
                 .findFirst()
                 .orElse(null);
     }
 
-    public List<Consultant> getAllConsultants(boolean includeEmpty, boolean includeNull) throws NotionException {
+    @Lazy
+    @Cacheable(value = "allconsultants")
+    public List<Consultant> getAllConsultants(boolean includeEmptyResponsible) throws NotionException {
         List<Consultant> allConsultants = new ArrayList<>();
         String nextCursor = null;
         boolean hasMore = true;
@@ -156,15 +207,23 @@ public class NotionService {
                     .retrieve()
                     .body(JsonNode.class);
 
+            List<String> ptPeople;
+            try {
+                ptPeople = getAllResponsiblePeople(false).stream().map(ResponsiblePerson::name).toList();
+            } catch (NotionException e) {
+                throw new RuntimeException(e);
+            }
+
             if (response == null) {
                 throw new NotionException();
             }
 
             response.get("results").elements().forEachRemaining(element -> {
+                if (element.get("properties").get("Name") == null) return;
                 if (element.get("properties").get("Name").get("title").get(0) == null) return;
 
-                List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(element, includeNull);
-                if (responsiblePersonList.isEmpty() && !includeEmpty) {
+                List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(element,ptPeople);
+                if (responsiblePersonList.isEmpty() && !includeEmptyResponsible) {
                     return;
                 }
 
@@ -242,7 +301,7 @@ public class NotionService {
     }
 
     @Cacheable(value = "developerScoreCard", key = "#id")
-    public Developer getDeveloperByIdWithScore(UUID id) throws NotionException {
+    public Developer getDeveloperByIdWithScore(UUID id) throws NotionException, NotionNotFoundException {
         List<Score> allScores = new ArrayList<>();
         String nextCursor = null;
         boolean hasMore = true;
@@ -276,7 +335,7 @@ public class NotionService {
                 throw new NotionException();
             }
             if (response.get("results").isEmpty()) {
-                throw new NotionException();
+                throw new NotionNotFoundException();
             }
             response.get("results").elements().forEachRemaining(element -> {
 

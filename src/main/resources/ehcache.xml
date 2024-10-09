@@ -36,4 +36,21 @@
         </resources>
     </cache>
 
+    <cache alias="allconsultants">
+
+        <!-- These can be removed -->
+<!--        <key-type>org.springframework.cache.interceptor.SimpleKey</key-type>-->
+<!--        <value-type>java.util.List</value-type>-->
+        <!-- These can be removed -->
+
+        <expiry>
+            <ttl>10</ttl>
+        </expiry>
+
+        <resources>
+            <heap>2</heap>
+            <!--            <offheap unit="MB">1</offheap>--><!-- if you want extra heap memory off JVM -->
+        </resources>
+    </cache>
+
 </config>

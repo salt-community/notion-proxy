@@ -17,6 +17,14 @@ public record ResponsibleWithConsultantsDto(String name, UUID id, String email, 
         return responsibleWithConsultantsDtos;
     }
 
+    public static List<ResponsibleWithConsultantsDto> fromModelList(List<ResponsiblePerson> responsiblePerson) {
+        List<ResponsibleWithConsultantsDto> responsibleWithConsultantsDtos = new ArrayList<>();
+        for(ResponsiblePerson person : responsiblePerson) {
+            responsibleWithConsultantsDtos.add(new ResponsibleWithConsultantsDto(person.name(),person.id(),person.email(),person.consultants().stream().map(consultant -> BasicConsultantDto.fromModel(consultant)).toList()));
+        }
+        return responsibleWithConsultantsDtos;
+    }
+
     public static ResponsibleWithConsultantsDto fromModel(ResponsiblePerson responsiblePerson) {
        return new ResponsibleWithConsultantsDto(
                responsiblePerson.name(),
