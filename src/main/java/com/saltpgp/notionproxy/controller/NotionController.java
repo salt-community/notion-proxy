@@ -35,10 +35,13 @@ public class NotionController {
 
     @GetMapping("consultants")
     public ResponseEntity<List<ConsultantWithResponsibleDto>> getConsultants(
-            @RequestParam(required = false, defaultValue = "false") boolean includeEmptyResponsible){
+            @RequestParam(required = false, defaultValue = "false") boolean includeEmptyResponsible) {
         try {
             return ResponseEntity.ok(notionService
-                    .getAllConsultants(includeEmptyResponsible).stream().map(ConsultantWithResponsibleDto::fromModel).toList());
+                    .getAllConsultants(includeEmptyResponsible)
+                    .stream()
+                    .map(ConsultantWithResponsibleDto::fromModel)
+                    .toList());
         } catch (NotionException e) {
             return ResponseEntity.internalServerError().build();
         }
@@ -52,6 +55,7 @@ public class NotionController {
             if (consultant == null) {
                 return ResponseEntity.notFound().build();
             }
+
             return ResponseEntity.ok(ConsultantWithResponsibleDto.fromModel(consultant));
         } catch (NotionException e) {
             return ResponseEntity.internalServerError().build();
@@ -65,12 +69,11 @@ public class NotionController {
             @RequestParam(required = false, defaultValue = "false") boolean includeConsultants
     ) {
         try {
-            if(includeConsultants){
+            if (includeConsultants) {
                 List<ResponsibleWithConsultantsDto> dtos = ResponsibleWithConsultantsDto
                         .fromModelList(notionService.getAllResponsiblePeople(true));
                 return ResponseEntity.ok((List<T>) dtos);
-            }
-            else{
+            } else {
                 List<BasicResponsiblePersonDto> dtos = BasicResponsiblePersonDto
                         .fromModelList(notionService.getAllResponsiblePeople(false));
                 return ResponseEntity.ok((List<T>) dtos);
@@ -86,17 +89,20 @@ public class NotionController {
             @RequestParam(required = false, defaultValue = "false") boolean includeConsultants
     ) {
         try {
-            ResponsiblePerson responsiblePerson = notionService.getResponsiblePersonById(id, includeConsultants);
+            ResponsiblePerson responsiblePerson = notionService
+                    .getResponsiblePersonById(id, includeConsultants);
+
             if (responsiblePerson == null) {
                 return ResponseEntity.notFound().build();
             }
 
-            if(includeConsultants){
+            if (includeConsultants) {
                 ResponsibleWithConsultantsDto dtos = ResponsibleWithConsultantsDto
                         .fromModel(responsiblePerson);
                 return ResponseEntity.ok((T) dtos);
             }
-            else{
+
+            else {
                 BasicResponsiblePersonDto dtos = BasicResponsiblePersonDto
                         .fromModel(responsiblePerson);
                 return ResponseEntity.ok((T) dtos);
@@ -107,12 +113,12 @@ public class NotionController {
     }
 
     @GetMapping("developers/{id}/scores")
-    public ResponseEntity <DeveloperDto> getScoreCard(@PathVariable UUID id) {
-        try{
+    public ResponseEntity<DeveloperDto> getScoreCard(@PathVariable UUID id) {
+        try {
             return ResponseEntity.ok(DeveloperDto.fromModel(notionService.getDeveloperByIdWithScore(id)));
         } catch (NotionException e) {
             return ResponseEntity.internalServerError().build();
-        }catch (NotionNotFoundException e) {
+        } catch (NotionNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
 

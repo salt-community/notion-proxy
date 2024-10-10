@@ -9,7 +9,6 @@ import com.saltpgp.notionproxy.models.Consultant;
 import com.saltpgp.notionproxy.models.Developer;
 import com.saltpgp.notionproxy.models.ResponsiblePerson;
 import com.saltpgp.notionproxy.models.Score;
-import com.saltpgp.notionproxy.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -39,13 +38,9 @@ public class NotionService {
     @Value("${CORE_DATABASE_ID}")
     private String CORE_DATABASE_ID;
 
-    @Value("${PEOPLE_AND_TALENT}")
-    private String PEOPLE_AND_TALENT;
-
     @Autowired
     @Lazy
     private NotionService self;
-
 
     public NotionService(RestClient.Builder builder) {
         this.restClient = builder.baseUrl("https://api.notion.com/v1").build();
@@ -61,12 +56,10 @@ public class NotionService {
                 .retrieve()
                 .body(JsonNode.class);
 
-        List<String> ptPeople;
-        try {
-            ptPeople = getAllResponsiblePeople( false).stream().map(ResponsiblePerson::name).toList();
-        } catch (NotionException e) {
-            throw new RuntimeException(e);
-        }
+        List<String> ptPeople = getAllResponsiblePeople(false)
+                .stream()
+                .map(ResponsiblePerson::name)
+                .toList();
 
         if (response == null) {
             throw new NotionException();
@@ -76,7 +69,7 @@ public class NotionService {
             return null;
         }
 
-        List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(response,ptPeople);
+        List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(response, ptPeople);
 
         return new Consultant(
                 response.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
@@ -84,7 +77,7 @@ public class NotionService {
                 responsiblePersonList);
     }
 
-    private List<ResponsiblePerson> getResponsiblePersonsFromResponse(JsonNode response,List<String> ptPeople) {
+    private List<ResponsiblePerson> getResponsiblePersonsFromResponse(JsonNode response, List<String> ptPeople) {
         List<ResponsiblePerson> responsiblePersonList = new ArrayList<>();
         if (response.get("properties").get("Responsible").get("people").get(0) != null) {
             response.get("properties").get("Responsible").get("people").elements().forEachRemaining(element2 -> {
@@ -122,16 +115,16 @@ public class NotionService {
         List<ResponsiblePerson> responsiblePersonList = new ArrayList<>();
 
         String jsonBody = """
-        {
-            "filter": {
-                "property": "Guild",
-                "multi_select": {
-                    "contains": "P&T"
+                {
+                    "filter": {
+                        "property": "Guild",
+                        "multi_select": {
+                            "contains": "P&T"
+                        }
+                    }
                 }
-            }
-        }
-        """;
-        
+                """;
+
         JsonNode response = restClient
                 .post()
                 .uri(String.format("/databases/%s/query", CORE_DATABASE_ID))
@@ -142,39 +135,40 @@ public class NotionService {
                 .retrieve()
                 .body(JsonNode.class);
 
+        if (response == null) {
+            throw new NotionException();
+        }
 
         response.get("results").elements().forEachRemaining(element -> {
-            if (element.get("properties").get("Person").get("people").get(0) == null) return;
+            JsonNode person = element.get("properties").get("Person").get("people").get(0);
+            if (person  == null) return;
 
 //          If you add these lines then you can filter out inactive P&T
 //            List<String> ptPeople = List.of(StringUtils.normalizeSwedishAlphabet(PEOPLE_AND_TALENT).split(","));
 //            if (!ptPeople.contains(element.get("properties").get("Person").get("people").get(0).get("name").asText())) {
 //                return;
 //            }
+
             ResponsiblePerson responsiblePerson = new ResponsiblePerson(
-                    element.get("properties").get("Person").get("people").get(0).get("name").asText(),
-                    UUID.fromString(element.get("properties").get("Person").get("people").get(0).get("id").asText()),
-                    element.get("properties").get("Person").get("people").get(0).get("person").get("email").asText(),
+                    person.get("name").asText(),
+                    UUID.fromString(person.get("id").asText()),
+                    person.get("person").get("email").asText(),
                     new ArrayList<>());
 
             responsiblePersonList.add(responsiblePerson);
         });
 
-        if(includeConsultants){
+        if (includeConsultants) {
             List<Consultant> consultants = self.getAllConsultants(true);
             responsiblePersonList.forEach(responsiblePerson -> {
                 List<Consultant> newConsultantsList = new ArrayList<>();
-                consultants.forEach(consultant -> {
-                    consultant.responsiblePersonList().forEach(consultantsResponsiblePerson -> {
-                        if(consultantsResponsiblePerson.name()==null) return;
-                        if(consultantsResponsiblePerson.id().equals(responsiblePerson.id())){
-                            newConsultantsList.add(consultant);
-                        }
-                    });
-                });
-                newConsultantsList.forEach(consultant -> {
-                    responsiblePerson.consultants().add(consultant);
-                });
+                consultants.forEach(consultant -> consultant.responsiblePersonList().forEach(consultantsResponsiblePerson -> {
+                    if (consultantsResponsiblePerson.name() == null) return;
+                    if (consultantsResponsiblePerson.id().equals(responsiblePerson.id())) {
+                        newConsultantsList.add(consultant);
+                    }
+                }));
+                newConsultantsList.forEach(consultant -> responsiblePerson.consultants().add(consultant));
             });
         }
 
@@ -207,12 +201,10 @@ public class NotionService {
                     .retrieve()
                     .body(JsonNode.class);
 
-            List<String> ptPeople;
-            try {
-                ptPeople = getAllResponsiblePeople(false).stream().map(ResponsiblePerson::name).toList();
-            } catch (NotionException e) {
-                throw new RuntimeException(e);
-            }
+            List<String> ptPeople = getAllResponsiblePeople(false)
+                    .stream()
+                    .map(ResponsiblePerson::name)
+                    .toList();
 
             if (response == null) {
                 throw new NotionException();
@@ -222,7 +214,7 @@ public class NotionService {
                 if (element.get("properties").get("Name") == null) return;
                 if (element.get("properties").get("Name").get("title").get(0) == null) return;
 
-                List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(element,ptPeople);
+                List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(element, ptPeople);
                 if (responsiblePersonList.isEmpty() && !includeEmptyResponsible) {
                     return;
                 }
