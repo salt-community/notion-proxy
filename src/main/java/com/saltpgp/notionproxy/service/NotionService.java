@@ -161,17 +161,13 @@ public class NotionService {
             List<Consultant> consultants = self.getAllConsultants(true);
             responsiblePersonList.forEach(responsiblePerson -> {
                 List<Consultant> newConsultantsList = new ArrayList<>();
-                consultants.forEach(consultant -> {
-                    consultant.responsiblePersonList().forEach(consultantsResponsiblePerson -> {
-                        if (consultantsResponsiblePerson.name() == null) return;
-                        if (consultantsResponsiblePerson.id().equals(responsiblePerson.id())) {
-                            newConsultantsList.add(consultant);
-                        }
-                    });
-                });
-                newConsultantsList.forEach(consultant -> {
-                    responsiblePerson.consultants().add(consultant);
-                });
+                consultants.forEach(consultant -> consultant.responsiblePersonList().forEach(consultantsResponsiblePerson -> {
+                    if (consultantsResponsiblePerson.name() == null) return;
+                    if (consultantsResponsiblePerson.id().equals(responsiblePerson.id())) {
+                        newConsultantsList.add(consultant);
+                    }
+                }));
+                newConsultantsList.forEach(consultant -> responsiblePerson.consultants().add(consultant));
             });
         }
 
