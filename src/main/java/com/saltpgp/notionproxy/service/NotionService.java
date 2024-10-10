@@ -140,7 +140,8 @@ public class NotionService {
         }
 
         response.get("results").elements().forEachRemaining(element -> {
-            if (element.get("properties").get("Person").get("people").get(0) == null) return;
+            JsonNode person = element.get("properties").get("Person").get("people").get(0);
+            if (person  == null) return;
 
 //          If you add these lines then you can filter out inactive P&T
 //            List<String> ptPeople = List.of(StringUtils.normalizeSwedishAlphabet(PEOPLE_AND_TALENT).split(","));
@@ -149,9 +150,9 @@ public class NotionService {
 //            }
 
             ResponsiblePerson responsiblePerson = new ResponsiblePerson(
-                    element.get("properties").get("Person").get("people").get(0).get("name").asText(),
-                    UUID.fromString(element.get("properties").get("Person").get("people").get(0).get("id").asText()),
-                    element.get("properties").get("Person").get("people").get(0).get("person").get("email").asText(),
+                    person.get("name").asText(),
+                    UUID.fromString(person.get("id").asText()),
+                    person.get("person").get("email").asText(),
                     new ArrayList<>());
 
             responsiblePersonList.add(responsiblePerson);
