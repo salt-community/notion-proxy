@@ -9,7 +9,6 @@ import com.saltpgp.notionproxy.models.Consultant;
 import com.saltpgp.notionproxy.models.Developer;
 import com.saltpgp.notionproxy.models.ResponsiblePerson;
 import com.saltpgp.notionproxy.models.Score;
-import com.saltpgp.notionproxy.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -39,13 +38,9 @@ public class NotionService {
     @Value("${CORE_DATABASE_ID}")
     private String CORE_DATABASE_ID;
 
-    @Value("${PEOPLE_AND_TALENT}")
-    private String PEOPLE_AND_TALENT;
-
     @Autowired
     @Lazy
     private NotionService self;
-
 
     public NotionService(RestClient.Builder builder) {
         this.restClient = builder.baseUrl("https://api.notion.com/v1").build();
