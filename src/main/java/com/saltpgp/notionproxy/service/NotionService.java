@@ -56,12 +56,10 @@ public class NotionService {
                 .retrieve()
                 .body(JsonNode.class);
 
-        List<String> ptPeople;
-        try {
-            ptPeople = getAllResponsiblePeople(false).stream().map(ResponsiblePerson::name).toList();
-        } catch (NotionException e) {
-            throw new RuntimeException(e);
-        }
+        List<String> ptPeople = getAllResponsiblePeople(false)
+                .stream()
+                .map(ResponsiblePerson::name)
+                .toList();
 
         if (response == null) {
             throw new NotionException();
@@ -206,12 +204,10 @@ public class NotionService {
                     .retrieve()
                     .body(JsonNode.class);
 
-            List<String> ptPeople;
-            try {
-                ptPeople = getAllResponsiblePeople(false).stream().map(ResponsiblePerson::name).toList();
-            } catch (NotionException e) {
-                throw new RuntimeException(e);
-            }
+            List<String> ptPeople = getAllResponsiblePeople(false)
+                    .stream()
+                    .map(ResponsiblePerson::name)
+                    .toList();
 
             if (response == null) {
                 throw new NotionException();
