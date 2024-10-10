@@ -142,6 +142,9 @@ public class NotionService {
                 .retrieve()
                 .body(JsonNode.class);
 
+        if (response == null) {
+            throw new NotionException();
+        }
 
         response.get("results").elements().forEachRemaining(element -> {
             if (element.get("properties").get("Person").get("people").get(0) == null) return;
@@ -151,6 +154,7 @@ public class NotionService {
 //            if (!ptPeople.contains(element.get("properties").get("Person").get("people").get(0).get("name").asText())) {
 //                return;
 //            }
+
             ResponsiblePerson responsiblePerson = new ResponsiblePerson(
                     element.get("properties").get("Person").get("people").get(0).get("name").asText(),
                     UUID.fromString(element.get("properties").get("Person").get("people").get(0).get("id").asText()),
