@@ -63,7 +63,7 @@ public class NotionService {
 
         List<String> ptPeople;
         try {
-            ptPeople = getAllResponsiblePeople( false).stream().map(ResponsiblePerson::name).toList();
+            ptPeople = getAllResponsiblePeople(false).stream().map(ResponsiblePerson::name).toList();
         } catch (NotionException e) {
             throw new RuntimeException(e);
         }
@@ -76,7 +76,7 @@ public class NotionService {
             return null;
         }
 
-        List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(response,ptPeople);
+        List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(response, ptPeople);
 
         return new Consultant(
                 response.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
@@ -84,7 +84,7 @@ public class NotionService {
                 responsiblePersonList);
     }
 
-    private List<ResponsiblePerson> getResponsiblePersonsFromResponse(JsonNode response,List<String> ptPeople) {
+    private List<ResponsiblePerson> getResponsiblePersonsFromResponse(JsonNode response, List<String> ptPeople) {
         List<ResponsiblePerson> responsiblePersonList = new ArrayList<>();
         if (response.get("properties").get("Responsible").get("people").get(0) != null) {
             response.get("properties").get("Responsible").get("people").elements().forEachRemaining(element2 -> {
@@ -122,16 +122,16 @@ public class NotionService {
         List<ResponsiblePerson> responsiblePersonList = new ArrayList<>();
 
         String jsonBody = """
-        {
-            "filter": {
-                "property": "Guild",
-                "multi_select": {
-                    "contains": "P&T"
+                {
+                    "filter": {
+                        "property": "Guild",
+                        "multi_select": {
+                            "contains": "P&T"
+                        }
+                    }
                 }
-            }
-        }
-        """;
-        
+                """;
+
         JsonNode response = restClient
                 .post()
                 .uri(String.format("/databases/%s/query", CORE_DATABASE_ID))
@@ -160,14 +160,14 @@ public class NotionService {
             responsiblePersonList.add(responsiblePerson);
         });
 
-        if(includeConsultants){
+        if (includeConsultants) {
             List<Consultant> consultants = self.getAllConsultants(true);
             responsiblePersonList.forEach(responsiblePerson -> {
                 List<Consultant> newConsultantsList = new ArrayList<>();
                 consultants.forEach(consultant -> {
                     consultant.responsiblePersonList().forEach(consultantsResponsiblePerson -> {
-                        if(consultantsResponsiblePerson.name()==null) return;
-                        if(consultantsResponsiblePerson.id().equals(responsiblePerson.id())){
+                        if (consultantsResponsiblePerson.name() == null) return;
+                        if (consultantsResponsiblePerson.id().equals(responsiblePerson.id())) {
                             newConsultantsList.add(consultant);
                         }
                     });
@@ -222,7 +222,7 @@ public class NotionService {
                 if (element.get("properties").get("Name") == null) return;
                 if (element.get("properties").get("Name").get("title").get(0) == null) return;
 
-                List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(element,ptPeople);
+                List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(element, ptPeople);
                 if (responsiblePersonList.isEmpty() && !includeEmptyResponsible) {
                     return;
                 }
