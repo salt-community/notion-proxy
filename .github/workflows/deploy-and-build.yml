@@ -33,17 +33,18 @@ jobs:
       - name: Docker Build
         run: |
           docker build \
-            --build-arg DB_URL="${{ vars.NOTION_API_KEY }}" \
-            --build-arg DB_USERNAME="${{ vars.DATABASE_ID }}" \
-            --build-arg DB_URL="${{ secrets.NOTION_VERSION }}" \
-            --build-arg DB_URL="${{ vars.CUSTOM_API_KEY }}" \
-            --build-arg DB_USERNAME="${{ vars.API_KEY_HEADER }}" \
-            --build-arg DB_URL="${{ secrets.SCORE_DATABASE_ID }}" \
-            --build-arg DB_URL="${{ secrets.CORE_DATABASE_ID }}" \
+            --build-arg NOTION_API_KEY="${{ secrets.NOTION_API_KEY }}" \
+            --build-arg DATABASE_ID="${{ secrets.DATABASE_ID }}" \
+            --build-arg NOTION_VERSION="${{ secrets.NOTION_VERSION }}" \
+            --build-arg CUSTOM_API_KEY="${{ secrets.CUSTOM_API_KEY }}" \
+            --build-arg API_KEY_HEADER="${{ secrets.API_KEY_HEADER }}" \
+            --build-arg SCORE_DATABASE_ID="${{ secrets.SCORE_DATABASE_ID }}" \
+            --build-arg CORE_DATABASE_ID="${{ secrets.CORE_DATABASE_ID }}" \
             --no-cache \
             -t ${{ env.IMAGE_URL }} \
             . \
             -f Dockerfile
+
       - name: Docker Push
         run: docker push $IMAGE_URL
 
@@ -51,9 +52,13 @@ jobs:
         uses: google-github-actions/deploy-cloudrun@v1
         with:
           env_vars: |-
-            DB_URL=${{vars.DB_URL}}
-            DB_USERNAME=${{vars.DB_USERNAME}}
-            DB_PASSWORD=${{secrets.DB_PASSWORD}}
+            NOTION_API_KEY=${{ secrets.NOTION_API_KEY }}
+            DATABASE_ID=${{ secrets.DATABASE_ID }}
+            NOTION_VERSION=${{ secrets.NOTION_VERSION }}
+            CUSTOM_API_KEY=${{ secrets.CUSTOM_API_KEY }}
+            API_KEY_HEADER=${{ secrets.API_KEY_HEADER }}
+            SCORE_DATABASE_ID=${{ secrets.SCORE_DATABASE_ID }}
+            CORE_DATABASE_ID=${{ secrets.CORE_DATABASE_ID }}
           region: ${{ vars.GC_REGION }}
           service: ${{ vars.GC_REPO_NAME }}
           image: ${{ env.IMAGE_URL }}
