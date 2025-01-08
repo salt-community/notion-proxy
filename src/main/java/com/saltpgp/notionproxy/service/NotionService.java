@@ -338,13 +338,13 @@ public class NotionService {
                     element.get("properties").get("Categories").get("multi_select").forEach(category ->
                             categories.add(category.get("name").asText()));
                 }
-                System.out.println("Element Properties = " + element.get("properties").get("Comment").get("rich_text"));
+
 
                 Score score = new Score(
                         element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
                         element.get("properties").get("Score").get("number").asInt(),
                         categories,
-                        NotionServiceUtility.GetScoreComment(element)
+                        NotionServiceUtility.getScoreComment(element)
                 );
 
                 allScores.add(score);
