@@ -128,13 +128,14 @@ public class NotionService {
         List<Consultant> allConsultants = new ArrayList<>();
         String nextCursor = null;
         boolean hasMore = true;
+        List<String> ptPeople = getAllResponsiblePeople(false)
+                .stream()
+                .map(ResponsiblePerson::name)
+                .toList();
 
         while (hasMore) {
             JsonNode response = getNotionDataBaseResponse(DATABASE_ID, createQueryRequestBody(nextCursor));
-            List<String> ptPeople = getAllResponsiblePeople(false)
-                    .stream()
-                    .map(ResponsiblePerson::name)
-                    .toList();
+
 
             response.get("results").elements().forEachRemaining(element -> {
                 if (element.get("properties").get("Name") == null) return;
