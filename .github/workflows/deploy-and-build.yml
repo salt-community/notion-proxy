@@ -1,0 +1,64 @@
+name: Build and deploy app
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_URL: ${{ vars.GC_REGION }}-docker.pkg.dev/${{ vars.GC_PROJECT_ID }}/cloud-run-source-deploy/${{ vars.GC_REPO_NAME }}/${{ vars.GC_REPO_NAME }}:${{ github.sha }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - id: "auth"
+        name: Authenticate GCP
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: "${{ secrets.GCP_SA_KEY }}"
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: Use gcloud CLI
+        run: gcloud info
+
+      - name: Configure docker
+        run: gcloud auth configure-docker ${{ vars.GC_REGION }}-docker.pkg.dev
+
+      - name: Docker Build
+        run: |
+          docker build \
+            --build-arg NOTION_API_KEY="${{ secrets.NOTION_API_KEY }}" \
+            --build-arg DATABASE_ID="${{ secrets.DATABASE_ID }}" \
+            --build-arg NOTION_VERSION="${{ secrets.NOTION_VERSION }}" \
+            --build-arg CUSTOM_API_KEY="${{ secrets.CUSTOM_API_KEY }}" \
+            --build-arg API_KEY_HEADER="${{ secrets.API_KEY_HEADER }}" \
+            --build-arg SCORE_DATABASE_ID="${{ secrets.SCORE_DATABASE_ID }}" \
+            --build-arg CORE_DATABASE_ID="${{ secrets.CORE_DATABASE_ID }}" \
+            --no-cache \
+            -t ${{ env.IMAGE_URL }} \
+            . \
+            -f Dockerfile
+
+      - name: Docker Push
+        run: docker push $IMAGE_URL
+
+      - name: Update Cloud Run service
+        uses: google-github-actions/deploy-cloudrun@v1
+        with:
+          env_vars: |-
+            NOTION_API_KEY=${{ secrets.NOTION_API_KEY }}
+            DATABASE_ID=${{ secrets.DATABASE_ID }}
+            NOTION_VERSION=${{ secrets.NOTION_VERSION }}
+            CUSTOM_API_KEY=${{ secrets.CUSTOM_API_KEY }}
+            API_KEY_HEADER=${{ secrets.API_KEY_HEADER }}
+            SCORE_DATABASE_ID=${{ secrets.SCORE_DATABASE_ID }}
+            CORE_DATABASE_ID=${{ secrets.CORE_DATABASE_ID }}
+          region: ${{ vars.GC_REGION }}
+          service: ${{ vars.GC_REPO_NAME }}
+          image: ${{ env.IMAGE_URL }}
