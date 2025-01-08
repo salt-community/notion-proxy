@@ -13,6 +13,6 @@ public class Score {
     private String name;
     private int score;
     private List<String> categories;
-
+    private String comment;
 
 }
