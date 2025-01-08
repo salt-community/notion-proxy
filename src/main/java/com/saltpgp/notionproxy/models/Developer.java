@@ -18,4 +18,16 @@ public class Developer {
     private String githubImageUrl;
     private String email;
     private List<Score> scores;
+
+    public static Developer addScore(Developer developer, List<Score> scores) {
+        return new Developer(
+                developer.getName(),
+                developer.getId(),
+                developer.getGithubUrl(),
+                developer.getGithubImageUrl(),
+                developer.getEmail(),
+                scores
+        );
+
+    }
 }

@@ -297,17 +297,7 @@ public class NotionService {
         List<Score> allScores = new ArrayList<>();
         String nextCursor = null;
         boolean hasMore = true;
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        ObjectNode relationNode = objectMapper.createObjectNode();
-        relationNode.put("contains", String.valueOf(id));
-
-        ObjectNode filterNode = objectMapper.createObjectNode();
-        filterNode.put("property", "💽 Developer");
-        filterNode.set("relation", relationNode);
-
-        ObjectNode bodyNode = objectMapper.createObjectNode();
-        bodyNode.set("filter", filterNode);
+        ObjectNode bodyNode = getDeveloperNode(id);
         while (hasMore) {
 
             if (nextCursor != null) {
@@ -331,7 +321,9 @@ public class NotionService {
             }
             response.get("results").elements().forEachRemaining(element -> {
 
-                if (element.get("properties").get("Score") == null) return;
+                if (element.get("properties").get("Score") == null) {
+                    return;
+                }
 
                 List<String> categories = new ArrayList<>();
                 if (element.get("properties").get("Categories") != null) {
@@ -339,36 +331,37 @@ public class NotionService {
                             categories.add(category.get("name").asText()));
                 }
 
-
                 Score score = new Score(
                         element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
                         element.get("properties").get("Score").get("number").asInt(),
                         categories,
                         NotionServiceUtility.getScoreComment(element)
                 );
-
                 allScores.add(score);
             });
-
             nextCursor = response.get("next_cursor").asText();
             hasMore = response.get("has_more").asBoolean();
         }
 
         List<Developer> allSalties = self.getAllDevelopers();
-
         Developer developer = allSalties.stream()
                 .filter(dev -> dev.getId().equals(id))
                 .findFirst()
                 .orElseThrow(NotionException::new);
 
-        return new Developer(
-                developer.getName(),
-                developer.getId(),
-                developer.getGithubUrl(),
-                developer.getGithubImageUrl(),
-                developer.getEmail(),
-                allScores
-        );
+        return Developer.addScore(developer, allScores);
+    }
+
+    public ObjectNode getDeveloperNode(UUID id) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode relationNode = objectMapper.createObjectNode();
+        relationNode.put("contains", String.valueOf(id));
+        ObjectNode filterNode = objectMapper.createObjectNode();
+        filterNode.put("property", "💽 Developer");
+        filterNode.set("relation", relationNode);
+        ObjectNode bodyNode = objectMapper.createObjectNode();
+        bodyNode.set("filter", filterNode);
+        return bodyNode;
     }
 
 
