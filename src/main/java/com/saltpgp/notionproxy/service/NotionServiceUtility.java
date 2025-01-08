@@ -6,7 +6,7 @@ public class NotionServiceUtility {
 
     public final static String noCommentMessage = "No comment";
 
-    public static String GetScoreComment(JsonNode element) {
+    public static String getScoreComment(JsonNode element) {
         JsonNode text = element.get("properties").get("Comment").get("rich_text");
         if(text.get(0) != null) {
             return text.get(0).get("plain_text").asText();
