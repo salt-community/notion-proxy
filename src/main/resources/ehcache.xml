@@ -10,7 +10,7 @@
         <!-- These can be removed -->
 
         <expiry>
-            <ttl>10</ttl>
+            <ttl>60</ttl>
         </expiry>
 
         <resources>
