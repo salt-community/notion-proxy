@@ -228,13 +228,7 @@ public class NotionService {
             hasMore = scoreResponse.get("has_more").asBoolean();
         }
 
-        List<Developer> allSalties = self.getAllDevelopers();
-        Developer developer = allSalties.stream()
-                .filter(dev -> dev.getId().equals(id))
-                .findFirst()
-                .orElseThrow(NotionException::new);
-
-        return Developer.addScore(developer, allScores);
+        return Developer.addScore(getDeveloperById(id), allScores);
     }
 
     private ObjectNode getDeveloperNode(UUID id) {
@@ -341,5 +335,17 @@ public class NotionService {
                 categories,
                 NotionServiceUtility.getScoreComment(element)
         );
+    }
+
+    private Developer getDeveloperById(UUID id) throws NotionException {
+        JsonNode response = getNotionPageResponse(id.toString());
+        String name = response.get("properties").get("Name").get("title").get(0).get("plain_text").asText();
+        String githubUrl = response.get("properties").get("GitHub").get("url").asText();
+        String githubImage = githubUrl + "png";
+        String email = response.get("properties").get("Private Email").get("email").asText();
+
+        return new Developer(name,id,githubUrl,
+                githubImage,email, Collections.emptyList());
+
     }
 }
