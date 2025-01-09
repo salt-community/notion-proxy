@@ -135,11 +135,13 @@ public class NotionService {
 
         while (hasMore) {
             JsonNode response = getNotionDataBaseResponse(DATABASE_ID, createQueryRequestBody(nextCursor));
-
-
             response.get("results").elements().forEachRemaining(element -> {
-                if (element.get("properties").get("Name") == null) return;
-                if (element.get("properties").get("Name").get("title").get(0) == null) return;
+                if (element.get("properties").get("Name") == null) {
+                    return;
+                }
+                if (element.get("properties").get("Name").get("title").get(0) == null) {
+                    return;
+                }
 
                 List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(element, ptPeople);
                 if (responsiblePersonList.isEmpty() && !includeEmptyResponsible) {
@@ -208,37 +210,22 @@ public class NotionService {
         boolean hasMore = true;
         ObjectNode bodyNode = getDeveloperNode(id);
         while (hasMore) {
-
             if (nextCursor != null) {
                 bodyNode.put("start_cursor", nextCursor);
             }
-            JsonNode response = getNotionDataBaseResponse(SCORE_DATABASE_ID, bodyNode);
+            JsonNode scoreResponse = getNotionDataBaseResponse(SCORE_DATABASE_ID, bodyNode);
 
-            if (response.get("results").isEmpty()) {
+            if (scoreResponse.get("results").isEmpty()) {
                 throw new NotionNotFoundException();
             }
-            response.get("results").elements().forEachRemaining(element -> {
-
-                if (element.get("properties").get("Score") == null) {
-                    return;
+            scoreResponse.get("results").elements().forEachRemaining(element -> {
+                Score score = extractScore(element);
+                if (score != null) {
+                    allScores.add(score);
                 }
-
-                List<String> categories = new ArrayList<>();
-                if (element.get("properties").get("Categories") != null) {
-                    element.get("properties").get("Categories").get("multi_select").forEach(category ->
-                            categories.add(category.get("name").asText()));
-                }
-
-                Score score = new Score(
-                        element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
-                        element.get("properties").get("Score").get("number").asInt(),
-                        categories,
-                        NotionServiceUtility.getScoreComment(element)
-                );
-                allScores.add(score);
             });
-            nextCursor = response.get("next_cursor").asText();
-            hasMore = response.get("has_more").asBoolean();
+            nextCursor = scoreResponse.get("next_cursor").asText();
+            hasMore = scoreResponse.get("has_more").asBoolean();
         }
 
         List<Developer> allSalties = self.getAllDevelopers();
@@ -335,5 +322,24 @@ public class NotionService {
             throw new NotionException();
         }
         return response;
+    }
+
+    private Score extractScore(JsonNode element) {
+        if (element.get("properties").get("Score") == null) {
+            return null;
+        }
+
+        List<String> categories = new ArrayList<>();
+        if (element.get("properties").get("Categories") != null) {
+            element.get("properties").get("Categories").get("multi_select").forEach(category ->
+                    categories.add(category.get("name").asText()));
+        }
+
+        return new Score(
+                element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
+                element.get("properties").get("Score").get("number").asInt(),
+                categories,
+                NotionServiceUtility.getScoreComment(element)
+        );
     }
 }
