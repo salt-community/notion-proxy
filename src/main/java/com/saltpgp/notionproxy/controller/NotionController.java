@@ -6,6 +6,10 @@ import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import com.saltpgp.notionproxy.models.Consultant;
 import com.saltpgp.notionproxy.models.ResponsiblePerson;
 import com.saltpgp.notionproxy.service.NotionService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
@@ -24,6 +28,11 @@ public class NotionController {
         this.notionService = notionService;
     }
 
+    @Operation(summary = "Get all developers", description = "Retrieves a list of all developers.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved list of developers"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    })
     @GetMapping("")
     public ResponseEntity<List<SaltiesDto>> getAllSalties() {
         try {
@@ -33,8 +42,14 @@ public class NotionController {
         }
     }
 
+    @Operation(summary = "Get all consultants", description = "Retrieves a list of all consultants, with an optional filter to include consultants with empty responsible persons.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved list of consultants"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    })
     @GetMapping("consultants")
     public ResponseEntity<List<ConsultantWithResponsibleDto>> getConsultants(
+            @Parameter(description = "Whether to include consultants with no responsible persons", required = false, example = "false")
             @RequestParam(required = false, defaultValue = "false") boolean includeEmptyResponsible) {
         try {
             return ResponseEntity.ok(notionService
@@ -47,8 +62,15 @@ public class NotionController {
         }
     }
 
+    @Operation(summary = "Get a specific consultant by ID", description = "Retrieves details of a specific consultant by their unique ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved the consultant"),
+            @ApiResponse(responseCode = "404", description = "Consultant not found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    })
     @GetMapping("consultants/{id}")
     public ResponseEntity<ConsultantWithResponsibleDto> getConsultant(
+            @Parameter(description = "UUID of the consultant to retrieve", required = true)
             @PathVariable UUID id) {
         try {
             Consultant consultant = notionService.getConsultantById(id);
@@ -64,10 +86,15 @@ public class NotionController {
         }
     }
 
+    @Operation(summary = "Get all responsible persons", description = "Retrieves a list of all responsible persons, with an optional filter to include consultants.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved list of responsible persons"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    })
     @GetMapping("responsible")
     public <T> ResponseEntity<List<T>> getResponsiblePeople(
-            @RequestParam(required = false, defaultValue = "false") boolean includeConsultants
-    ) {
+            @Parameter(description = "Whether to include the consultants for whom they are responsible", required = false, example = "false")
+            @RequestParam(required = false, defaultValue = "false") boolean includeConsultants) {
         try {
             if (includeConsultants) {
                 List<ResponsibleWithConsultantsDto> dtos = ResponsibleWithConsultantsDto
@@ -83,11 +110,18 @@ public class NotionController {
         }
     }
 
+    @Operation(summary = "Get a specific responsible person by ID", description = "Retrieves details of a specific responsible person by their unique ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved the responsible person"),
+            @ApiResponse(responseCode = "404", description = "Responsible person not found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    })
     @GetMapping("responsible/{id}")
     public <T> ResponseEntity<T> getResponsiblePeopleById(
+            @Parameter(description = "UUID of the responsible person to retrieve", required = true)
             @PathVariable UUID id,
-            @RequestParam(required = false, defaultValue = "false") boolean includeConsultants
-    ) {
+            @Parameter(description = "Whether to include the consultants for whom they are responsible", required = false, example = "false")
+            @RequestParam(required = false, defaultValue = "false") boolean includeConsultants) {
         try {
             ResponsiblePerson responsiblePerson = notionService
                     .getResponsiblePersonById(id, includeConsultants);
@@ -100,9 +134,7 @@ public class NotionController {
                 ResponsibleWithConsultantsDto dtos = ResponsibleWithConsultantsDto
                         .fromModel(responsiblePerson);
                 return ResponseEntity.ok((T) dtos);
-            }
-
-            else {
+            } else {
                 BasicResponsiblePersonDto dtos = BasicResponsiblePersonDto
                         .fromModel(responsiblePerson);
                 return ResponseEntity.ok((T) dtos);
@@ -112,6 +144,12 @@ public class NotionController {
         }
     }
 
+    @Operation(summary = "Get developer scorecard", description = "Retrieves the scorecard of a specific developer.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved the developer scorecard"),
+            @ApiResponse(responseCode = "404", description = "Developer not found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    })
     @GetMapping("developers/{id}/scores")
     public ResponseEntity<DeveloperDto> getScoreCard(@PathVariable UUID id) {
         try {
@@ -121,7 +159,5 @@ public class NotionController {
         } catch (NotionNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
-
     }
-
 }
