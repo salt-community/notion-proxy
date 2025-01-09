@@ -22,7 +22,7 @@ public class ApiKeyFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
         String requestApiKey = request.getHeader(API_KEY_HEADER);
-        if (true) {
+        if (CUSTOM_API_KEY.equals(requestApiKey)) {
             filterChain.doFilter(request, response);
         } else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
