@@ -169,15 +169,7 @@ public class NotionService {
         boolean hasMore = true;
 
         while (hasMore) {
-            JsonNode response = restClient
-                    .post()
-                    .uri(String.format("/databases/%s/query", DATABASE_ID))
-                    .header("Content-Type", "application/json")
-                    .header("Authorization", "Bearer " + API_KEY)
-                    .header("Notion-Version", NOTION_VERSION)
-                    .body(createQueryRequestBody(nextCursor))
-                    .retrieve()
-                    .body(JsonNode.class);
+            JsonNode response = getNotionDataBaseResponse(DATABASE_ID, createQueryRequestBody(nextCursor));
 
             if (response == null) {
                 throw new NotionException();
