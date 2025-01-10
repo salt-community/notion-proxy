@@ -23,17 +23,25 @@ public class ApiKeyFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
+
         String requestApiKey = request.getHeader(API_KEY_HEADER);
+
+        if (request.getRequestURI().contains("/swagger-ui") || request.getRequestURI().contains("/v3/api-docs")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         if (CUSTOM_API_KEY.equals(requestApiKey)) {
             log.info("Successful API access: IP={}, Method={}, Path={}",
                     request.getRemoteAddr(), request.getMethod(), request.getRequestURI());
             filterChain.doFilter(request, response);
-        } else {
-            log.warn("Unauthorized access attempt: IP={}, Method={}, Path={}, API Key Valid={}",
-                    request.getRemoteAddr(), request.getMethod(), request.getRequestURI(), false);
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Unauthorized: Invalid API Key");
         }
+
+        log.warn("Unauthorized access attempt: IP={}, Method={}, Path={}, API Key Valid={}",
+                request.getRemoteAddr(), request.getMethod(), request.getRequestURI(), false);
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write("Unauthorized: Invalid API Key");
+
     }
 }
 
