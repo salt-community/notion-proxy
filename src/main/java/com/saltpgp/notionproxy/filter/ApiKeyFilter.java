@@ -13,14 +13,14 @@ import java.io.IOException;
 @Component
 public class ApiKeyFilter extends OncePerRequestFilter {
 
-    @Value("${API_KEY_HEADER}")
-    private String API_KEY_HEADER;
+    private final static String API_KEY_HEADER = "X-API-KEY";
     @Value("${CUSTOM_API_KEY}")
     private String CUSTOM_API_KEY;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
+        System.out.println("CUSTOM_API_KEY = " + CUSTOM_API_KEY);
         String requestApiKey = request.getHeader(API_KEY_HEADER);
         if (CUSTOM_API_KEY.equals(requestApiKey)) {
             filterChain.doFilter(request, response);
