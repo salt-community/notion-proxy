@@ -123,24 +123,20 @@ public class NotionService {
                 .stream()
                 .map(ResponsiblePerson::name)
                 .toList();
-
-
         while (hasMore) {
             JsonNode response = getNotionDataBaseResponse(DATABASE_ID, NotionServiceFilters.getFilterOnAssignment(nextCursor));
             response.get("results").elements().forEachRemaining(element -> {
-
                 if (element.get("properties").get("Name") == null) {
                     return;
                 }
                 if (element.get("properties").get("Name").get("title").get(0) == null) {
                     return;
                 }
-
                 List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(element, ptPeople);
                 if (responsiblePersonList.isEmpty() && !includeEmptyResponsible) {
-                    return;
+                   System.out.println("Discarded empty");
+                   return;
                 }
-
                 Consultant consultant = new Consultant(
                         element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
                         UUID.fromString(element.get("id").asText()),
@@ -239,7 +235,6 @@ public class NotionService {
     private JsonNode createQueryRequestBody(String nextCursor) {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode body = objectMapper.createObjectNode();
-
         if (nextCursor != null) {
             body.put("start_cursor", nextCursor);
         }
