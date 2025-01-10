@@ -134,7 +134,6 @@ public class NotionService {
                 }
                 List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(element, ptPeople);
                 if (responsiblePersonList.isEmpty() && !includeEmptyResponsible) {
-                   System.out.println("Discarded empty");
                    return;
                 }
                 Consultant consultant = new Consultant(
