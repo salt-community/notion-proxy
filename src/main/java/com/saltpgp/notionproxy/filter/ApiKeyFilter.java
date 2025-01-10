@@ -15,7 +15,8 @@ import java.io.IOException;
 @Slf4j
 public class ApiKeyFilter extends OncePerRequestFilter {
 
-    private final static String API_KEY_HEADER = "X-API-KEY";
+    @Value("${API_KEY_HEADER}")
+    private String API_KEY_HEADER;
     @Value("${CUSTOM_API_KEY}")
     private String CUSTOM_API_KEY;
 
