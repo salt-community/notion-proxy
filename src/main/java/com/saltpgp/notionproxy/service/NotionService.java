@@ -66,16 +66,7 @@ public class NotionService {
     public List<ResponsiblePerson> getAllResponsiblePeople(boolean includeConsultants) throws NotionException {
         List<ResponsiblePerson> responsiblePersonList = new ArrayList<>();
 
-        String jsonBody = """
-                {
-                    "filter": {
-                        "property": "Guild",
-                        "multi_select": {
-                            "contains": "P&T"
-                        }
-                    }
-                }
-                """;
+        String jsonBody = NotionServiceFilters.FILTER_RESPONSIBLE_PEOPLE;
 
         JsonNode response = getNotionDataBaseResponse(CORE_DATABASE_ID,jsonBody);
         response.get("results").elements().forEachRemaining(element -> {
@@ -132,9 +123,8 @@ public class NotionService {
                 .stream()
                 .map(ResponsiblePerson::name)
                 .toList();
-
         while (hasMore) {
-            JsonNode response = getNotionDataBaseResponse(DATABASE_ID, createQueryRequestBody(nextCursor));
+            JsonNode response = getNotionDataBaseResponse(DATABASE_ID, NotionServiceFilters.getFilterOnAssignment(nextCursor));
             response.get("results").elements().forEachRemaining(element -> {
                 if (element.get("properties").get("Name") == null) {
                     return;
@@ -142,12 +132,10 @@ public class NotionService {
                 if (element.get("properties").get("Name").get("title").get(0) == null) {
                     return;
                 }
-
                 List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(element, ptPeople);
                 if (responsiblePersonList.isEmpty() && !includeEmptyResponsible) {
-                    return;
+                   return;
                 }
-
                 Consultant consultant = new Consultant(
                         element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
                         UUID.fromString(element.get("id").asText()),
@@ -155,9 +143,9 @@ public class NotionService {
 
                 allConsultants.add(consultant);
             });
-
             nextCursor = response.get("next_cursor").asText();
             hasMore = response.get("has_more").asBoolean();
+
         }
 
         return allConsultants;
@@ -246,7 +234,6 @@ public class NotionService {
     private JsonNode createQueryRequestBody(String nextCursor) {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode body = objectMapper.createObjectNode();
-
         if (nextCursor != null) {
             body.put("start_cursor", nextCursor);
         }
