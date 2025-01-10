@@ -20,7 +20,6 @@ public class ApiKeyFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
-        System.out.println("CUSTOM_API_KEY = " + CUSTOM_API_KEY);
         String requestApiKey = request.getHeader(API_KEY_HEADER);
         if (CUSTOM_API_KEY.equals(requestApiKey)) {
             filterChain.doFilter(request, response);
