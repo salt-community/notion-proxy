@@ -6,6 +6,7 @@ This API provides access to developer, consultant, and responsible person data, 
 All endpoints are prefixed with `/api/salt`.
 
 The API is deployed and can be accessed at: `https://notion-proxy-735865474111.europe-north1.run.app`
+
 Swagger documentation: `https://notion-proxy-735865474111.europe-north1.run.app/api/swagger-ui/index.html`
 
 ## Authorization
