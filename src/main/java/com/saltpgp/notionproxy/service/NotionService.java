@@ -66,16 +66,7 @@ public class NotionService {
     public List<ResponsiblePerson> getAllResponsiblePeople(boolean includeConsultants) throws NotionException {
         List<ResponsiblePerson> responsiblePersonList = new ArrayList<>();
 
-        String jsonBody = """
-                {
-                    "filter": {
-                        "property": "Guild",
-                        "multi_select": {
-                            "contains": "P&T"
-                        }
-                    }
-                }
-                """;
+        String jsonBody = NotionServiceFilters.FILTER_RESPONSIBLE_PEOPLE;
 
         JsonNode response = getNotionDataBaseResponse(CORE_DATABASE_ID,jsonBody);
         response.get("results").elements().forEachRemaining(element -> {
