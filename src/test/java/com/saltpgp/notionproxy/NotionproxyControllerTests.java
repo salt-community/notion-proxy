@@ -71,4 +71,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedResponse));
     }
+
+    @Test
+    void getAllSalties_shouldReturnUnauthorized() throws Exception {
+
+        // Act & Assert
+        mockMvc.perform(get("/salt")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
+    }
 }
