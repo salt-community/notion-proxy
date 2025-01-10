@@ -124,9 +124,11 @@ public class NotionService {
                 .map(ResponsiblePerson::name)
                 .toList();
 
+
         while (hasMore) {
-            JsonNode response = getNotionDataBaseResponse(DATABASE_ID, createQueryRequestBody(nextCursor));
+            JsonNode response = getNotionDataBaseResponse(DATABASE_ID, NotionServiceFilters.getFilterOnAssignment(nextCursor));
             response.get("results").elements().forEachRemaining(element -> {
+
                 if (element.get("properties").get("Name") == null) {
                     return;
                 }
@@ -146,9 +148,9 @@ public class NotionService {
 
                 allConsultants.add(consultant);
             });
-
             nextCursor = response.get("next_cursor").asText();
             hasMore = response.get("has_more").asBoolean();
+
         }
 
         return allConsultants;
