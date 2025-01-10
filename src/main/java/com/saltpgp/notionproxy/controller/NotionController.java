@@ -10,6 +10,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
@@ -20,6 +23,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("salt")
 @CrossOrigin
+@Slf4j
 public class NotionController {
 
     private final NotionService notionService;
@@ -47,6 +51,8 @@ public class NotionController {
     public ResponseEntity<List<ConsultantWithResponsibleDto>> getConsultants(
             @Parameter(description = "Whether to include consultants with no responsible persons", required = false, example = "false")
             @RequestParam(required = false, defaultValue = "false") boolean includeEmptyResponsible) throws NotionException {
+        log.info("Received request to get all consultants. Include empty responsible: {}", includeEmptyResponsible);
+
         return ResponseEntity.ok(notionService
                 .getAllConsultants(includeEmptyResponsible)
                 .stream()
@@ -64,8 +70,12 @@ public class NotionController {
     public ResponseEntity<ConsultantWithResponsibleDto> getConsultant(
             @Parameter(description = "UUID of the consultant to retrieve", required = true)
             @PathVariable UUID id) throws NotionException {
+
+        log.info("Received request to get consultant with ID: {}", id);
+
         Consultant consultant = notionService.getConsultantById(id);
         if (consultant == null) {
+            log.warn("Consultant not found for ID: {}", id);
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(ConsultantWithResponsibleDto.fromModel(consultant));
@@ -104,20 +114,24 @@ public class NotionController {
             @Parameter(description = "Whether to include the consultants for whom they are responsible", required = false, example = "false")
             @RequestParam(required = false, defaultValue = "false") boolean includeConsultants) throws NotionException {
 
+            log.info("Received request to get responsible person with ID: {}. Include consultants: {}", id, includeConsultants);
             ResponsiblePerson responsiblePerson = notionService
                     .getResponsiblePersonById(id, includeConsultants);
 
             if (responsiblePerson == null) {
+                log.warn("Responsible person not found for ID: {}", id);
                 return ResponseEntity.notFound().build();
             }
 
             if (includeConsultants) {
                 ResponsibleWithConsultantsDto dtos = ResponsibleWithConsultantsDto
                         .fromModel(responsiblePerson);
+                log.info("Successfully retrieved responsible person with consultants for ID: {}", id);
                 return ResponseEntity.ok((T) dtos);
             } else {
                 BasicResponsiblePersonDto dtos = BasicResponsiblePersonDto
                         .fromModel(responsiblePerson);
+                log.info("Successfully retrieved basic responsible person for ID: {}", id);
                 return ResponseEntity.ok((T) dtos);
             }
 
