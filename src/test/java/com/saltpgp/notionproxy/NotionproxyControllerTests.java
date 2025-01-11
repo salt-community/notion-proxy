@@ -92,6 +92,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                         .accept(MediaType.APPLICATION_JSON)
                         .header("X-API-KEY", TEST_API_KEY))
                 .andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    void getConsultants_shouldReturnListOfConsultants() throws Exception {
 
     }
 }
