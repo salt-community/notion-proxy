@@ -77,7 +77,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
         // Act & Assert
         mockMvc.perform(get("/salt")
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void getAllSalties_shouldReturnInternalServerErroe() throws Exception {
+
+        // Arrange
+        when(notionService.getAllDevelopers()).thenThrow(new RuntimeException());
+
+        // Act and assert
+        mockMvc.perform(get("/salt")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header("X-API-KEY", TEST_API_KEY))
+                .andExpect(status().isInternalServerError());
+
     }
 }
