@@ -2,7 +2,9 @@ package com.saltpgp.notionproxy;
 
 import com.saltpgp.notionproxy.config.SecurityConfig;
 import com.saltpgp.notionproxy.controller.NotionController;
+import com.saltpgp.notionproxy.models.Consultant;
 import com.saltpgp.notionproxy.models.Developer;
+import com.saltpgp.notionproxy.models.ResponsiblePerson;
 import com.saltpgp.notionproxy.service.NotionService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(NotionController.class)
 @Import(SecurityConfig.class) // Import your security configuration
- class NotionControllerTest {
+class NotionControllerTest {
 
     @Value("${CUSTOM_API_KEY}")
     private String TEST_API_KEY;
@@ -97,5 +100,47 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     @Test
     void getConsultants_shouldReturnListOfConsultants() throws Exception {
 
+        //Arrange
+        List<Consultant> mockConsultants = new ArrayList<>();
+
+        List<ResponsiblePerson> mockResponsiblepersons = List.of(
+                new ResponsiblePerson("TestResponsiblePerson1", UUID.fromString("5f972ce7-b9f0-4b23-b97f-b860c9c2fe4k"), "test@gmail.com", mockConsultants),
+                new ResponsiblePerson("TestResponsiblePerson2", UUID.fromString("5f972ce7-b9f0-4b23-b97f-b860c9c2fe4w"), "test2@gmail.com", null)
+        );
+
+        mockConsultants = List.of(
+                new Consultant("TestName", UUID.fromString("5f972ce7-b8f0-4b27-b97f-b860c9c2fe4c"), mockResponsiblepersons.subList(0,0)),
+                new Consultant("TestName2", UUID.fromString("5f972ce7-b9f0-4b23-b97f-b860c9c2fe4d"), mockResponsiblepersons.subList(0,0))
+        );
+
+        boolean includeEmptyResponsiblePersons = true;
+
+        when(notionService.getAllConsultants(includeEmptyResponsiblePersons)).thenReturn(mockConsultants);
+
+        String expectedResponse = """
+        [
+          {
+            "name": "TestResponsiblePerson1",
+            "id": "5f972ce7-b9f0-4b23-b97f-b860c9c2fe4k",
+            "email": "test@gmail.com",
+            "consultants": [
+                {
+                    "name": "TestName",
+                    "id": "5f972ce7-b8f0-4b27-b97f-b860c9c2fe4c",
+                },
+                {
+                    "name": "TestName2",
+                    "id": "5f972ce7-b9f0-4b23-b97f-b860c9c2fe4d"
+                }
+            ]
+          },
+          {
+            "name": "TestResponsiblePerson2",
+            "id": "5f972ce7-b9f0-4b23-b97f-b860c9c2fe4w",
+            "email": "test2@gmail.com",
+            "consultants": []
+          }
+        ]
+        """;
     }
 }
