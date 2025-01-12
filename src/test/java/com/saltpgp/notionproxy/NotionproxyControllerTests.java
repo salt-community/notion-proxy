@@ -104,13 +104,12 @@ class NotionControllerTest {
         List<Consultant> mockConsultants = new ArrayList<>();
 
         List<ResponsiblePerson> mockResponsiblepersons = List.of(
-                new ResponsiblePerson("TestResponsiblePerson1", UUID.fromString("5f972ce7-b9f0-4b23-b97f-b860c9c2fe4k"), "test@gmail.com", mockConsultants),
-                new ResponsiblePerson("TestResponsiblePerson2", UUID.fromString("5f972ce7-b9f0-4b23-b97f-b860c9c2fe4w"), "test2@gmail.com", null)
+                new ResponsiblePerson("TestResponsiblePerson1", UUID.fromString("5f972ce7-b9f0-4b23-b97f-b860c9c2fe4k"), "test@gmail.com", mockConsultants.subList(0,0))
         );
 
         mockConsultants = List.of(
                 new Consultant("TestName", UUID.fromString("5f972ce7-b8f0-4b27-b97f-b860c9c2fe4c"), mockResponsiblepersons.subList(0,0)),
-                new Consultant("TestName2", UUID.fromString("5f972ce7-b9f0-4b23-b97f-b860c9c2fe4d"), mockResponsiblepersons.subList(0,0))
+                new Consultant("TestName2", UUID.fromString("5f972ce7-b9f0-4b23-b97f-b860c9c2fe4d"), null)
         );
 
         boolean includeEmptyResponsiblePersons = true;
@@ -120,25 +119,20 @@ class NotionControllerTest {
         String expectedResponse = """
         [
           {
-            "name": "TestResponsiblePerson1",
-            "id": "5f972ce7-b9f0-4b23-b97f-b860c9c2fe4k",
-            "email": "test@gmail.com",
-            "consultants": [
+            "name": "TestName",
+            "id": "5f972ce7-b8f0-4b27-b97f-b860c9c2fe4c",
+            "responsiblePersonList": [
                 {
-                    "name": "TestName",
-                    "id": "5f972ce7-b8f0-4b27-b97f-b860c9c2fe4c",
-                },
-                {
-                    "name": "TestName2",
-                    "id": "5f972ce7-b9f0-4b23-b97f-b860c9c2fe4d"
+                    "name": "TestResponsiblePerson1",
+                    "id": "5f972ce7-b9f0-4b23-b97f-b860c9c2fe4k",
+                    "email": "test@gmail.com",
                 }
             ]
           },
           {
-            "name": "TestResponsiblePerson2",
-            "id": "5f972ce7-b9f0-4b23-b97f-b860c9c2fe4w",
-            "email": "test2@gmail.com",
-            "consultants": []
+            "name": "TestName2",
+            "id": "5f972ce7-b9f0-4b23-b97f-b860c9c2fe4d",
+            "responsiblePersonList": []
           }
         ]
         """;
