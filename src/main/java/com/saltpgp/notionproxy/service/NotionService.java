@@ -201,7 +201,7 @@ public class NotionService {
         String nextCursor = null;
         boolean hasMore = true;
         while (hasMore) {
-            JsonNode response = getNotionDataBaseResponse(DATABASE_ID, createQueryRequestBody(nextCursor));
+            JsonNode response = getNotionDataBaseResponse(DATABASE_ID, NotionServiceFilters.getFilterDeveloper(nextCursor, filter));
 
             if (response == null) {
                 throw new NotionException();
@@ -282,6 +282,7 @@ public class NotionService {
         if (nextCursor != null) {
             body.put("start_cursor", nextCursor);
         }
+        System.out.println("body = " + body);
         return body;
     }
 
