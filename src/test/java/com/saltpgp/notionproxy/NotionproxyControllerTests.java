@@ -98,7 +98,7 @@ class NotionControllerTest {
     }
 
     @Test
-    void getConsultants_shouldReturnListOfConsultants() throws Exception {
+    void getConsultants_shouldReturnListOfConsultantsWithEmptyResponsiblePerson() throws Exception {
 
         //Arrange
         List<ResponsiblePerson> mockResponsiblepersons = List.of(
