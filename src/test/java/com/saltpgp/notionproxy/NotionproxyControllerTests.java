@@ -164,5 +164,11 @@ class NotionControllerTest {
         boolean includeEmptyResponsiblePersons = false;
 
         when(notionService.getAllConsultants(includeEmptyResponsiblePersons)).thenThrow(new RuntimeException());
+
+        //Act & Assert
+        mockMvc.perform(get("/api/salt/consultants")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header("X-API-KEY", TEST_API_KEY))
+                .andExpect(status().isInternalServerError());
     }
 }
