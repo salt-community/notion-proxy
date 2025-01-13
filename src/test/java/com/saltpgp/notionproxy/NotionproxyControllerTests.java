@@ -146,5 +146,9 @@ class NotionControllerTest {
     @Test
     void getConsultants_shouldReturnUnAuthorized() throws Exception{
 
+        // Act & Assert
+        mockMvc.perform(get("/salt/consultants")
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isUnauthorized());
     }
 }
