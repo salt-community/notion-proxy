@@ -81,19 +81,21 @@ class NotionControllerTest {
     void getAllSalties_shouldReturnUnauthorized() throws Exception {
 
         // Act & Assert
-        mockMvc.perform(get("/salt")
+        mockMvc.perform(get("/api/salt")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
-    void getAllSalties_shouldReturnInternalServerErroe() throws Exception {
+    void getAllSalties_shouldReturnInternalServerError() throws Exception {
 
         // Arrange
-        when(notionService.getAllDevelopers()).thenThrow(new RuntimeException());
+        String filter = "none";
+
+        when(notionService.getAllDevelopers(filter)).thenThrow(new RuntimeException());
 
         // Act and assert
-        mockMvc.perform(get("/salt")
+        mockMvc.perform(get("/api/salt")
                         .accept(MediaType.APPLICATION_JSON)
                         .header("X-API-KEY", TEST_API_KEY))
                 .andExpect(status().isInternalServerError());
@@ -138,7 +140,7 @@ class NotionControllerTest {
         """;
 
         // Act & Assert
-        mockMvc.perform(get("/salt/consultants?includeEmptyResponsible=true")
+        mockMvc.perform(get("/api/salt/consultants?includeEmptyResponsible=true")
                         .accept(MediaType.APPLICATION_JSON)
                         .header("X-API-KEY", TEST_API_KEY))
                 .andExpect(status().isOk())
@@ -149,7 +151,7 @@ class NotionControllerTest {
     void getConsultants_shouldReturnUnAuthorized() throws Exception{
 
         // Act & Assert
-        mockMvc.perform(get("/salt/consultants")
+        mockMvc.perform(get("/api/salt/consultants")
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isUnauthorized());
     }
