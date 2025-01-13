@@ -2,7 +2,9 @@ package com.saltpgp.notionproxy;
 
 import com.saltpgp.notionproxy.config.SecurityConfig;
 import com.saltpgp.notionproxy.controller.NotionController;
+import com.saltpgp.notionproxy.models.Consultant;
 import com.saltpgp.notionproxy.models.Developer;
+import com.saltpgp.notionproxy.models.ResponsiblePerson;
 import com.saltpgp.notionproxy.service.NotionService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(NotionController.class)
 @Import(SecurityConfig.class) // Import your security configuration
- class NotionControllerTest {
+class NotionControllerTest {
 
     @Value("${CUSTOM_API_KEY}")
     private String TEST_API_KEY;
@@ -77,7 +80,66 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
         // Act & Assert
         mockMvc.perform(get("/salt")
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void getAllSalties_shouldReturnInternalServerErroe() throws Exception {
+
+        // Arrange
+        when(notionService.getAllDevelopers()).thenThrow(new RuntimeException());
+
+        // Act and assert
+        mockMvc.perform(get("/salt")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header("X-API-KEY", TEST_API_KEY))
+                .andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    void getConsultants_shouldReturnListOfConsultantsWithEmptyResponsiblePerson() throws Exception {
+
+        //Arrange
+        List<ResponsiblePerson> mockResponsiblepersons = List.of(
+                new ResponsiblePerson("TestResponsiblePerson1", UUID.fromString("b28fbeb3-f829-4d27-9339-3a41f8d45435"), "test@gmail.com", List.of())
+        );
+
+        List<Consultant> mockConsultants = List.of(
+                new Consultant("TestName", UUID.fromString("f0d02a91-50c3-46a7-a4e7-76f8de3db2a9"), mockResponsiblepersons),
+                new Consultant("TestName2", UUID.fromString("8ca26bfd-920d-4f46-b03d-5e485eb70504"), new ArrayList<>())
+        );
+
+        boolean includeEmptyResponsiblePersons = true;
+
+        when(notionService.getAllConsultants(includeEmptyResponsiblePersons)).thenReturn(mockConsultants);
+
+        String expectedResponse = """
+        [
+          {
+            "name": "TestName",
+            "id": "f0d02a91-50c3-46a7-a4e7-76f8de3db2a9",
+            "responsiblePersonList": [
+                {
+                    "name": "TestResponsiblePerson1",
+                    "id": "b28fbeb3-f829-4d27-9339-3a41f8d45435",
+                    "email": "test@gmail.com"
+                }
+            ]
+          },
+          {
+            "name": "TestName2",
+            "id": "8ca26bfd-920d-4f46-b03d-5e485eb70504",
+            "responsiblePersonList": []
+          }
+        ]
+        """;
+
+        // Act & Assert
+        mockMvc.perform(get("/salt/consultants?includeEmptyResponsible=true")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header("X-API-KEY", TEST_API_KEY))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expectedResponse));
     }
 }
