@@ -30,7 +30,7 @@ public class NotionServiceFilters {
         }
             return String.format("""
                 {
-                    "start_cursor": %s
+                    "start_cursor": "%s"
                     "filter": {
                         "property": "Status",
                         "select": {
@@ -43,16 +43,12 @@ public class NotionServiceFilters {
 
     public static String getFilterDeveloper (String cursor, String filter) {
         if (filter == null || filter.equals("none")) {
-            if (cursor == null) {
-                return "{" +
-                        "}";
-            }
-            return String.format("""
-                {
-                    "start_cursor": %s
-                    }
-                }
+            if (cursor != null) {
+                return String.format("""
+                {"start_cursor": "%s"}
                 """,cursor);
+            }
+            return "{}";
         }
         if (cursor == null) {
             return String.format("""
@@ -60,7 +56,7 @@ public class NotionServiceFilters {
                     "filter": {
                         "property": "Status",
                         "select": {
-                            "equals": %s
+                            "equals": "%s"
                         }
                     }
                 }
@@ -68,11 +64,11 @@ public class NotionServiceFilters {
         }
         return String.format("""
                 {
-                    "start_cursor": %s
+                    "start_cursor": "%s"
                     "filter": {
                         "property": "Status",
                         "select": {
-                            "equals": %s
+                            "equals": "%s"
                         }
                     }
                 }
