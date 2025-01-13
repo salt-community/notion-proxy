@@ -101,15 +101,13 @@ class NotionControllerTest {
     void getConsultants_shouldReturnListOfConsultants() throws Exception {
 
         //Arrange
-        List<Consultant> mockConsultants = new ArrayList<>();
-
         List<ResponsiblePerson> mockResponsiblepersons = List.of(
-                new ResponsiblePerson("TestResponsiblePerson1", UUID.fromString("5f972ce7-b9f0-4b23-b97f-b860c9c2fe4k"), "test@gmail.com", mockConsultants.subList(0,0))
+                new ResponsiblePerson("TestResponsiblePerson1", UUID.fromString("b28fbeb3-f829-4d27-9339-3a41f8d45435"), "test@gmail.com", List.of())
         );
 
-        mockConsultants = List.of(
-                new Consultant("TestName", UUID.fromString("5f972ce7-b8f0-4b27-b97f-b860c9c2fe4c"), mockResponsiblepersons.subList(0,0)),
-                new Consultant("TestName2", UUID.fromString("5f972ce7-b9f0-4b23-b97f-b860c9c2fe4d"), null)
+        List<Consultant> mockConsultants = List.of(
+                new Consultant("TestName", UUID.fromString("f0d02a91-50c3-46a7-a4e7-76f8de3db2a9"), mockResponsiblepersons),
+                new Consultant("TestName2", UUID.fromString("8ca26bfd-920d-4f46-b03d-5e485eb70504"), new ArrayList<>())
         );
 
         boolean includeEmptyResponsiblePersons = true;
@@ -120,21 +118,28 @@ class NotionControllerTest {
         [
           {
             "name": "TestName",
-            "id": "5f972ce7-b8f0-4b27-b97f-b860c9c2fe4c",
+            "id": "f0d02a91-50c3-46a7-a4e7-76f8de3db2a9",
             "responsiblePersonList": [
                 {
                     "name": "TestResponsiblePerson1",
-                    "id": "5f972ce7-b9f0-4b23-b97f-b860c9c2fe4k",
-                    "email": "test@gmail.com",
+                    "id": "b28fbeb3-f829-4d27-9339-3a41f8d45435",
+                    "email": "test@gmail.com"
                 }
             ]
           },
           {
             "name": "TestName2",
-            "id": "5f972ce7-b9f0-4b23-b97f-b860c9c2fe4d",
+            "id": "8ca26bfd-920d-4f46-b03d-5e485eb70504",
             "responsiblePersonList": []
           }
         ]
         """;
+
+        // Act & Assert
+        mockMvc.perform(get("/salt/consultants?includeEmptyResponsible=true")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header("X-API-KEY", TEST_API_KEY))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expectedResponse));
     }
 }
