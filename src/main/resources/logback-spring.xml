@@ -7,7 +7,7 @@
     </appender>
 
     <appender name="GENERAL_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/notion-proxy.log</file>
+        <file>logs/general/notion-proxy.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>notion-proxy.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>10MB</maxFileSize>
@@ -19,7 +19,7 @@
     </appender>
 
     <appender name="SECURITY_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/notion-proxy-security.log</file>
+        <file>logs/security/notion-proxy-security.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>notion-proxy-security.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>10MB</maxFileSize>
