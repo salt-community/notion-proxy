@@ -1,0 +1,570 @@
+INFO  - 2025-01-10 12:35:50 - c.s.n.NotionproxyApplication - Starting NotionproxyApplication using Java 21.0.5 with PID 16120 (C:\Users\hacks\salt\pgp\notion-proxy\target\classes started by hacks in C:\Users\hacks\salt\pgp\notion-proxy)
+INFO  - 2025-01-10 12:35:50 - c.s.n.NotionproxyApplication - No active profile set, falling back to 1 default profile: "default"
+INFO  - 2025-01-10 12:35:51 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+INFO  - 2025-01-10 12:35:51 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 12:35:51 - o.a.catalina.core.StandardService - Starting service [Tomcat]
+INFO  - 2025-01-10 12:35:51 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.33]
+INFO  - 2025-01-10 12:35:51 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+INFO  - 2025-01-10 12:35:51 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 952 ms
+INFO  - 2025-01-10 12:35:52 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' created in EhcacheManager.
+INFO  - 2025-01-10 12:35:52 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' created in EhcacheManager.
+INFO  - 2025-01-10 12:35:52 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' created in EhcacheManager.
+INFO  - 2025-01-10 12:35:52 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=saltiesInformation
+INFO  - 2025-01-10 12:35:52 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=allconsultants
+INFO  - 2025-01-10 12:35:52 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=developerScoreCard
+INFO  - 2025-01-10 12:35:52 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 12:35:52 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+INFO  - 2025-01-10 12:35:52 - c.s.n.NotionproxyApplication - Started NotionproxyApplication in 2.67 seconds (process running for 3.157)
+INFO  - 2025-01-10 12:35:59 - o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+INFO  - 2025-01-10 12:35:59 - o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+INFO  - 2025-01-10 12:35:59 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' removed from EhcacheManager.
+INFO  - 2025-01-10 12:35:59 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' removed from EhcacheManager.
+INFO  - 2025-01-10 12:35:59 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' removed from EhcacheManager.
+INFO  - 2025-01-10 12:36:01 - c.s.n.NotionproxyApplication - Starting NotionproxyApplication using Java 21.0.5 with PID 15732 (C:\Users\hacks\salt\pgp\notion-proxy\target\classes started by hacks in C:\Users\hacks\salt\pgp\notion-proxy)
+INFO  - 2025-01-10 12:36:01 - c.s.n.NotionproxyApplication - No active profile set, falling back to 1 default profile: "default"
+INFO  - 2025-01-10 12:36:02 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+INFO  - 2025-01-10 12:36:02 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 12:36:02 - o.a.catalina.core.StandardService - Starting service [Tomcat]
+INFO  - 2025-01-10 12:36:02 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.33]
+INFO  - 2025-01-10 12:36:02 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+INFO  - 2025-01-10 12:36:02 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 935 ms
+INFO  - 2025-01-10 12:36:03 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' created in EhcacheManager.
+INFO  - 2025-01-10 12:36:03 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' created in EhcacheManager.
+INFO  - 2025-01-10 12:36:03 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' created in EhcacheManager.
+INFO  - 2025-01-10 12:36:03 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=saltiesInformation
+INFO  - 2025-01-10 12:36:03 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=allconsultants
+INFO  - 2025-01-10 12:36:03 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=developerScoreCard
+INFO  - 2025-01-10 12:36:03 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 12:36:03 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+INFO  - 2025-01-10 12:36:03 - c.s.n.NotionproxyApplication - Started NotionproxyApplication in 2.627 seconds (process running for 3.246)
+INFO  - 2025-01-10 12:49:45 - o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+INFO  - 2025-01-10 12:49:45 - o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+INFO  - 2025-01-10 12:49:45 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' removed from EhcacheManager.
+INFO  - 2025-01-10 12:49:45 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' removed from EhcacheManager.
+INFO  - 2025-01-10 12:49:45 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' removed from EhcacheManager.
+INFO  - 2025-01-10 13:04:35 - c.s.n.NotionproxyApplication - Starting NotionproxyApplication using Java 21.0.5 with PID 14708 (C:\Users\hacks\salt\pgp\notion-proxy\target\classes started by hacks in C:\Users\hacks\salt\pgp\notion-proxy)
+INFO  - 2025-01-10 13:04:35 - c.s.n.NotionproxyApplication - No active profile set, falling back to 1 default profile: "default"
+INFO  - 2025-01-10 13:04:36 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+INFO  - 2025-01-10 13:04:36 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 13:04:36 - o.a.catalina.core.StandardService - Starting service [Tomcat]
+INFO  - 2025-01-10 13:04:36 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.33]
+INFO  - 2025-01-10 13:04:36 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+INFO  - 2025-01-10 13:04:36 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 927 ms
+INFO  - 2025-01-10 13:04:37 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' created in EhcacheManager.
+INFO  - 2025-01-10 13:04:37 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' created in EhcacheManager.
+INFO  - 2025-01-10 13:04:37 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' created in EhcacheManager.
+INFO  - 2025-01-10 13:04:37 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=saltiesInformation
+INFO  - 2025-01-10 13:04:37 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=allconsultants
+INFO  - 2025-01-10 13:04:37 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=developerScoreCard
+INFO  - 2025-01-10 13:04:37 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 13:04:37 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+INFO  - 2025-01-10 13:04:37 - c.s.n.NotionproxyApplication - Started NotionproxyApplication in 2.644 seconds (process running for 3.156)
+INFO  - 2025-01-10 13:04:49 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  - 2025-01-10 13:04:49 - o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+INFO  - 2025-01-10 13:04:49 - o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+WARN  - 2025-01-10 13:04:49 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=GET, Path=/api/swagger-ui/index.html, API Key Valid=false
+INFO  - 2025-01-10 13:05:08 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/index.html
+INFO  - 2025-01-10 13:05:08 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui.css
+INFO  - 2025-01-10 13:05:08 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/index.css
+INFO  - 2025-01-10 13:05:08 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui-bundle.js
+INFO  - 2025-01-10 13:05:08 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui-standalone-preset.js
+INFO  - 2025-01-10 13:05:08 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-initializer.js
+INFO  - 2025-01-10 13:05:08 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/v3/api-docs/swagger-config
+INFO  - 2025-01-10 13:05:36 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/v3/api-docs
+INFO  - 2025-01-10 13:05:36 - o.s.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 208 ms
+INFO  - 2025-01-10 13:05:43 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/v3/api-docs
+WARN  - 2025-01-10 13:06:01 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=GET, Path=/api/salt, API Key Valid=false
+INFO  - 2025-01-10 13:07:41 - o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+INFO  - 2025-01-10 13:07:41 - o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+INFO  - 2025-01-10 13:07:41 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' removed from EhcacheManager.
+INFO  - 2025-01-10 13:07:41 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' removed from EhcacheManager.
+INFO  - 2025-01-10 13:07:41 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' removed from EhcacheManager.
+INFO  - 2025-01-10 13:31:28 - c.s.n.NotionproxyApplication - Starting NotionproxyApplication using Java 21.0.5 with PID 16176 (C:\Users\hacks\salt\pgp\notion-proxy\target\classes started by hacks in C:\Users\hacks\salt\pgp\notion-proxy)
+INFO  - 2025-01-10 13:31:28 - c.s.n.NotionproxyApplication - No active profile set, falling back to 1 default profile: "default"
+INFO  - 2025-01-10 13:31:29 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+INFO  - 2025-01-10 13:31:29 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 13:31:29 - o.a.catalina.core.StandardService - Starting service [Tomcat]
+INFO  - 2025-01-10 13:31:29 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.33]
+INFO  - 2025-01-10 13:31:29 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+INFO  - 2025-01-10 13:31:29 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 936 ms
+INFO  - 2025-01-10 13:31:30 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' created in EhcacheManager.
+INFO  - 2025-01-10 13:31:30 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' created in EhcacheManager.
+INFO  - 2025-01-10 13:31:30 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' created in EhcacheManager.
+INFO  - 2025-01-10 13:31:30 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=saltiesInformation
+INFO  - 2025-01-10 13:31:30 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=allconsultants
+INFO  - 2025-01-10 13:31:30 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=developerScoreCard
+INFO  - 2025-01-10 13:31:30 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 13:31:30 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+INFO  - 2025-01-10 13:31:30 - c.s.n.NotionproxyApplication - Started NotionproxyApplication in 2.725 seconds (process running for 3.237)
+INFO  - 2025-01-10 13:31:36 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  - 2025-01-10 13:31:36 - o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+INFO  - 2025-01-10 13:31:36 - o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+INFO  - 2025-01-10 13:31:36 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/index.html
+INFO  - 2025-01-10 13:31:36 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui.css
+INFO  - 2025-01-10 13:31:36 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui-bundle.js
+INFO  - 2025-01-10 13:31:36 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/index.css
+INFO  - 2025-01-10 13:31:36 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui-standalone-preset.js
+INFO  - 2025-01-10 13:31:37 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-initializer.js
+INFO  - 2025-01-10 13:31:37 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/favicon-32x32.png
+INFO  - 2025-01-10 13:31:40 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/v3/api-docs
+INFO  - 2025-01-10 13:31:40 - o.s.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 228 ms
+WARN  - 2025-01-10 13:31:44 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=OPTIONS, Path=/api/salt, API Key Valid=false
+INFO  - 2025-01-10 13:34:11 - o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+INFO  - 2025-01-10 13:34:11 - o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+INFO  - 2025-01-10 13:34:11 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' removed from EhcacheManager.
+INFO  - 2025-01-10 13:34:11 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' removed from EhcacheManager.
+INFO  - 2025-01-10 13:34:11 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' removed from EhcacheManager.
+INFO  - 2025-01-10 13:34:15 - c.s.n.NotionproxyApplication - Starting NotionproxyApplication using Java 21.0.5 with PID 6804 (C:\Users\hacks\salt\pgp\notion-proxy\target\classes started by hacks in C:\Users\hacks\salt\pgp\notion-proxy)
+INFO  - 2025-01-10 13:34:15 - c.s.n.NotionproxyApplication - No active profile set, falling back to 1 default profile: "default"
+INFO  - 2025-01-10 13:34:16 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+INFO  - 2025-01-10 13:34:16 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 13:34:16 - o.a.catalina.core.StandardService - Starting service [Tomcat]
+INFO  - 2025-01-10 13:34:16 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.33]
+INFO  - 2025-01-10 13:34:16 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+INFO  - 2025-01-10 13:34:16 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 906 ms
+INFO  - 2025-01-10 13:34:17 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' created in EhcacheManager.
+INFO  - 2025-01-10 13:34:17 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' created in EhcacheManager.
+INFO  - 2025-01-10 13:34:17 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' created in EhcacheManager.
+INFO  - 2025-01-10 13:34:17 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=saltiesInformation
+INFO  - 2025-01-10 13:34:17 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=allconsultants
+INFO  - 2025-01-10 13:34:17 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=developerScoreCard
+INFO  - 2025-01-10 13:34:17 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 13:34:17 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+INFO  - 2025-01-10 13:34:17 - c.s.n.NotionproxyApplication - Started NotionproxyApplication in 2.665 seconds (process running for 3.192)
+INFO  - 2025-01-10 13:34:19 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  - 2025-01-10 13:34:19 - o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+INFO  - 2025-01-10 13:34:19 - o.s.web.servlet.DispatcherServlet - Completed initialization in 0 ms
+WARN  - 2025-01-10 13:34:19 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=OPTIONS, Path=/api/salt, API Key Valid=false
+INFO  - 2025-01-10 13:35:09 - o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+INFO  - 2025-01-10 13:35:09 - o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+INFO  - 2025-01-10 13:35:09 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' removed from EhcacheManager.
+INFO  - 2025-01-10 13:35:09 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' removed from EhcacheManager.
+INFO  - 2025-01-10 13:35:09 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' removed from EhcacheManager.
+INFO  - 2025-01-10 13:35:12 - c.s.n.NotionproxyApplication - Starting NotionproxyApplication using Java 21.0.5 with PID 8412 (C:\Users\hacks\salt\pgp\notion-proxy\target\classes started by hacks in C:\Users\hacks\salt\pgp\notion-proxy)
+INFO  - 2025-01-10 13:35:12 - c.s.n.NotionproxyApplication - No active profile set, falling back to 1 default profile: "default"
+INFO  - 2025-01-10 13:35:13 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+INFO  - 2025-01-10 13:35:13 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 13:35:13 - o.a.catalina.core.StandardService - Starting service [Tomcat]
+INFO  - 2025-01-10 13:35:13 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.33]
+INFO  - 2025-01-10 13:35:13 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+INFO  - 2025-01-10 13:35:13 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 916 ms
+INFO  - 2025-01-10 13:35:14 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' created in EhcacheManager.
+INFO  - 2025-01-10 13:35:14 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' created in EhcacheManager.
+INFO  - 2025-01-10 13:35:14 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' created in EhcacheManager.
+INFO  - 2025-01-10 13:35:14 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=saltiesInformation
+INFO  - 2025-01-10 13:35:14 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=allconsultants
+INFO  - 2025-01-10 13:35:14 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=developerScoreCard
+INFO  - 2025-01-10 13:35:14 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 13:35:14 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+INFO  - 2025-01-10 13:35:14 - c.s.n.NotionproxyApplication - Started NotionproxyApplication in 2.598 seconds (process running for 3.091)
+INFO  - 2025-01-10 13:35:16 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  - 2025-01-10 13:35:16 - o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+INFO  - 2025-01-10 13:35:16 - o.s.web.servlet.DispatcherServlet - Completed initialization in 0 ms
+WARN  - 2025-01-10 13:35:16 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=OPTIONS, Path=/api/salt, API Key Valid=false
+INFO  - 2025-01-10 13:36:19 - o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+INFO  - 2025-01-10 13:36:19 - o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+INFO  - 2025-01-10 13:36:19 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' removed from EhcacheManager.
+INFO  - 2025-01-10 13:36:19 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' removed from EhcacheManager.
+INFO  - 2025-01-10 13:36:19 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' removed from EhcacheManager.
+INFO  - 2025-01-10 13:36:22 - c.s.n.NotionproxyApplication - Starting NotionproxyApplication using Java 21.0.5 with PID 3556 (C:\Users\hacks\salt\pgp\notion-proxy\target\classes started by hacks in C:\Users\hacks\salt\pgp\notion-proxy)
+INFO  - 2025-01-10 13:36:22 - c.s.n.NotionproxyApplication - No active profile set, falling back to 1 default profile: "default"
+INFO  - 2025-01-10 13:36:23 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+INFO  - 2025-01-10 13:36:23 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 13:36:23 - o.a.catalina.core.StandardService - Starting service [Tomcat]
+INFO  - 2025-01-10 13:36:23 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.33]
+INFO  - 2025-01-10 13:36:23 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+INFO  - 2025-01-10 13:36:23 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 927 ms
+INFO  - 2025-01-10 13:36:25 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' created in EhcacheManager.
+INFO  - 2025-01-10 13:36:25 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' created in EhcacheManager.
+INFO  - 2025-01-10 13:36:25 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' created in EhcacheManager.
+INFO  - 2025-01-10 13:36:25 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=saltiesInformation
+INFO  - 2025-01-10 13:36:25 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=allconsultants
+INFO  - 2025-01-10 13:36:25 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=developerScoreCard
+INFO  - 2025-01-10 13:36:25 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 13:36:25 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+INFO  - 2025-01-10 13:36:25 - c.s.n.NotionproxyApplication - Started NotionproxyApplication in 2.645 seconds (process running for 3.149)
+INFO  - 2025-01-10 13:36:27 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  - 2025-01-10 13:36:27 - o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+INFO  - 2025-01-10 13:36:27 - o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+WARN  - 2025-01-10 13:36:27 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=OPTIONS, Path=/api/salt, API Key Valid=false
+INFO  - 2025-01-10 13:36:54 - o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+INFO  - 2025-01-10 13:36:54 - o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+INFO  - 2025-01-10 13:36:54 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' removed from EhcacheManager.
+INFO  - 2025-01-10 13:36:54 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' removed from EhcacheManager.
+INFO  - 2025-01-10 13:36:54 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' removed from EhcacheManager.
+INFO  - 2025-01-10 13:36:58 - c.s.n.NotionproxyApplication - Starting NotionproxyApplication using Java 21.0.5 with PID 15760 (C:\Users\hacks\salt\pgp\notion-proxy\target\classes started by hacks in C:\Users\hacks\salt\pgp\notion-proxy)
+INFO  - 2025-01-10 13:36:58 - c.s.n.NotionproxyApplication - No active profile set, falling back to 1 default profile: "default"
+INFO  - 2025-01-10 13:36:59 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+INFO  - 2025-01-10 13:36:59 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 13:36:59 - o.a.catalina.core.StandardService - Starting service [Tomcat]
+INFO  - 2025-01-10 13:36:59 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.33]
+INFO  - 2025-01-10 13:36:59 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+INFO  - 2025-01-10 13:36:59 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 926 ms
+INFO  - 2025-01-10 13:37:00 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' created in EhcacheManager.
+INFO  - 2025-01-10 13:37:00 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' created in EhcacheManager.
+INFO  - 2025-01-10 13:37:00 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' created in EhcacheManager.
+INFO  - 2025-01-10 13:37:00 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=saltiesInformation
+INFO  - 2025-01-10 13:37:00 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=allconsultants
+INFO  - 2025-01-10 13:37:00 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=developerScoreCard
+INFO  - 2025-01-10 13:37:00 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 13:37:00 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+INFO  - 2025-01-10 13:37:00 - c.s.n.NotionproxyApplication - Started NotionproxyApplication in 2.61 seconds (process running for 3.086)
+INFO  - 2025-01-10 13:37:02 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  - 2025-01-10 13:37:02 - o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+INFO  - 2025-01-10 13:37:02 - o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+INFO  - 2025-01-10 13:37:02 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/index.html
+INFO  - 2025-01-10 13:37:02 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui.css
+INFO  - 2025-01-10 13:37:02 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/index.css
+INFO  - 2025-01-10 13:37:02 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui-bundle.js
+INFO  - 2025-01-10 13:37:02 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui-standalone-preset.js
+INFO  - 2025-01-10 13:37:03 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-initializer.js
+INFO  - 2025-01-10 13:37:03 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/favicon-32x32.png
+INFO  - 2025-01-10 13:37:15 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/v3/api-docs
+INFO  - 2025-01-10 13:37:15 - o.s.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 251 ms
+WARN  - 2025-01-10 13:37:22 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=OPTIONS, Path=/api/salt, API Key Valid=false
+INFO  - 2025-01-10 13:40:33 - o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+INFO  - 2025-01-10 13:40:33 - o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+INFO  - 2025-01-10 13:40:33 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' removed from EhcacheManager.
+INFO  - 2025-01-10 13:40:33 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' removed from EhcacheManager.
+INFO  - 2025-01-10 13:40:33 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' removed from EhcacheManager.
+INFO  - 2025-01-10 13:40:37 - c.s.n.NotionproxyApplication - Starting NotionproxyApplication using Java 21.0.5 with PID 14020 (C:\Users\hacks\salt\pgp\notion-proxy\target\classes started by hacks in C:\Users\hacks\salt\pgp\notion-proxy)
+INFO  - 2025-01-10 13:40:37 - c.s.n.NotionproxyApplication - No active profile set, falling back to 1 default profile: "default"
+INFO  - 2025-01-10 13:40:38 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+INFO  - 2025-01-10 13:40:38 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 13:40:38 - o.a.catalina.core.StandardService - Starting service [Tomcat]
+INFO  - 2025-01-10 13:40:38 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.33]
+INFO  - 2025-01-10 13:40:38 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+INFO  - 2025-01-10 13:40:38 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 997 ms
+INFO  - 2025-01-10 13:40:39 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' created in EhcacheManager.
+INFO  - 2025-01-10 13:40:39 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' created in EhcacheManager.
+INFO  - 2025-01-10 13:40:39 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' created in EhcacheManager.
+INFO  - 2025-01-10 13:40:39 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=saltiesInformation
+INFO  - 2025-01-10 13:40:39 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=allconsultants
+INFO  - 2025-01-10 13:40:39 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=developerScoreCard
+INFO  - 2025-01-10 13:40:39 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 13:40:39 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+INFO  - 2025-01-10 13:40:39 - c.s.n.NotionproxyApplication - Started NotionproxyApplication in 2.729 seconds (process running for 3.24)
+INFO  - 2025-01-10 13:40:42 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  - 2025-01-10 13:40:42 - o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+INFO  - 2025-01-10 13:40:42 - o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+WARN  - 2025-01-10 13:40:42 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=OPTIONS, Path=/api/salt, API Key Valid=false
+INFO  - 2025-01-10 13:42:14 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/index.html
+INFO  - 2025-01-10 13:42:14 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui.css
+INFO  - 2025-01-10 13:42:14 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/index.css
+INFO  - 2025-01-10 13:42:14 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui-bundle.js
+INFO  - 2025-01-10 13:42:14 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui-standalone-preset.js
+INFO  - 2025-01-10 13:42:14 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-initializer.js
+INFO  - 2025-01-10 13:42:14 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/favicon-32x32.png
+INFO  - 2025-01-10 13:48:54 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/v3/api-docs
+INFO  - 2025-01-10 13:48:54 - o.s.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 257 ms
+WARN  - 2025-01-10 13:48:59 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=OPTIONS, Path=/api/salt, API Key Valid=false
+INFO  - 2025-01-10 13:50:47 - o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+INFO  - 2025-01-10 13:50:47 - o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+INFO  - 2025-01-10 13:50:47 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' removed from EhcacheManager.
+INFO  - 2025-01-10 13:50:47 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' removed from EhcacheManager.
+INFO  - 2025-01-10 13:50:47 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' removed from EhcacheManager.
+INFO  - 2025-01-10 13:50:49 - c.s.n.NotionproxyApplication - Starting NotionproxyApplication using Java 21.0.5 with PID 1504 (C:\Users\hacks\salt\pgp\notion-proxy\target\classes started by hacks in C:\Users\hacks\salt\pgp\notion-proxy)
+INFO  - 2025-01-10 13:50:49 - c.s.n.NotionproxyApplication - No active profile set, falling back to 1 default profile: "default"
+INFO  - 2025-01-10 13:50:50 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+INFO  - 2025-01-10 13:50:50 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 13:50:50 - o.a.catalina.core.StandardService - Starting service [Tomcat]
+INFO  - 2025-01-10 13:50:50 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.33]
+INFO  - 2025-01-10 13:50:50 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+INFO  - 2025-01-10 13:50:50 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 946 ms
+INFO  - 2025-01-10 13:50:51 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' created in EhcacheManager.
+INFO  - 2025-01-10 13:50:51 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' created in EhcacheManager.
+INFO  - 2025-01-10 13:50:51 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' created in EhcacheManager.
+INFO  - 2025-01-10 13:50:51 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=saltiesInformation
+INFO  - 2025-01-10 13:50:51 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=allconsultants
+INFO  - 2025-01-10 13:50:51 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=developerScoreCard
+INFO  - 2025-01-10 13:50:51 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 13:50:51 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+INFO  - 2025-01-10 13:50:51 - c.s.n.NotionproxyApplication - Started NotionproxyApplication in 2.949 seconds (process running for 3.466)
+INFO  - 2025-01-10 13:50:55 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  - 2025-01-10 13:50:55 - o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+INFO  - 2025-01-10 13:50:55 - o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+INFO  - 2025-01-10 13:50:55 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/index.html
+INFO  - 2025-01-10 13:50:55 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui.css
+INFO  - 2025-01-10 13:50:55 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/index.css
+INFO  - 2025-01-10 13:50:55 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui-bundle.js
+INFO  - 2025-01-10 13:50:55 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui-standalone-preset.js
+INFO  - 2025-01-10 13:50:55 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-initializer.js
+INFO  - 2025-01-10 13:50:55 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/favicon-32x32.png
+INFO  - 2025-01-10 13:50:58 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/v3/api-docs
+INFO  - 2025-01-10 13:50:58 - o.s.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 234 ms
+WARN  - 2025-01-10 13:51:02 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=OPTIONS, Path=/api/salt, API Key Valid=false
+WARN  - 2025-01-10 13:51:14 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=OPTIONS, Path=/api/salt, API Key Valid=false
+INFO  - 2025-01-10 13:51:48 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/index.html
+INFO  - 2025-01-10 13:51:48 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui.css
+INFO  - 2025-01-10 13:51:48 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/index.css
+INFO  - 2025-01-10 13:51:48 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui-bundle.js
+INFO  - 2025-01-10 13:51:48 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui-standalone-preset.js
+INFO  - 2025-01-10 13:51:48 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-initializer.js
+INFO  - 2025-01-10 13:51:48 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/favicon-32x32.png
+INFO  - 2025-01-10 13:51:53 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/api/v3/api-docs
+INFO  - 2025-01-10 13:51:56 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/v3/api-docs
+WARN  - 2025-01-10 13:52:03 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=OPTIONS, Path=/api/salt, API Key Valid=false
+INFO  - 2025-01-10 13:52:07 - o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+INFO  - 2025-01-10 13:52:07 - o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+INFO  - 2025-01-10 13:52:07 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' removed from EhcacheManager.
+INFO  - 2025-01-10 13:52:07 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' removed from EhcacheManager.
+INFO  - 2025-01-10 13:52:07 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' removed from EhcacheManager.
+INFO  - 2025-01-10 13:52:11 - c.s.n.NotionproxyApplication - Starting NotionproxyApplication using Java 21.0.5 with PID 544 (C:\Users\hacks\salt\pgp\notion-proxy\target\classes started by hacks in C:\Users\hacks\salt\pgp\notion-proxy)
+INFO  - 2025-01-10 13:52:11 - c.s.n.NotionproxyApplication - No active profile set, falling back to 1 default profile: "default"
+INFO  - 2025-01-10 13:52:12 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+INFO  - 2025-01-10 13:52:12 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 13:52:12 - o.a.catalina.core.StandardService - Starting service [Tomcat]
+INFO  - 2025-01-10 13:52:12 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.33]
+INFO  - 2025-01-10 13:52:12 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+INFO  - 2025-01-10 13:52:12 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 911 ms
+INFO  - 2025-01-10 13:52:13 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' created in EhcacheManager.
+INFO  - 2025-01-10 13:52:13 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' created in EhcacheManager.
+INFO  - 2025-01-10 13:52:13 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' created in EhcacheManager.
+INFO  - 2025-01-10 13:52:13 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=saltiesInformation
+INFO  - 2025-01-10 13:52:13 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=allconsultants
+INFO  - 2025-01-10 13:52:13 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=developerScoreCard
+INFO  - 2025-01-10 13:52:13 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 13:52:13 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+INFO  - 2025-01-10 13:52:13 - c.s.n.NotionproxyApplication - Started NotionproxyApplication in 2.645 seconds (process running for 3.163)
+INFO  - 2025-01-10 13:52:16 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  - 2025-01-10 13:52:16 - o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+INFO  - 2025-01-10 13:52:16 - o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+INFO  - 2025-01-10 13:52:16 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/index.html
+INFO  - 2025-01-10 13:52:16 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui.css
+INFO  - 2025-01-10 13:52:16 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui-standalone-preset.js
+INFO  - 2025-01-10 13:52:16 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui-bundle.js
+INFO  - 2025-01-10 13:52:16 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/index.css
+INFO  - 2025-01-10 13:52:16 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-initializer.js
+INFO  - 2025-01-10 13:52:16 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/favicon-32x32.png
+INFO  - 2025-01-10 13:52:19 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/v3/api-docs
+INFO  - 2025-01-10 13:52:20 - o.s.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 240 ms
+WARN  - 2025-01-10 13:52:23 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=OPTIONS, Path=/api/salt, API Key Valid=false
+INFO  - 2025-01-10 13:54:28 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui.css
+INFO  - 2025-01-10 13:54:28 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/index.css
+INFO  - 2025-01-10 13:54:29 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui.css.map
+WARN  - 2025-01-10 13:54:40 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=OPTIONS, Path=/api/salt, API Key Valid=false
+INFO  - 2025-01-10 13:54:51 - o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+INFO  - 2025-01-10 13:54:51 - o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+INFO  - 2025-01-10 13:54:51 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' removed from EhcacheManager.
+INFO  - 2025-01-10 13:54:51 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' removed from EhcacheManager.
+INFO  - 2025-01-10 13:54:51 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' removed from EhcacheManager.
+INFO  - 2025-01-10 13:54:57 - c.s.n.NotionproxyApplication - Starting NotionproxyApplication using Java 21.0.5 with PID 13744 (C:\Users\hacks\salt\pgp\notion-proxy\target\classes started by hacks in C:\Users\hacks\salt\pgp\notion-proxy)
+INFO  - 2025-01-10 13:54:57 - c.s.n.NotionproxyApplication - No active profile set, falling back to 1 default profile: "default"
+INFO  - 2025-01-10 13:54:58 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+INFO  - 2025-01-10 13:54:58 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 13:54:58 - o.a.catalina.core.StandardService - Starting service [Tomcat]
+INFO  - 2025-01-10 13:54:58 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.33]
+INFO  - 2025-01-10 13:54:58 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+INFO  - 2025-01-10 13:54:58 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1120 ms
+INFO  - 2025-01-10 13:55:00 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' created in EhcacheManager.
+INFO  - 2025-01-10 13:55:00 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' created in EhcacheManager.
+INFO  - 2025-01-10 13:55:00 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' created in EhcacheManager.
+INFO  - 2025-01-10 13:55:00 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=saltiesInformation
+INFO  - 2025-01-10 13:55:00 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=allconsultants
+INFO  - 2025-01-10 13:55:00 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=developerScoreCard
+INFO  - 2025-01-10 13:55:00 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 13:55:00 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+INFO  - 2025-01-10 13:55:00 - c.s.n.NotionproxyApplication - Started NotionproxyApplication in 2.854 seconds (process running for 3.724)
+INFO  - 2025-01-10 13:55:04 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  - 2025-01-10 13:55:04 - o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+INFO  - 2025-01-10 13:55:04 - o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+WARN  - 2025-01-10 13:55:04 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=OPTIONS, Path=/api/salt, API Key Valid=false
+INFO  - 2025-01-10 13:55:20 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/index.html
+INFO  - 2025-01-10 13:55:20 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui.css
+INFO  - 2025-01-10 13:55:20 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/index.css
+INFO  - 2025-01-10 13:55:20 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui-bundle.js
+INFO  - 2025-01-10 13:55:20 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui-standalone-preset.js
+INFO  - 2025-01-10 13:55:20 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-initializer.js
+INFO  - 2025-01-10 13:55:21 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/favicon-32x32.png
+INFO  - 2025-01-10 13:55:26 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/v3/api-docs
+INFO  - 2025-01-10 13:55:26 - o.s.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 235 ms
+WARN  - 2025-01-10 13:55:33 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=OPTIONS, Path=/api/salt, API Key Valid=false
+INFO  - 2025-01-10 14:00:29 - o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+INFO  - 2025-01-10 14:00:29 - o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+INFO  - 2025-01-10 14:00:29 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' removed from EhcacheManager.
+INFO  - 2025-01-10 14:00:29 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' removed from EhcacheManager.
+INFO  - 2025-01-10 14:00:29 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' removed from EhcacheManager.
+INFO  - 2025-01-10 14:00:32 - c.s.n.NotionproxyApplication - Starting NotionproxyApplication using Java 21.0.5 with PID 16248 (C:\Users\hacks\salt\pgp\notion-proxy\target\classes started by hacks in C:\Users\hacks\salt\pgp\notion-proxy)
+INFO  - 2025-01-10 14:00:32 - c.s.n.NotionproxyApplication - No active profile set, falling back to 1 default profile: "default"
+INFO  - 2025-01-10 14:00:33 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+INFO  - 2025-01-10 14:00:33 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 14:00:33 - o.a.catalina.core.StandardService - Starting service [Tomcat]
+INFO  - 2025-01-10 14:00:33 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.33]
+INFO  - 2025-01-10 14:00:33 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+INFO  - 2025-01-10 14:00:33 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 954 ms
+INFO  - 2025-01-10 14:00:34 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' created in EhcacheManager.
+INFO  - 2025-01-10 14:00:34 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' created in EhcacheManager.
+INFO  - 2025-01-10 14:00:34 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' created in EhcacheManager.
+INFO  - 2025-01-10 14:00:34 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=saltiesInformation
+INFO  - 2025-01-10 14:00:34 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=allconsultants
+INFO  - 2025-01-10 14:00:34 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=developerScoreCard
+INFO  - 2025-01-10 14:00:34 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 14:00:34 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+INFO  - 2025-01-10 14:00:34 - c.s.n.NotionproxyApplication - Started NotionproxyApplication in 2.686 seconds (process running for 3.207)
+INFO  - 2025-01-10 14:01:05 - o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+INFO  - 2025-01-10 14:01:05 - o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+INFO  - 2025-01-10 14:01:05 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' removed from EhcacheManager.
+INFO  - 2025-01-10 14:01:05 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' removed from EhcacheManager.
+INFO  - 2025-01-10 14:01:05 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' removed from EhcacheManager.
+INFO  - 2025-01-10 14:01:09 - c.s.n.NotionproxyApplication - Starting NotionproxyApplication using Java 21.0.5 with PID 5616 (C:\Users\hacks\salt\pgp\notion-proxy\target\classes started by hacks in C:\Users\hacks\salt\pgp\notion-proxy)
+INFO  - 2025-01-10 14:01:09 - c.s.n.NotionproxyApplication - No active profile set, falling back to 1 default profile: "default"
+INFO  - 2025-01-10 14:01:10 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+INFO  - 2025-01-10 14:01:10 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 14:01:10 - o.a.catalina.core.StandardService - Starting service [Tomcat]
+INFO  - 2025-01-10 14:01:10 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.33]
+INFO  - 2025-01-10 14:01:10 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+INFO  - 2025-01-10 14:01:10 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1011 ms
+INFO  - 2025-01-10 14:01:11 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' created in EhcacheManager.
+INFO  - 2025-01-10 14:01:11 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' created in EhcacheManager.
+INFO  - 2025-01-10 14:01:11 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' created in EhcacheManager.
+INFO  - 2025-01-10 14:01:11 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=saltiesInformation
+INFO  - 2025-01-10 14:01:11 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=allconsultants
+INFO  - 2025-01-10 14:01:11 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=developerScoreCard
+INFO  - 2025-01-10 14:01:11 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 14:01:11 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+INFO  - 2025-01-10 14:01:11 - c.s.n.NotionproxyApplication - Started NotionproxyApplication in 2.813 seconds (process running for 3.505)
+INFO  - 2025-01-10 14:01:19 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  - 2025-01-10 14:01:19 - o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+INFO  - 2025-01-10 14:01:19 - o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+INFO  - 2025-01-10 14:01:19 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/index.html
+INFO  - 2025-01-10 14:01:19 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui.css
+INFO  - 2025-01-10 14:01:19 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/index.css
+INFO  - 2025-01-10 14:01:19 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui-bundle.js
+INFO  - 2025-01-10 14:01:19 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui-standalone-preset.js
+INFO  - 2025-01-10 14:01:19 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-initializer.js
+INFO  - 2025-01-10 14:01:20 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/favicon-32x32.png
+INFO  - 2025-01-10 14:01:23 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/v3/api-docs
+INFO  - 2025-01-10 14:01:23 - o.s.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 224 ms
+WARN  - 2025-01-10 14:01:28 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=OPTIONS, Path=/api/salt, API Key Valid=false
+INFO  - 2025-01-10 14:02:01 - o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+INFO  - 2025-01-10 14:02:01 - o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+INFO  - 2025-01-10 14:02:01 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' removed from EhcacheManager.
+INFO  - 2025-01-10 14:02:01 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' removed from EhcacheManager.
+INFO  - 2025-01-10 14:02:01 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' removed from EhcacheManager.
+INFO  - 2025-01-10 14:02:05 - c.s.n.NotionproxyApplication - Starting NotionproxyApplication using Java 21.0.5 with PID 5396 (C:\Users\hacks\salt\pgp\notion-proxy\target\classes started by hacks in C:\Users\hacks\salt\pgp\notion-proxy)
+INFO  - 2025-01-10 14:02:05 - c.s.n.NotionproxyApplication - No active profile set, falling back to 1 default profile: "default"
+INFO  - 2025-01-10 14:02:06 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+INFO  - 2025-01-10 14:02:06 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 14:02:06 - o.a.catalina.core.StandardService - Starting service [Tomcat]
+INFO  - 2025-01-10 14:02:06 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.33]
+INFO  - 2025-01-10 14:02:06 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+INFO  - 2025-01-10 14:02:06 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 933 ms
+INFO  - 2025-01-10 14:02:07 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' created in EhcacheManager.
+INFO  - 2025-01-10 14:02:07 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' created in EhcacheManager.
+INFO  - 2025-01-10 14:02:07 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' created in EhcacheManager.
+INFO  - 2025-01-10 14:02:07 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=saltiesInformation
+INFO  - 2025-01-10 14:02:07 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=allconsultants
+INFO  - 2025-01-10 14:02:07 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=developerScoreCard
+INFO  - 2025-01-10 14:02:07 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 14:02:07 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+INFO  - 2025-01-10 14:02:07 - c.s.n.NotionproxyApplication - Started NotionproxyApplication in 2.653 seconds (process running for 3.146)
+INFO  - 2025-01-10 14:02:10 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  - 2025-01-10 14:02:10 - o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+INFO  - 2025-01-10 14:02:10 - o.s.web.servlet.DispatcherServlet - Completed initialization in 0 ms
+INFO  - 2025-01-10 14:02:10 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/v3/api-docs
+INFO  - 2025-01-10 14:02:10 - o.s.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 237 ms
+WARN  - 2025-01-10 14:02:17 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=OPTIONS, Path=/api/salt, API Key Valid=false
+WARN  - 2025-01-10 14:05:14 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=GET, Path=/api/salt, API Key Valid=false
+INFO  - 2025-01-10 14:06:55 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui.css
+INFO  - 2025-01-10 14:06:55 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/index.css
+INFO  - 2025-01-10 14:06:56 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui.css.map
+WARN  - 2025-01-10 14:07:04 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=OPTIONS, Path=/api/salt, API Key Valid=false
+INFO  - 2025-01-10 14:09:28 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=0:0:0:0:0:0:0:1, Method=GET, Path=/api/salt
+WARN  - 2025-01-10 14:12:48 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=OPTIONS, Path=/api/salt, API Key Valid=false
+WARN  - 2025-01-10 14:18:27 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=OPTIONS, Path=/api/salt/responsible, API Key Valid=false
+INFO  - 2025-01-10 14:18:38 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui.css.map
+WARN  - 2025-01-10 14:18:43 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=OPTIONS, Path=/api/salt/responsible, API Key Valid=false
+WARN  - 2025-01-10 14:19:15 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=OPTIONS, Path=/api/salt/responsible, API Key Valid=false
+WARN  - 2025-01-10 14:19:23 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=OPTIONS, Path=/api/salt/responsible, API Key Valid=false
+INFO  - 2025-01-10 14:55:33 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/index.html
+INFO  - 2025-01-10 14:55:33 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui.css
+INFO  - 2025-01-10 14:55:33 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/index.css
+INFO  - 2025-01-10 14:55:33 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui-bundle.js
+INFO  - 2025-01-10 14:55:34 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-ui-standalone-preset.js
+INFO  - 2025-01-10 14:55:34 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/swagger-ui/swagger-initializer.js
+INFO  - 2025-01-10 14:55:35 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/salt
+INFO  - 2025-01-10 14:55:49 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/salt
+INFO  - 2025-01-10 14:56:13 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=127.0.0.1, Method=GET, Path=/api/salt/developers/c9af92af-05e5-4618-8dbe-8a162ab649c3/scores
+INFO  - 2025-01-10 14:56:40 - o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+INFO  - 2025-01-10 14:56:40 - o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+INFO  - 2025-01-10 14:56:40 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' removed from EhcacheManager.
+INFO  - 2025-01-10 14:56:40 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' removed from EhcacheManager.
+INFO  - 2025-01-10 14:56:40 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' removed from EhcacheManager.
+INFO  - 2025-01-10 14:56:44 - c.s.n.NotionproxyApplication - Starting NotionproxyApplication using Java 21.0.5 with PID 13856 (C:\Users\hacks\salt\pgp\notion-proxy\target\classes started by hacks in C:\Users\hacks\salt\pgp\notion-proxy)
+INFO  - 2025-01-10 14:56:44 - c.s.n.NotionproxyApplication - No active profile set, falling back to 1 default profile: "default"
+INFO  - 2025-01-10 14:56:45 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+INFO  - 2025-01-10 14:56:45 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 14:56:45 - o.a.catalina.core.StandardService - Starting service [Tomcat]
+INFO  - 2025-01-10 14:56:45 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.33]
+INFO  - 2025-01-10 14:56:45 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+INFO  - 2025-01-10 14:56:45 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1005 ms
+INFO  - 2025-01-10 14:56:46 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' created in EhcacheManager.
+INFO  - 2025-01-10 14:56:46 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' created in EhcacheManager.
+INFO  - 2025-01-10 14:56:46 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' created in EhcacheManager.
+INFO  - 2025-01-10 14:56:46 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=saltiesInformation
+INFO  - 2025-01-10 14:56:46 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=allconsultants
+INFO  - 2025-01-10 14:56:46 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=developerScoreCard
+INFO  - 2025-01-10 14:56:46 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 14:56:46 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+INFO  - 2025-01-10 14:56:46 - c.s.n.NotionproxyApplication - Started NotionproxyApplication in 2.778 seconds (process running for 3.274)
+INFO  - 2025-01-10 14:56:51 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  - 2025-01-10 14:56:51 - o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+INFO  - 2025-01-10 14:56:51 - o.s.web.servlet.DispatcherServlet - Completed initialization in 0 ms
+INFO  - 2025-01-10 14:56:51 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=0:0:0:0:0:0:0:1, Method=GET, Path=/api/salt/developers/c9af92af-05e5-4618-8dbe-8a162ab649c3/scores
+INFO  - 2025-01-10 15:17:01 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=0:0:0:0:0:0:0:1, Method=GET, Path=/api/salt
+INFO  - 2025-01-10 15:17:40 - c.s.notionproxy.filter.ApiKeyFilter - Successful API access: IP=0:0:0:0:0:0:0:1, Method=GET, Path=/api/salt/developers/0c625d53-6cd7-448e-bd80-b11d0f1e8efb/scores
+INFO  - 2025-01-10 15:40:46 - o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+INFO  - 2025-01-10 15:40:46 - o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+INFO  - 2025-01-10 15:40:46 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' removed from EhcacheManager.
+INFO  - 2025-01-10 15:40:46 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' removed from EhcacheManager.
+INFO  - 2025-01-10 15:40:46 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' removed from EhcacheManager.
+INFO  - 2025-01-10 15:46:02 - c.s.n.NotionproxyApplication - Starting NotionproxyApplication using Java 21.0.5 with PID 12784 (C:\Users\hacks\salt\pgp\notion-proxy\target\classes started by hacks in C:\Users\hacks\salt\pgp\notion-proxy)
+INFO  - 2025-01-10 15:46:02 - c.s.n.NotionproxyApplication - No active profile set, falling back to 1 default profile: "default"
+INFO  - 2025-01-10 15:46:03 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+INFO  - 2025-01-10 15:46:03 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 15:46:03 - o.a.catalina.core.StandardService - Starting service [Tomcat]
+INFO  - 2025-01-10 15:46:03 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.33]
+INFO  - 2025-01-10 15:46:03 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+INFO  - 2025-01-10 15:46:03 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 981 ms
+INFO  - 2025-01-10 15:46:04 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' created in EhcacheManager.
+INFO  - 2025-01-10 15:46:04 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' created in EhcacheManager.
+INFO  - 2025-01-10 15:46:04 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' created in EhcacheManager.
+INFO  - 2025-01-10 15:46:04 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=saltiesInformation
+INFO  - 2025-01-10 15:46:04 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=allconsultants
+INFO  - 2025-01-10 15:46:04 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=developerScoreCard
+INFO  - 2025-01-10 15:46:04 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 15:46:04 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+INFO  - 2025-01-10 15:46:04 - c.s.n.NotionproxyApplication - Started NotionproxyApplication in 2.908 seconds (process running for 3.449)
+INFO  - 2025-01-10 15:46:16 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+INFO  - 2025-01-10 15:46:16 - o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+INFO  - 2025-01-10 15:46:16 - o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+INFO  - 2025-01-10 15:46:17 - o.s.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 229 ms
+WARN  - 2025-01-10 15:46:23 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=GET, Path=/api/salt, API Key Valid=false
+WARN  - 2025-01-10 15:46:48 - c.s.notionproxy.filter.ApiKeyFilter - Unauthorized access attempt: IP=0:0:0:0:0:0:0:1, Method=GET, Path=/api/salt, API Key Valid=false
+INFO  - 2025-01-10 15:46:52 - o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+INFO  - 2025-01-10 15:46:52 - o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+INFO  - 2025-01-10 15:46:52 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' removed from EhcacheManager.
+INFO  - 2025-01-10 15:46:52 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' removed from EhcacheManager.
+INFO  - 2025-01-10 15:46:52 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' removed from EhcacheManager.
+INFO  - 2025-01-10 15:48:53 - c.s.n.NotionproxyApplication - Starting NotionproxyApplication using Java 21.0.5 with PID 15336 (C:\Users\hacks\salt\pgp\notion-proxy\target\classes started by hacks in C:\Users\hacks\salt\pgp\notion-proxy)
+INFO  - 2025-01-10 15:48:53 - c.s.n.NotionproxyApplication - No active profile set, falling back to 1 default profile: "default"
+INFO  - 2025-01-10 15:48:54 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+INFO  - 2025-01-10 15:48:54 - o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 15:48:54 - o.a.catalina.core.StandardService - Starting service [Tomcat]
+INFO  - 2025-01-10 15:48:54 - o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.33]
+INFO  - 2025-01-10 15:48:54 - o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+INFO  - 2025-01-10 15:48:54 - o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 953 ms
+INFO  - 2025-01-10 15:48:55 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' created in EhcacheManager.
+INFO  - 2025-01-10 15:48:55 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' created in EhcacheManager.
+INFO  - 2025-01-10 15:48:55 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' created in EhcacheManager.
+INFO  - 2025-01-10 15:48:55 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=saltiesInformation
+INFO  - 2025-01-10 15:48:55 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=allconsultants
+INFO  - 2025-01-10 15:48:55 - o.ehcache.jsr107.Eh107CacheManager - Registering Ehcache MBean javax.cache:type=CacheStatistics,CacheManager=file./C./Users/hacks/salt/pgp/notion-proxy/target/classes/ehcache.xml,Cache=developerScoreCard
+INFO  - 2025-01-10 15:48:55 - o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+INFO  - 2025-01-10 15:48:55 - o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+INFO  - 2025-01-10 15:48:55 - c.s.n.NotionproxyApplication - Started NotionproxyApplication in 2.778 seconds (process running for 3.318)
+INFO  - 2025-01-10 15:49:01 - o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+INFO  - 2025-01-10 15:49:01 - o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+INFO  - 2025-01-10 15:49:01 - org.ehcache.core.EhcacheManager - Cache 'saltiesInformation' removed from EhcacheManager.
+INFO  - 2025-01-10 15:49:01 - org.ehcache.core.EhcacheManager - Cache 'allconsultants' removed from EhcacheManager.
+INFO  - 2025-01-10 15:49:01 - org.ehcache.core.EhcacheManager - Cache 'developerScoreCard' removed from EhcacheManager.
