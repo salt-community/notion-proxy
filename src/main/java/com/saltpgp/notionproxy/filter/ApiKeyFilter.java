@@ -35,6 +35,7 @@ public class ApiKeyFilter extends OncePerRequestFilter {
             log.info("Successful API access: IP={}, Method={}, Path={}",
                     request.getRemoteAddr(), request.getMethod(), request.getRequestURI());
             filterChain.doFilter(request, response);
+            return;
         }
 
         log.warn("Unauthorized access attempt: IP={}, Method={}, Path={}, API Key Valid={}",
