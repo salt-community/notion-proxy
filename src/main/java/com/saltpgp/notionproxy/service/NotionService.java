@@ -24,6 +24,7 @@ import java.util.*;
 public class NotionService {
 
     public RestClient restClient;
+    private final NotionApiService notionApiService;
 
     @Value("${NOTION_API_KEY}")
     private String API_KEY;
@@ -44,8 +45,9 @@ public class NotionService {
     @Lazy
     private NotionService self;
 
-    public NotionService(RestClient.Builder builder) {
+    public NotionService(RestClient.Builder builder, NotionApiService notionApiService) {
         this.restClient = builder.baseUrl("https://api.notion.com/v1").build();
+        this.notionApiService = notionApiService;
     }
 
     public Consultant getConsultantById(UUID id) throws NotionException {
@@ -321,34 +323,11 @@ public class NotionService {
     }
 
     private JsonNode getNotionDataBaseResponse(String database, Object node) throws NotionException {
-        JsonNode response =  restClient
-                .post()
-                .uri(String.format("/databases/%s/query", database))
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + API_KEY)
-                .header("Notion-Version", NOTION_VERSION)
-                .body(node)
-                .retrieve()
-                .body(JsonNode.class);
-        if (response == null) {
-            throw new NotionException();
-        }
-        return response;
+        return notionApiService.fetchDatabase(database, node, API_KEY, NOTION_VERSION);
     }
 
     private JsonNode getNotionPageResponse(String pageId) throws NotionException {
-        JsonNode response = restClient
-                .get()
-                .uri(String.format("/pages/%s", pageId))
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + API_KEY)
-                .header("Notion-Version", NOTION_VERSION)
-                .retrieve()
-                .body(JsonNode.class);
-        if (response == null) {
-            throw new NotionException();
-        }
-        return response;
+        return notionApiService.fetchPage(pageId, API_KEY, NOTION_VERSION);
     }
 
     private Score extractScore(JsonNode element) {
