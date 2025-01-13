@@ -15,6 +15,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler({NotionNotFoundException.class})
     public ResponseEntity<Void> handleNotionNotFoundException() {
+        log.debug("NotionNotFoundException was thrown: Resource not found");
         return ResponseEntity.notFound().build();
     }
 
