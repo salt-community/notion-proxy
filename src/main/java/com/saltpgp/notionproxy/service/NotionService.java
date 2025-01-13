@@ -9,6 +9,7 @@ import com.saltpgp.notionproxy.models.Consultant;
 import com.saltpgp.notionproxy.models.Developer;
 import com.saltpgp.notionproxy.models.ResponsiblePerson;
 import com.saltpgp.notionproxy.models.Score;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -19,6 +20,7 @@ import org.springframework.web.client.RestClient;
 import java.util.*;
 
 @Service
+@Slf4j
 public class NotionService {
 
     public RestClient restClient;
@@ -54,6 +56,7 @@ public class NotionService {
                 .toList();
 
         if (response.get("properties").get("Name").get("title").get(0) == null) {
+            log.debug("Property Name.Title == Null, returning null from method");
             return null;
         }
         List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(response, ptPeople);
@@ -157,7 +160,6 @@ public class NotionService {
         List<Developer> allSalties = new ArrayList<>();
         String nextCursor = null;
         boolean hasMore = true;
-
         while (hasMore) {
             JsonNode response = getNotionDataBaseResponse(DATABASE_ID, createQueryRequestBody(nextCursor));
 
@@ -187,6 +189,8 @@ public class NotionService {
 
             nextCursor = response.get("next_cursor").asText();
             hasMore = response.get("has_more").asBoolean();
+            log.debug("Finished fetch of notion db. Nextcursors: {}, hasMore? = {}", nextCursor, hasMore);
+            log.debug("Developers found: {}", allSalties.size());
         }
         return allSalties;
     }
