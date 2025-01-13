@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -159,5 +160,9 @@ class NotionControllerTest {
     @Test
     void getConsultants_shouldReturnInternalServerError() throws Exception {
 
+        // Arrange
+        boolean includeEmptyResponsiblePersons = false;
+
+        when(notionService.getAllConsultants(includeEmptyResponsiblePersons)).thenThrow(new RuntimeException());
     }
 }
