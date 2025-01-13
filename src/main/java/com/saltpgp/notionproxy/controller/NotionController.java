@@ -155,7 +155,10 @@ public class NotionController {
     })
     @GetMapping("developers/{id}/scores")
     public ResponseEntity<DeveloperDto> getScoreCard(@PathVariable UUID id) throws NotionException, NotionNotFoundException {
-            return ResponseEntity.ok(DeveloperDto.fromModel(notionService.getDeveloperByIdWithScore(id)));
+        log.info("Received request for developer scorecard with ID: {}", id);
+        DeveloperDto developerDto = DeveloperDto.fromModel(notionService.getDeveloperByIdWithScore(id));
+        log.info("Successfully retrieved scorecard for developer with ID: {}", id);
+        return ResponseEntity.ok(developerDto);
 
     }
 }

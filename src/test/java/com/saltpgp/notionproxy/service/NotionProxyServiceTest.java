@@ -1,7 +1,6 @@
 package com.saltpgp.notionproxy.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
@@ -14,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.client.ExpectedCount;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.client.MockRestServiceServer;
 
 import java.util.List;
@@ -26,6 +25,11 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 
 @RestClientTest(NotionService.class)
+@TestPropertySource(properties = {
+        "DATABASE_ID=some_database_id",
+        "CORE_DATABASE_ID=some_core_database_id",
+        "SCORE_DATABASE_ID=some_score_database_id"
+})
 class NotionProxyServiceTest {
 
     @Autowired
