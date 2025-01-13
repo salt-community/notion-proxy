@@ -38,8 +38,10 @@ public class NotionController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @GetMapping("")
-    public ResponseEntity<List<SaltiesDto>> getAllSalties() throws NotionException {
-        return ResponseEntity.ok(SaltiesDto.fromModel(notionService.getAllDevelopers()));
+    public ResponseEntity<List<SaltiesDto>> getAllSalties(
+            @Parameter(description = "A filter to sort devs by current status(on assignment, pgp, etc)", required = false, example = "none")
+            @RequestParam(required = false, defaultValue = "none") String filter) throws NotionException {
+        return ResponseEntity.ok(SaltiesDto.fromModel(notionService.getAllDevelopers(filter)));
     }
 
     @Operation(summary = "Get all consultants", description = "Retrieves a list of all consultants, with an optional filter to include consultants with empty responsible persons.")
