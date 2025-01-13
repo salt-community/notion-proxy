@@ -46,7 +46,9 @@ class NotionControllerTest {
                 new Developer("Carl-Henrik Alm", UUID.fromString("1450064b-bb9a-80a6-88c5-e9391cdd8974"), null, null, "carlhalm@gmail.com", null)
         );
 
-        when(notionService.getAllDevelopers()).thenReturn(mockDevelopers);
+        String filter = "none";
+
+        when(notionService.getAllDevelopers(filter)).thenReturn(mockDevelopers);
 
         String expectedResponse = """
         [
@@ -68,7 +70,7 @@ class NotionControllerTest {
         """;
 
         // Act & Assert
-        mockMvc.perform(get("/salt")
+        mockMvc.perform(get("/api/salt")
                         .header("X-API-KEY", TEST_API_KEY)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -79,19 +81,21 @@ class NotionControllerTest {
     void getAllSalties_shouldReturnUnauthorized() throws Exception {
 
         // Act & Assert
-        mockMvc.perform(get("/salt")
+        mockMvc.perform(get("/api/salt")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
-    void getAllSalties_shouldReturnInternalServerErroe() throws Exception {
+    void getAllSalties_shouldReturnInternalServerError() throws Exception {
 
         // Arrange
-        when(notionService.getAllDevelopers()).thenThrow(new RuntimeException());
+        String filter = "none";
+
+        when(notionService.getAllDevelopers(filter)).thenThrow(new RuntimeException());
 
         // Act and assert
-        mockMvc.perform(get("/salt")
+        mockMvc.perform(get("/api/salt")
                         .accept(MediaType.APPLICATION_JSON)
                         .header("X-API-KEY", TEST_API_KEY))
                 .andExpect(status().isInternalServerError());
@@ -136,10 +140,19 @@ class NotionControllerTest {
         """;
 
         // Act & Assert
-        mockMvc.perform(get("/salt/consultants?includeEmptyResponsible=true")
+        mockMvc.perform(get("/api/salt/consultants?includeEmptyResponsible=true")
                         .accept(MediaType.APPLICATION_JSON)
                         .header("X-API-KEY", TEST_API_KEY))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedResponse));
+    }
+
+    @Test
+    void getConsultants_shouldReturnUnAuthorized() throws Exception{
+
+        // Act & Assert
+        mockMvc.perform(get("/api/salt/consultants")
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isUnauthorized());
     }
 }
