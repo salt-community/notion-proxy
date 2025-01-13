@@ -319,14 +319,13 @@ class NotionProxyServiceTest {
     @Test
     void shouldFindAllConsultantswithIncludeEmptyTrue() throws NotionException, JsonProcessingException {
 
-        server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", DATABASE_ID)))
-                .andRespond(withSuccess(databaseResponse, MediaType.APPLICATION_JSON));
-
         server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", CORE_DATABASE_ID)))
                 .andRespond(withSuccess(coreDatabaseResponse, MediaType.APPLICATION_JSON));
 
-        List<Consultant> consultants = notionService.getAllConsultants( false);
+        server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", DATABASE_ID)))
+                .andRespond(withSuccess(databaseResponse, MediaType.APPLICATION_JSON));
 
+        List<Consultant> consultants = notionService.getAllConsultants( true);
         assertEquals(2, consultants.size());
         assertEquals("Test Saltie 1", consultants.get(0).name());
         assertEquals("Test Saltie 2", consultants.get(1).name());
