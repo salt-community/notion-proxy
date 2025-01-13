@@ -374,8 +374,9 @@ class NotionProxyServiceTest {
         server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", SCORE_DATABASE_ID)))
                 .andRespond(withSuccess(scoreDatabaseResponse, MediaType.APPLICATION_JSON));
 
-        server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", DATABASE_ID)))
-                .andRespond(withSuccess(databaseResponse, MediaType.APPLICATION_JSON));
+        server.expect(requestTo(String.format("https://api.notion.com/v1/pages/%s", id)))
+                .andRespond(withSuccess(consultantPageResponse, MediaType.APPLICATION_JSON));
+
         //Then
         Developer developer = notionService.getDeveloperByIdWithScore(UUID.fromString(id));
 
