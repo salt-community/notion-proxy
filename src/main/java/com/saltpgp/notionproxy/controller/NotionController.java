@@ -90,15 +90,23 @@ public class NotionController {
     public <T> ResponseEntity<List<T>> getResponsiblePeople(
             @Parameter(description = "Whether to include the consultants for whom they are responsible", required = false, example = "false")
             @RequestParam(required = false, defaultValue = "false") boolean includeConsultants) throws NotionException {
+
+        log.info("Received request to get responsible persons with includeConsultants={}", includeConsultants);
+
         if (includeConsultants) {
+            log.info("Including consultants in the list of responsible persons.");
             List<ResponsibleWithConsultantsDto> dtos = ResponsibleWithConsultantsDto
                     .fromModelList(notionService.getAllResponsiblePeople(true));
+            log.debug("Returning response with {} responsible persons with consultants.", dtos.size());
             return ResponseEntity.ok((List<T>) dtos);
         } else {
+            log.info("Excluding consultants from the list of responsible persons.");
             List<BasicResponsiblePersonDto> dtos = BasicResponsiblePersonDto
                     .fromModelList(notionService.getAllResponsiblePeople(false));
+            log.debug("Returning response with {} responsible persons without consultants.", dtos.size());
             return ResponseEntity.ok((List<T>) dtos);
         }
+
     }
 
     @Operation(summary = "Get a specific responsible person by ID", description = "Retrieves details of a specific responsible person by their unique ID.")
