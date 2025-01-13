@@ -142,4 +142,9 @@ class NotionControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedResponse));
     }
+
+    @Test
+    void getConsultants_shouldReturnUnAuthorized() throws Exception{
+
+    }
 }
