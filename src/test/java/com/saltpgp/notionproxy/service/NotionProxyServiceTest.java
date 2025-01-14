@@ -20,11 +20,10 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
-
-@RestClientTest(NotionService.class)
 @TestPropertySource(properties = {
         "DATABASE_ID=some_database_id",
         "CORE_DATABASE_ID=some_core_database_id",
@@ -32,14 +31,9 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 })
 class NotionProxyServiceTest {
 
-    @Autowired
-    MockRestServiceServer server;
+    NotionApiService mockApiService;
 
-    @Autowired
     NotionService notionService;
-
-    @Autowired
-    ObjectMapper objectMapper;
 
     @Value("${DATABASE_ID}")
     private String DATABASE_ID;
@@ -58,6 +52,10 @@ class NotionProxyServiceTest {
 
     @BeforeEach
     void setUp() throws JsonProcessingException {
+
+        mockApiService = mock(NotionApiService.class);
+
+        notionService = new NotionService(mockApiService);
 
         databaseResponse = """
                 {
@@ -323,12 +321,6 @@ class NotionProxyServiceTest {
     @Test
     void shouldFindAllConsultantswithIncludeEmptyTrue() throws NotionException, JsonProcessingException {
 
-        server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", CORE_DATABASE_ID)))
-                .andRespond(withSuccess(coreDatabaseResponse, MediaType.APPLICATION_JSON));
-
-        server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", DATABASE_ID)))
-                .andRespond(withSuccess(databaseResponse, MediaType.APPLICATION_JSON));
-
         List<Consultant> consultants = notionService.getAllConsultants( true);
         assertEquals(2, consultants.size());
         assertEquals("Test Saltie 1", consultants.get(0).name());
@@ -337,9 +329,6 @@ class NotionProxyServiceTest {
 
     @Test
     void shouldFindAllDevelopers() throws NotionException {
-
-        server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", DATABASE_ID)))
-                .andRespond(withSuccess(databaseResponse, MediaType.APPLICATION_JSON));
 
         List<Developer> developers = notionService.getAllDevelopers();
 
@@ -352,11 +341,6 @@ class NotionProxyServiceTest {
 
     @Test
     void getAllResponsiblePeopleTests() throws NotionException {
-
-
-//        Act
-        server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", CORE_DATABASE_ID)))
-                .andRespond(withSuccess(coreDatabaseResponse, MediaType.APPLICATION_JSON));
 
         List<ResponsiblePerson> responsiblePeople = notionService.getAllResponsiblePeople( false);
 
@@ -374,11 +358,6 @@ class NotionProxyServiceTest {
         String id = "11111111-1111-1111-1111-111111111111";
 
         //When
-        server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", SCORE_DATABASE_ID)))
-                .andRespond(withSuccess(scoreDatabaseResponse, MediaType.APPLICATION_JSON));
-
-        server.expect(requestTo(String.format("https://api.notion.com/v1/pages/%s", id)))
-                .andRespond(withSuccess(consultantPageResponse, MediaType.APPLICATION_JSON));
 
         //Then
         Developer developer = notionService.getDeveloperByIdWithScore(UUID.fromString(id));
@@ -395,11 +374,6 @@ class NotionProxyServiceTest {
         // Given
         UUID consultantId = UUID.fromString("11111111-1111-1111-1111-111111111111");
         // When
-        server.expect(requestTo(String.format("https://api.notion.com/v1/pages/%s", consultantId)))
-                .andRespond(withSuccess(consultantPageResponse, MediaType.APPLICATION_JSON));
-
-        server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", CORE_DATABASE_ID)))
-                .andRespond(withSuccess(coreDatabaseResponse, MediaType.APPLICATION_JSON));
 
         // Then
         Consultant consultant = notionService.getConsultantById(consultantId);
