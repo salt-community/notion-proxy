@@ -29,8 +29,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(SecurityConfig.class) // Import your security configuration
 class NotionControllerTest {
 
-    @Value("${CUSTOM_API_KEY}")
+    @Value("${NOTION_API_KEY}")
     private String TEST_API_KEY;
+
+    @Value("${CUSTOM_API_KEY}")
+    private String CUSTOM_API_KEY;
 
     @Autowired
     private MockMvc mockMvc;
@@ -72,7 +75,7 @@ class NotionControllerTest {
 
         // Act & Assert
         mockMvc.perform(get("/api/salt")
-                        .header("X-API-KEY", TEST_API_KEY)
+                        .header(CUSTOM_API_KEY, TEST_API_KEY)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedResponse));
@@ -98,7 +101,7 @@ class NotionControllerTest {
         // Act and assert
         mockMvc.perform(get("/api/salt")
                         .accept(MediaType.APPLICATION_JSON)
-                        .header("X-API-KEY", TEST_API_KEY))
+                        .header(CUSTOM_API_KEY, TEST_API_KEY))
                 .andExpect(status().isInternalServerError());
     }
 
@@ -143,7 +146,7 @@ class NotionControllerTest {
         // Act & Assert
         mockMvc.perform(get("/api/salt/consultants?includeEmptyResponsible=true")
                         .accept(MediaType.APPLICATION_JSON)
-                        .header("X-API-KEY", TEST_API_KEY))
+                        .header(CUSTOM_API_KEY, TEST_API_KEY))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedResponse));
     }
@@ -168,7 +171,7 @@ class NotionControllerTest {
         //Act & Assert
         mockMvc.perform(get("/api/salt/consultants")
                         .accept(MediaType.APPLICATION_JSON)
-                        .header("X-API-KEY", TEST_API_KEY))
+                        .header(CUSTOM_API_KEY, TEST_API_KEY))
                 .andExpect(status().isInternalServerError());
     }
 }
