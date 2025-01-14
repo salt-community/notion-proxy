@@ -52,7 +52,6 @@ class NotionProxyServiceTest {
     private String scoreDatabaseResponse;
     private String consultantPageResponse;
 
-
     @BeforeEach
     void setUp() throws JsonProcessingException, NotionException {
 
@@ -323,6 +322,24 @@ class NotionProxyServiceTest {
     }
 
     @Test
+    void shouldGetConsultantById() throws NotionException {
+        // Given
+        UUID consultantId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+        // Then
+        Consultant consultant = notionService.getConsultantById(consultantId);
+
+        assertNotNull(consultant);
+        assertEquals("Test Saltie 1", consultant.name());
+        assertEquals(consultantId, consultant.uuid());
+
+        // may want to assert responsiblePersonList content if applicable
+        assertNotNull(consultant.responsiblePersonList());
+        assertEquals(1, consultant.responsiblePersonList().size());
+        assertEquals("Responsible Person 1", consultant.responsiblePersonList().getFirst().name());
+    }
+
+    @Test
     void shouldFindAllConsultantsWithIncludeEmptyTrue() throws NotionException, JsonProcessingException {
 
         List<Consultant> consultants = notionService.getAllConsultants( true);
@@ -366,25 +383,6 @@ class NotionProxyServiceTest {
         assertEquals(95, developer.getScores().get(1).getScore());
         assertEquals("UI Enhancement", developer.getScores().get(1).getName());
         assertEquals("https://github.com/saltie1", developer.getGithubUrl());
-    }
-
-    @Test
-    void shouldGetConsultantById() throws NotionException {
-        // Given
-        UUID consultantId = UUID.fromString("11111111-1111-1111-1111-111111111111");
-        // When
-
-        // Then
-        Consultant consultant = notionService.getConsultantById(consultantId);
-
-        assertNotNull(consultant);
-        assertEquals("Test Saltie 1", consultant.name());
-        assertEquals(consultantId, consultant.uuid());
-
-        // may want to assert responsiblePersonList content if applicable
-        assertNotNull(consultant.responsiblePersonList());
-        assertEquals(1, consultant.responsiblePersonList().size());
-        assertEquals("Responsible Person 1", consultant.responsiblePersonList().getFirst().name());
     }
 
     private ObjectNode getDeveloperNode(UUID id) {

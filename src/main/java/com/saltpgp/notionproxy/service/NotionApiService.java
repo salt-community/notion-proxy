@@ -31,7 +31,7 @@ public class NotionApiService {
                 .retrieve()
                 .body(JsonNode.class);
         if (response == null) {
-            throw new NotionException();
+            throw new NotionException("Id didn't exist in the pages");
         }
         return response;
     }
