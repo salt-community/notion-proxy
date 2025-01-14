@@ -25,14 +25,8 @@ public class NotionService {
 
     private final NotionApiService notionApiService;
 
-    @Value("${NOTION_API_KEY}")
-    private String API_KEY;
-
     @Value("${DATABASE_ID}")
     private String DATABASE_ID;
-
-    @Value("${NOTION_VERSION}")
-    private String NOTION_VERSION;
 
     @Value("${SCORE_DATABASE_ID}")
     private String SCORE_DATABASE_ID;
@@ -317,11 +311,11 @@ public class NotionService {
     }
 
     private JsonNode getNotionDataBaseResponse(String database, Object node) throws NotionException {
-        return notionApiService.fetchDatabase(database, node, API_KEY, NOTION_VERSION);
+        return notionApiService.fetchDatabase(database, node);
     }
 
     private JsonNode getNotionPageResponse(String pageId) throws NotionException {
-        return notionApiService.fetchPage(pageId, API_KEY, NOTION_VERSION);
+        return notionApiService.fetchPage(pageId);
     }
 
     private Score extractScore(JsonNode element) {
