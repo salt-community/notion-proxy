@@ -1,8 +1,9 @@
 package com.saltpgp.notionproxy.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import com.saltpgp.notionproxy.models.Consultant;
@@ -14,36 +15,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.client.ExpectedCount;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.client.MockRestServiceServer;
 
 import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
+@TestPropertySource(properties = {
 
-@RestClientTest(NotionService.class)
+})
 class NotionProxyServiceTest {
 
-    @Autowired
-    MockRestServiceServer server;
+    NotionApiService mockApiService;
 
-    @Autowired
     NotionService notionService;
 
-    @Autowired
-    ObjectMapper objectMapper;
+    ObjectMapper mapper;
 
-    @Value("${DATABASE_ID}")
     private String DATABASE_ID;
 
-    @Value("${CORE_DATABASE_ID}")
     private String CORE_DATABASE_ID;
 
-    @Value("${SCORE_DATABASE_ID}")
     private String SCORE_DATABASE_ID;
 
     private String databaseResponse;
@@ -53,7 +51,13 @@ class NotionProxyServiceTest {
 
 
     @BeforeEach
-    void setUp() throws JsonProcessingException {
+    void setUp() throws JsonProcessingException, NotionException {
+
+        mockApiService = mock(NotionApiService.class);
+
+        notionService = new NotionService(mockApiService);
+
+        mapper = new ObjectMapper();
 
         databaseResponse = """
                 {
@@ -304,29 +308,21 @@ class NotionProxyServiceTest {
                         }
                 """;
 
-//        server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", DATABASE_ID)))
-//                .andRespond(withSuccess(databaseResponse, MediaType.APPLICATION_JSON));
+        when(mockApiService.fetchDatabase(CORE_DATABASE_ID,NotionServiceFilters.FILTER_RESPONSIBLE_PEOPLE)).thenReturn(mapper.readTree(coreDatabaseResponse));
 
-//        server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", CORE_DATABASE_ID)))
-//                .andRespond(withSuccess(coreDatabaseResponse, MediaType.APPLICATION_JSON));
+        when(mockApiService.fetchDatabase(DATABASE_ID, NotionServiceFilters.getFilterOnAssignment(null))).thenReturn(mapper.readTree(databaseResponse));
 
-//        server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", SCORE_DATABASE_ID)))
-//                .andRespond(withSuccess(scoreDatabaseResponse, MediaType.APPLICATION_JSON));
+        when(mockApiService.fetchDatabase(DATABASE_ID, mapper.createObjectNode())).thenReturn(mapper.readTree(databaseResponse));
 
+        when(mockApiService.fetchDatabase(SCORE_DATABASE_ID, getDeveloperNode(UUID.fromString("11111111-1111-1111-1111-111111111111")))).thenReturn(mapper.readTree(scoreDatabaseResponse));
 
+        when(mockApiService.fetchPage("11111111-1111-1111-1111-111111111111")).thenReturn(mapper.readTree(consultantPageResponse));
     }
 
     @Test
-    void shouldFindAllConsultantswithIncludeEmptyTrue() throws NotionException, JsonProcessingException {
+    void shouldFindAllConsultantsWithIncludeEmptyTrue() throws NotionException, JsonProcessingException {
 
-        server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", DATABASE_ID)))
-                .andRespond(withSuccess(databaseResponse, MediaType.APPLICATION_JSON));
-
-        server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", CORE_DATABASE_ID)))
-                .andRespond(withSuccess(coreDatabaseResponse, MediaType.APPLICATION_JSON));
-
-        List<Consultant> consultants = notionService.getAllConsultants( false);
-
+        List<Consultant> consultants = notionService.getAllConsultants( true);
         assertEquals(2, consultants.size());
         assertEquals("Test Saltie 1", consultants.get(0).name());
         assertEquals("Test Saltie 2", consultants.get(1).name());
@@ -335,28 +331,17 @@ class NotionProxyServiceTest {
     @Test
     void shouldFindAllDevelopers() throws NotionException {
 
-        server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", DATABASE_ID)))
-                .andRespond(withSuccess(databaseResponse, MediaType.APPLICATION_JSON));
-
         List<Developer> developers = notionService.getAllDevelopers();
 
         assertEquals(2, developers.size());
         assertEquals("Test Saltie 1", developers.get(0).getName());
         assertEquals("https://github.com/saltie2", developers.get(1).getGithubUrl());
-
-
     }
 
     @Test
     void getAllResponsiblePeopleTests() throws NotionException {
 
-
-//        Act
-        server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", CORE_DATABASE_ID)))
-                .andRespond(withSuccess(coreDatabaseResponse, MediaType.APPLICATION_JSON));
-
         List<ResponsiblePerson> responsiblePeople = notionService.getAllResponsiblePeople( false);
-
 //        Assert
         assertEquals(2, responsiblePeople.size());
         assertEquals("Responsible Person 1", responsiblePeople.get(0).name());
@@ -371,11 +356,7 @@ class NotionProxyServiceTest {
         String id = "11111111-1111-1111-1111-111111111111";
 
         //When
-        server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", SCORE_DATABASE_ID)))
-                .andRespond(withSuccess(scoreDatabaseResponse, MediaType.APPLICATION_JSON));
 
-        server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", DATABASE_ID)))
-                .andRespond(withSuccess(databaseResponse, MediaType.APPLICATION_JSON));
         //Then
         Developer developer = notionService.getDeveloperByIdWithScore(UUID.fromString(id));
 
@@ -391,11 +372,6 @@ class NotionProxyServiceTest {
         // Given
         UUID consultantId = UUID.fromString("11111111-1111-1111-1111-111111111111");
         // When
-        server.expect(requestTo(String.format("https://api.notion.com/v1/pages/%s", consultantId)))
-                .andRespond(withSuccess(consultantPageResponse, MediaType.APPLICATION_JSON));
-
-        server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", CORE_DATABASE_ID)))
-                .andRespond(withSuccess(coreDatabaseResponse, MediaType.APPLICATION_JSON));
 
         // Then
         Consultant consultant = notionService.getConsultantById(consultantId);
@@ -409,7 +385,17 @@ class NotionProxyServiceTest {
         assertEquals(1, consultant.responsiblePersonList().size());
         assertEquals("Responsible Person 1", consultant.responsiblePersonList().getFirst().name());
     }
-    
 
+    private ObjectNode getDeveloperNode(UUID id) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode relationNode = objectMapper.createObjectNode();
+        relationNode.put("contains", String.valueOf(id));
+        ObjectNode filterNode = objectMapper.createObjectNode();
+        filterNode.put("property", "💽 Developer");
+        filterNode.set("relation", relationNode);
+        ObjectNode bodyNode = objectMapper.createObjectNode();
+        bodyNode.set("filter", filterNode);
+        return bodyNode;
+    }
 
 }

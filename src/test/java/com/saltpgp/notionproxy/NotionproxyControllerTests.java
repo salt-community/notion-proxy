@@ -2,7 +2,9 @@ package com.saltpgp.notionproxy;
 
 import com.saltpgp.notionproxy.config.SecurityConfig;
 import com.saltpgp.notionproxy.controller.NotionController;
+import com.saltpgp.notionproxy.models.Consultant;
 import com.saltpgp.notionproxy.models.Developer;
+import com.saltpgp.notionproxy.models.ResponsiblePerson;
 import com.saltpgp.notionproxy.service.NotionService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.client.HttpServerErrorException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(NotionController.class)
 @Import(SecurityConfig.class) // Import your security configuration
- class NotionControllerTest {
+class NotionControllerTest {
 
     @Value("${CUSTOM_API_KEY}")
     private String TEST_API_KEY;
@@ -43,7 +47,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 new Developer("Carl-Henrik Alm", UUID.fromString("1450064b-bb9a-80a6-88c5-e9391cdd8974"), null, null, "carlhalm@gmail.com", null)
         );
 
-        when(notionService.getAllDevelopers()).thenReturn(mockDevelopers);
+        String filter = "none";
+
+        when(notionService.getAllDevelopers(filter)).thenReturn(mockDevelopers);
 
         String expectedResponse = """
         [
@@ -65,7 +71,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         """;
 
         // Act & Assert
-        mockMvc.perform(get("/salt")
+        mockMvc.perform(get("/api/salt")
                         .header("X-API-KEY", TEST_API_KEY)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -76,8 +82,93 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     void getAllSalties_shouldReturnUnauthorized() throws Exception {
 
         // Act & Assert
-        mockMvc.perform(get("/salt")
-                .accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/salt")
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void getAllSalties_shouldReturnInternalServerError() throws Exception {
+
+        // Arrange
+        String filter = "none";
+
+        when(notionService.getAllDevelopers(filter)).thenThrow(new RuntimeException());
+
+        // Act and assert
+        mockMvc.perform(get("/api/salt")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header("X-API-KEY", TEST_API_KEY))
+                .andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    void getConsultants_shouldReturnListOfConsultantsWithEmptyResponsiblePerson() throws Exception {
+
+        //Arrange
+        List<ResponsiblePerson> mockResponsiblepersons = List.of(
+                new ResponsiblePerson("TestResponsiblePerson1", UUID.fromString("b28fbeb3-f829-4d27-9339-3a41f8d45435"), "test@gmail.com", List.of())
+        );
+
+        List<Consultant> mockConsultants = List.of(
+                new Consultant("TestName", UUID.fromString("f0d02a91-50c3-46a7-a4e7-76f8de3db2a9"), mockResponsiblepersons),
+                new Consultant("TestName2", UUID.fromString("8ca26bfd-920d-4f46-b03d-5e485eb70504"), new ArrayList<>())
+        );
+
+        boolean includeEmptyResponsiblePersons = true;
+
+        when(notionService.getAllConsultants(includeEmptyResponsiblePersons)).thenReturn(mockConsultants);
+
+        String expectedResponse = """
+        [
+          {
+            "name": "TestName",
+            "id": "f0d02a91-50c3-46a7-a4e7-76f8de3db2a9",
+            "responsiblePersonList": [
+                {
+                    "name": "TestResponsiblePerson1",
+                    "id": "b28fbeb3-f829-4d27-9339-3a41f8d45435",
+                    "email": "test@gmail.com"
+                }
+            ]
+          },
+          {
+            "name": "TestName2",
+            "id": "8ca26bfd-920d-4f46-b03d-5e485eb70504",
+            "responsiblePersonList": []
+          }
+        ]
+        """;
+
+        // Act & Assert
+        mockMvc.perform(get("/api/salt/consultants?includeEmptyResponsible=true")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header("X-API-KEY", TEST_API_KEY))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expectedResponse));
+    }
+
+    @Test
+    void getConsultants_shouldReturnUnAuthorized() throws Exception{
+
+        // Act & Assert
+        mockMvc.perform(get("/api/salt/consultants")
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void getConsultants_shouldReturnInternalServerError() throws Exception {
+
+        // Arrange
+        boolean includeEmptyResponsiblePersons = false;
+
+        when(notionService.getAllConsultants(includeEmptyResponsiblePersons)).thenThrow(new RuntimeException());
+
+        //Act & Assert
+        mockMvc.perform(get("/api/salt/consultants")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header("X-API-KEY", TEST_API_KEY))
+                .andExpect(status().isInternalServerError());
     }
 }
