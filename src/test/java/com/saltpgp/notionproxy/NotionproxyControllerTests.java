@@ -221,5 +221,8 @@ class NotionControllerTest {
     @Test
     void getConsultant_shouldReturnInternalServerError() throws Exception {
 
+        // Arrange
+        when(notionService.getConsultantById(UUID.randomUUID())).thenThrow(new RuntimeException());
+
     }
 }
