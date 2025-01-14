@@ -1,6 +1,7 @@
 package com.saltpgp.notionproxy.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
@@ -49,7 +50,7 @@ class NotionProxyServiceTest {
 
 
     @BeforeEach
-    void setUp() throws JsonProcessingException {
+    void setUp() throws JsonProcessingException, NotionException {
 
         mockApiService = mock(NotionApiService.class);
 
@@ -306,24 +307,16 @@ class NotionProxyServiceTest {
                         }
                 """;
 
-//        server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", DATABASE_ID)))
-//                .andRespond(withSuccess(databaseResponse, MediaType.APPLICATION_JSON));
+        when(mockApiService.fetchDatabase(CORE_DATABASE_ID,NotionServiceFilters.FILTER_RESPONSIBLE_PEOPLE)).thenReturn(mapper.readTree(coreDatabaseResponse));
 
-//        server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", CORE_DATABASE_ID)))
-//                .andRespond(withSuccess(coreDatabaseResponse, MediaType.APPLICATION_JSON));
+        when(mockApiService.fetchDatabase(DATABASE_ID, NotionServiceFilters.getFilterOnAssignment(null))).thenReturn(mapper.readTree(databaseResponse));
 
-//        server.expect(requestTo(String.format("https://api.notion.com/v1/databases/%s/query", SCORE_DATABASE_ID)))
-//                .andRespond(withSuccess(scoreDatabaseResponse, MediaType.APPLICATION_JSON));
-
+        when(mockApiService.fetchDatabase(DATABASE_ID, null)).thenReturn(mapper.readTree(databaseResponse));
 
     }
 
     @Test
     void shouldFindAllConsultantsWithIncludeEmptyTrue() throws NotionException, JsonProcessingException {
-
-        when(mockApiService.fetchDatabase(CORE_DATABASE_ID,NotionServiceFilters.FILTER_RESPONSIBLE_PEOPLE)).thenReturn(mapper.readTree(coreDatabaseResponse));
-
-        when(mockApiService.fetchDatabase(DATABASE_ID,NotionServiceFilters.getFilterOnAssignment(null))).thenReturn(mapper.readTree(databaseResponse));
 
         List<Consultant> consultants = notionService.getAllConsultants( true);
         assertEquals(2, consultants.size());
@@ -339,15 +332,12 @@ class NotionProxyServiceTest {
         assertEquals(2, developers.size());
         assertEquals("Test Saltie 1", developers.get(0).getName());
         assertEquals("https://github.com/saltie2", developers.get(1).getGithubUrl());
-
-
     }
 
     @Test
     void getAllResponsiblePeopleTests() throws NotionException {
 
         List<ResponsiblePerson> responsiblePeople = notionService.getAllResponsiblePeople( false);
-
 //        Assert
         assertEquals(2, responsiblePeople.size());
         assertEquals("Responsible Person 1", responsiblePeople.get(0).name());
