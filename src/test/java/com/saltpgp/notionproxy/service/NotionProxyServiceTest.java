@@ -21,13 +21,12 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 @TestPropertySource(properties = {
-        "DATABASE_ID=some_database_id",
-        "CORE_DATABASE_ID=some_core_database_id",
-        "SCORE_DATABASE_ID=some_score_database_id"
+
 })
 class NotionProxyServiceTest {
 
@@ -35,13 +34,12 @@ class NotionProxyServiceTest {
 
     NotionService notionService;
 
-    @Value("${DATABASE_ID}")
+    ObjectMapper mapper;
+
     private String DATABASE_ID;
 
-    @Value("${CORE_DATABASE_ID}")
     private String CORE_DATABASE_ID;
 
-    @Value("${SCORE_DATABASE_ID}")
     private String SCORE_DATABASE_ID;
 
     private String databaseResponse;
@@ -56,6 +54,8 @@ class NotionProxyServiceTest {
         mockApiService = mock(NotionApiService.class);
 
         notionService = new NotionService(mockApiService);
+
+        mapper = new ObjectMapper();
 
         databaseResponse = """
                 {
@@ -319,7 +319,11 @@ class NotionProxyServiceTest {
     }
 
     @Test
-    void shouldFindAllConsultantswithIncludeEmptyTrue() throws NotionException, JsonProcessingException {
+    void shouldFindAllConsultantsWithIncludeEmptyTrue() throws NotionException, JsonProcessingException {
+
+        when(mockApiService.fetchDatabase(CORE_DATABASE_ID,NotionServiceFilters.FILTER_RESPONSIBLE_PEOPLE)).thenReturn(mapper.readTree(coreDatabaseResponse));
+
+        when(mockApiService.fetchDatabase(DATABASE_ID,NotionServiceFilters.getFilterOnAssignment(null))).thenReturn(mapper.readTree(databaseResponse));
 
         List<Consultant> consultants = notionService.getAllConsultants( true);
         assertEquals(2, consultants.size());
