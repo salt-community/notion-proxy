@@ -1,13 +1,16 @@
 name: Build and deploy app
 
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+  workflow_run:
+    workflows:
+      - Test Application
+    types:
+      - completed
 
 jobs:
-  build:
+  deploy:
+    name: Build and Deploy
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     env:
       IMAGE_URL: ${{ vars.GC_REGION }}-docker.pkg.dev/${{ vars.GC_PROJECT_ID }}/cloud-run-source-deploy/${{ vars.GC_REPO_NAME }}/${{ vars.GC_REPO_NAME }}:${{ github.sha }}
