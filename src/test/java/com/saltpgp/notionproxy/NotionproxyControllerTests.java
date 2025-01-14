@@ -208,4 +208,13 @@ class NotionControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedResponse));
     }
+
+    @Test
+    void getConsultant_shouldReturnUnAuthorized() throws Exception {
+
+        // Act & Assert
+        mockMvc.perform(get("/api/salt/consultants/" + UUID.randomUUID())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
+    }
 }
