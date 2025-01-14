@@ -2,7 +2,6 @@ package com.saltpgp.notionproxy.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.saltpgp.notionproxy.exceptions.NotionException;
-import org.apache.logging.log4j.message.Message;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -16,7 +15,9 @@ public class NotionApiService {
 
     private final String NOTION_VERSION;
 
-    public NotionApiService(RestClient.Builder builder , @Value("${NOTION_API_KEY}") String API_KEY, @Value("${NOTION_VERSION}") String NOTION_VERSION) {
+    public NotionApiService(RestClient.Builder builder ,
+                            @Value("${NOTION_API_KEY}") String API_KEY,
+                            @Value("${NOTION_VERSION}") String NOTION_VERSION) {
         this.restClient = builder.baseUrl("https://api.notion.com/v1").build();
         this.API_KEY = API_KEY;
         this.NOTION_VERSION = NOTION_VERSION;
