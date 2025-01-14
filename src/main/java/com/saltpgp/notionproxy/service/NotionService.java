@@ -41,16 +41,10 @@ public class NotionService {
     public Consultant getConsultantById(UUID id) throws NotionException {
         JsonNode response = getNotionPageResponse(id.toString());
 
-        if (response.get("properties").get("Name").get("title").get(0) == null) {
-            log.debug("Property Name.Title == Null, returning null from method");
-            return null;
-        }
-
         List<String> ptPeople = getAllResponsiblePeople(false)
                 .stream()
                 .map(ResponsiblePerson::name)
                 .toList();
-
 
         List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(response, ptPeople);
         return new Consultant(
