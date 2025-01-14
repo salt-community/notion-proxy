@@ -355,8 +355,6 @@ class NotionProxyServiceTest {
         //Given
         String id = "11111111-1111-1111-1111-111111111111";
 
-        //When
-
         //Then
         Developer developer = notionService.getDeveloperByIdWithScore(UUID.fromString(id));
 
