@@ -3,6 +3,7 @@ package com.saltpgp.notionproxy.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import com.saltpgp.notionproxy.models.Consultant;
@@ -313,6 +314,9 @@ class NotionProxyServiceTest {
 
         when(mockApiService.fetchDatabase(DATABASE_ID, mapper.createObjectNode())).thenReturn(mapper.readTree(databaseResponse));
 
+        when(mockApiService.fetchDatabase(SCORE_DATABASE_ID, getDeveloperNode(UUID.fromString("11111111-1111-1111-1111-111111111111")))).thenReturn(mapper.readTree(scoreDatabaseResponse));
+
+        when(mockApiService.fetchPage("11111111-1111-1111-1111-111111111111")).thenReturn(mapper.readTree(consultantPageResponse));
     }
 
     @Test
@@ -381,7 +385,17 @@ class NotionProxyServiceTest {
         assertEquals(1, consultant.responsiblePersonList().size());
         assertEquals("Responsible Person 1", consultant.responsiblePersonList().getFirst().name());
     }
-    
 
+    private ObjectNode getDeveloperNode(UUID id) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode relationNode = objectMapper.createObjectNode();
+        relationNode.put("contains", String.valueOf(id));
+        ObjectNode filterNode = objectMapper.createObjectNode();
+        filterNode.put("property", "💽 Developer");
+        filterNode.set("relation", relationNode);
+        ObjectNode bodyNode = objectMapper.createObjectNode();
+        bodyNode.set("filter", filterNode);
+        return bodyNode;
+    }
 
 }
