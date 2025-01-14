@@ -2,6 +2,7 @@ package com.saltpgp.notionproxy.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.saltpgp.notionproxy.exceptions.NotionException;
+import org.apache.logging.log4j.message.Message;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
