@@ -311,7 +311,7 @@ class NotionProxyServiceTest {
 
         when(mockApiService.fetchDatabase(DATABASE_ID, NotionServiceFilters.getFilterOnAssignment(null))).thenReturn(mapper.readTree(databaseResponse));
 
-        when(mockApiService.fetchDatabase(DATABASE_ID, null)).thenReturn(mapper.readTree(databaseResponse));
+        when(mockApiService.fetchDatabase(DATABASE_ID, mapper.createObjectNode())).thenReturn(mapper.readTree(databaseResponse));
 
     }
 
