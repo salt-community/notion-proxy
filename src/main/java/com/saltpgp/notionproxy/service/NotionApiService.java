@@ -11,13 +11,16 @@ public class NotionApiService {
 
     private final RestClient restClient;
 
-    @Value("${NOTION_API_KEY}")
-    private String API_KEY;
-    @Value("${NOTION_VERSION}")
-    private String NOTION_VERSION;
+    private final String API_KEY;
 
-    public NotionApiService(RestClient.Builder builder) {
+    private final String NOTION_VERSION;
+
+    public NotionApiService(RestClient.Builder builder ,
+                            @Value("${NOTION_API_KEY}") String API_KEY,
+                            @Value("${NOTION_VERSION}") String NOTION_VERSION) {
         this.restClient = builder.baseUrl("https://api.notion.com/v1").build();
+        this.API_KEY = API_KEY;
+        this.NOTION_VERSION = NOTION_VERSION;
     }
 
     public JsonNode fetchPage(String pageId) throws NotionException {
@@ -30,7 +33,7 @@ public class NotionApiService {
                 .retrieve()
                 .body(JsonNode.class);
         if (response == null) {
-            throw new NotionException();
+            throw new NotionException("Pages id didn't exist in notion");
         }
         return response;
     }
@@ -47,7 +50,7 @@ public class NotionApiService {
                 .retrieve()
                 .body(JsonNode.class);
         if (response == null) {
-            throw new NotionException();
+            throw new NotionException("Database didn't exist in notion");
         }
         return response;
     }

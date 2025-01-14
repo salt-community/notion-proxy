@@ -38,24 +38,26 @@ class NotionProxyServiceTest {
 
     ObjectMapper mapper;
 
+    @Value("${DATABASE_ID}")
     private String DATABASE_ID;
 
-    private String CORE_DATABASE_ID;
-
+    @Value("${SCORE_DATABASE_ID}")
     private String SCORE_DATABASE_ID;
+
+    @Value("${CORE_DATABASE_ID}")
+    private String CORE_DATABASE_ID;
 
     private String databaseResponse;
     private String coreDatabaseResponse;
     private String scoreDatabaseResponse;
     private String consultantPageResponse;
 
-
     @BeforeEach
     void setUp() throws JsonProcessingException, NotionException {
 
         mockApiService = mock(NotionApiService.class);
 
-        notionService = new NotionService(mockApiService);
+        notionService = new NotionService(mockApiService, DATABASE_ID, SCORE_DATABASE_ID, CORE_DATABASE_ID);
 
         mapper = new ObjectMapper();
 
@@ -265,7 +267,7 @@ class NotionProxyServiceTest {
                         "next_cursor": null,
                                 "has_more": false
                 }""";
-         consultantPageResponse = """
+        consultantPageResponse = """
                     {
                             "object": "page",
                             "id": "11111111-1111-1111-1111-111111111111",
@@ -308,7 +310,7 @@ class NotionProxyServiceTest {
                         }
                 """;
 
-        when(mockApiService.fetchDatabase(CORE_DATABASE_ID,NotionServiceFilters.FILTER_RESPONSIBLE_PEOPLE)).thenReturn(mapper.readTree(coreDatabaseResponse));
+        when(mockApiService.fetchDatabase(CORE_DATABASE_ID, NotionServiceFilters.FILTER_RESPONSIBLE_PEOPLE)).thenReturn(mapper.readTree(coreDatabaseResponse));
 
         when(mockApiService.fetchDatabase(DATABASE_ID, NotionServiceFilters.getFilterOnAssignment(null))).thenReturn(mapper.readTree(databaseResponse));
 
@@ -317,6 +319,24 @@ class NotionProxyServiceTest {
         when(mockApiService.fetchDatabase(SCORE_DATABASE_ID, getDeveloperNode(UUID.fromString("11111111-1111-1111-1111-111111111111")))).thenReturn(mapper.readTree(scoreDatabaseResponse));
 
         when(mockApiService.fetchPage("11111111-1111-1111-1111-111111111111")).thenReturn(mapper.readTree(consultantPageResponse));
+    }
+
+    @Test
+    void shouldGetConsultantById() throws NotionException {
+        // Given
+        UUID consultantId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+        // Then
+        Consultant consultant = notionService.getConsultantById(consultantId);
+
+        assertNotNull(consultant);
+        assertEquals("Test Saltie 1", consultant.name());
+        assertEquals(consultantId, consultant.uuid());
+
+        // may want to assert responsiblePersonList content if applicable
+        assertNotNull(consultant.responsiblePersonList());
+        assertEquals(1, consultant.responsiblePersonList().size());
+        assertEquals("Responsible Person 1", consultant.responsiblePersonList().getFirst().name());
     }
 
     @Test
@@ -363,25 +383,6 @@ class NotionProxyServiceTest {
         assertEquals(95, developer.getScores().get(1).getScore());
         assertEquals("UI Enhancement", developer.getScores().get(1).getName());
         assertEquals("https://github.com/saltie1", developer.getGithubUrl());
-    }
-
-    @Test
-    void shouldGetConsultantById() throws NotionException {
-        // Given
-        UUID consultantId = UUID.fromString("11111111-1111-1111-1111-111111111111");
-        // When
-
-        // Then
-        Consultant consultant = notionService.getConsultantById(consultantId);
-
-        assertNotNull(consultant);
-        assertEquals("Test Saltie 1", consultant.name());
-        assertEquals(consultantId, consultant.uuid());
-
-        // may want to assert responsiblePersonList content if applicable
-        assertNotNull(consultant.responsiblePersonList());
-        assertEquals(1, consultant.responsiblePersonList().size());
-        assertEquals("Responsible Person 1", consultant.responsiblePersonList().getFirst().name());
     }
 
     private ObjectNode getDeveloperNode(UUID id) {
