@@ -32,6 +32,14 @@ jobs:
       - name: Run Maven Tests
         run: mvn clean test
 
+      - name: Create Marker File
+        if: success()
+        run: echo "Tests Passed!" > marker.txt
+
+      - name: Verify Marker File
+        if: success()
+        run: ls -al && cat marker.txt
+
       - name: Upload Success Marker
         if: success()
         uses: actions/upload-artifact@v3
