@@ -217,4 +217,9 @@ class NotionControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
     }
+
+    @Test
+    void getConsultant_shouldReturnInternalServerError() throws Exception {
+
+    }
 }
