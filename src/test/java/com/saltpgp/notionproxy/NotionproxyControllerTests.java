@@ -178,5 +178,27 @@ class NotionControllerTest {
     @Test
     void getConsultant_shouldReturnConsultant() throws Exception {
 
+        // Arrange
+        UUID consultantId = UUID.fromString("f0d02a91-50c3-46a7-a4e7-76f8de3db2a9");
+
+        Consultant mockConsultant = new Consultant("TestDev", consultantId,
+                List.of(new ResponsiblePerson("TestResp", UUID.fromString("8ca26bfd-920d-4f46-b03d-5e485eb70504"), "test@gmail.com", List.of()))
+        );
+
+        when(notionService.getConsultantById(consultantId)).thenReturn(mockConsultant);
+
+        String expectedResponse = """
+                {
+                    "name": "TestDev",
+                    "id": "f0d02a91-50c3-46a7-a4e7-76f8de3db2a9",
+                    "responsiblePersonList": [
+                        {
+                            "name": "TestResp",
+                            "id": "8ca26bfd-920d-4f46-b03d-5e485eb70504",
+                            "email": "test@gmail.com"
+                        }
+                    ]
+                }
+                """;
     }
 }
