@@ -23,7 +23,6 @@ import java.util.*;
 @Slf4j
 public class NotionService {
 
-    public RestClient restClient;
     private final NotionApiService notionApiService;
 
     @Value("${NOTION_API_KEY}")
@@ -41,12 +40,7 @@ public class NotionService {
     @Value("${CORE_DATABASE_ID}")
     private String CORE_DATABASE_ID;
 
-    @Autowired
-    @Lazy
-    private NotionService self;
-
-    public NotionService(RestClient.Builder builder, NotionApiService notionApiService) {
-        this.restClient = builder.baseUrl("https://api.notion.com/v1").build();
+    public NotionService(NotionApiService notionApiService) {
         this.notionApiService = notionApiService;
     }
 
@@ -94,7 +88,7 @@ public class NotionService {
         });
 
         if (includeConsultants) {
-            List<Consultant> consultants = self.getAllConsultants(true);
+            List<Consultant> consultants = this.getAllConsultants(true);
             responsiblePersonList.forEach(responsiblePerson -> {
                 List<Consultant> newConsultantsList = new ArrayList<>();
                 consultants.forEach(consultant -> consultant.responsiblePersonList().forEach(consultantsResponsiblePerson -> {
