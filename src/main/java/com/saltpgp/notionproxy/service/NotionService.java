@@ -24,18 +24,18 @@ import java.util.*;
 public class NotionService {
 
     private final NotionApiService notionApiService;
+    private final String DATABASE_ID;
+    private final String SCORE_DATABASE_ID;
+    private final String CORE_DATABASE_ID;
 
-    @Value("${DATABASE_ID}")
-    private String DATABASE_ID;
-
-    @Value("${SCORE_DATABASE_ID}")
-    private String SCORE_DATABASE_ID;
-
-    @Value("${CORE_DATABASE_ID}")
-    private String CORE_DATABASE_ID;
-
-    public NotionService(NotionApiService notionApiService) {
+    public NotionService(NotionApiService notionApiService,
+                         @Value("${DATABASE_ID}") String DATABASE_ID,
+                         @Value("${SCORE_DATABASE_ID}") String SCORE_DATABASE_ID,
+                         @Value("${CORE_DATABASE_ID}") String CORE_DATABASE_ID) {
         this.notionApiService = notionApiService;
+        this.DATABASE_ID = DATABASE_ID;
+        this.SCORE_DATABASE_ID = SCORE_DATABASE_ID;
+        this.CORE_DATABASE_ID = CORE_DATABASE_ID;
     }
 
     public Consultant getConsultantById(UUID id) throws NotionException {

@@ -38,11 +38,14 @@ class NotionProxyServiceTest {
 
     ObjectMapper mapper;
 
+    @Value("${DATABASE_ID}")
     private String DATABASE_ID;
 
-    private String CORE_DATABASE_ID;
-
+    @Value("${SCORE_DATABASE_ID}")
     private String SCORE_DATABASE_ID;
+
+    @Value("${CORE_DATABASE_ID}")
+    private String CORE_DATABASE_ID;
 
     private String databaseResponse;
     private String coreDatabaseResponse;
@@ -55,7 +58,7 @@ class NotionProxyServiceTest {
 
         mockApiService = mock(NotionApiService.class);
 
-        notionService = new NotionService(mockApiService);
+        notionService = new NotionService(mockApiService, DATABASE_ID, SCORE_DATABASE_ID, CORE_DATABASE_ID);
 
         mapper = new ObjectMapper();
 
@@ -265,7 +268,7 @@ class NotionProxyServiceTest {
                         "next_cursor": null,
                                 "has_more": false
                 }""";
-         consultantPageResponse = """
+        consultantPageResponse = """
                     {
                             "object": "page",
                             "id": "11111111-1111-1111-1111-111111111111",
@@ -308,7 +311,7 @@ class NotionProxyServiceTest {
                         }
                 """;
 
-        when(mockApiService.fetchDatabase(CORE_DATABASE_ID,NotionServiceFilters.FILTER_RESPONSIBLE_PEOPLE)).thenReturn(mapper.readTree(coreDatabaseResponse));
+        when(mockApiService.fetchDatabase(CORE_DATABASE_ID, NotionServiceFilters.FILTER_RESPONSIBLE_PEOPLE)).thenReturn(mapper.readTree(coreDatabaseResponse));
 
         when(mockApiService.fetchDatabase(DATABASE_ID, NotionServiceFilters.getFilterOnAssignment(null))).thenReturn(mapper.readTree(databaseResponse));
 
