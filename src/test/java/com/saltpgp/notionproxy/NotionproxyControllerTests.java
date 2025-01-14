@@ -174,4 +174,9 @@ class NotionControllerTest {
                         .header(CUSTOM_API_KEY, TEST_API_KEY))
                 .andExpect(status().isInternalServerError());
     }
+
+    @Test
+    void getConsultant_shouldReturnConsultant() throws Exception {
+
+    }
 }
