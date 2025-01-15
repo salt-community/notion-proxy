@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/salt")
+@RequestMapping("api")
 @CrossOrigin
 @Slf4j
 public class NotionController {
