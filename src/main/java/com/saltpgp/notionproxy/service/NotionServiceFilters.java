@@ -10,8 +10,7 @@ public class NotionServiceFilters {
                             "contains": "P&T"
                         }
                     }
-                }
-                """;
+                }""";
 
     public static final String FILTER_ON_ASSIGNMENT = """
                 {
@@ -21,8 +20,7 @@ public class NotionServiceFilters {
                             "equals": "On Assignment"
                         }
                     }
-                }
-                """;
+                }""";
 
     public static String getFilterOnAssignment (String cursor) {
         return cursor == null ? FILTER_ON_ASSIGNMENT :
@@ -35,32 +33,26 @@ public class NotionServiceFilters {
                                     "equals": "On Assignment"
                                 }
                             }
-                        }
-                        """, cursor);
+                        }""", cursor);
     }
 
     public static String getFilterDeveloper (String cursor, String filter) {
-        String developerFilter = """
-                {
-                """;
+        String developerFilter = "{\n";
         if (cursor != null) {
             developerFilter += String.format("""
                         "start_cursor": "%s"
                     """, cursor);
         }
-        if (filter == null || filter.equals("none")) {
-            return developerFilter += """
-                }
-                """;
-        }
-        return developerFilter += String.format("""
+        if (filter != null && !filter.equals("none")) {
+            developerFilter += String.format("""
                         "filter": {
                             "property": "Status",
                             "select": {
                                 "equals": "%s"
                             }
                         }
-                    }
                     """, filter);
+        }
+        return developerFilter += "}";
     }
 }

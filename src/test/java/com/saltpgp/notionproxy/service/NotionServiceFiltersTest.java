@@ -15,8 +15,7 @@ public class NotionServiceFiltersTest {
                             \"contains\": \"P&T\"
                         }
                     }
-                }
-                """;
+                }""";
         assertEquals(expected, NotionServiceFilters.FILTER_RESPONSIBLE_PEOPLE);
     }
 
@@ -30,8 +29,7 @@ public class NotionServiceFiltersTest {
                             \"equals\": \"On Assignment\"
                         }
                     }
-                }
-                """;
+                }""";
         assertEquals(expected, NotionServiceFilters.FILTER_ON_ASSIGNMENT);
     }
 
@@ -54,8 +52,7 @@ public class NotionServiceFiltersTest {
                             \"equals\": \"On Assignment\"
                         }
                     }
-                }
-                """, cursor);
+                }""", cursor);
         assertEquals(expected, NotionServiceFilters.getFilterOnAssignment(cursor));
     }
 
@@ -63,8 +60,7 @@ public class NotionServiceFiltersTest {
     public void getFilterDeveloperWithNullCursorAndNullFilter() {
         String expected = """
                 {
-                }
-                """;
+                }""";
         assertEquals(expected, NotionServiceFilters.getFilterDeveloper(null, null));
     }
 
@@ -74,8 +70,7 @@ public class NotionServiceFiltersTest {
         String expected = String.format("""
                 {
                     \"start_cursor\": \"%s\"
-                }
-                """, cursor);
+                }""", cursor);
         assertEquals(expected, NotionServiceFilters.getFilterDeveloper(cursor, null));
     }
 
@@ -92,8 +87,7 @@ public class NotionServiceFiltersTest {
                             \"equals\": \"%s\"
                         }
                     }
-                }
-                """, cursor, filter);
+                }""", cursor, filter);
         assertEquals(expected, NotionServiceFilters.getFilterDeveloper(cursor, filter));
     }
 
@@ -108,8 +102,7 @@ public class NotionServiceFiltersTest {
                             \"equals\": \"%s\"
                         }
                     }
-                }
-                """, filter);
+                }""", filter);
         assertEquals(expected, NotionServiceFilters.getFilterDeveloper(null, filter));
     }
 }
