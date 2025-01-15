@@ -237,4 +237,9 @@ class NotionControllerTest {
                 .andExpect(status().isInternalServerError());
 
     }
+
+    @Test
+    void getResponsibleShouldReturnListOfResponsiblePersons() throws Exception {
+
+    }
 }
