@@ -52,7 +52,6 @@ public class NotionController {
             @RequestParam(required = false, defaultValue = "false") boolean includeEmptyResponsible) throws NotionException {
 
         log.info("Received request to get all consultants. Include empty responsible: {}", includeEmptyResponsible);
-
         return ResponseEntity.ok(notionService
                 .getAllConsultants(includeEmptyResponsible)
                 .stream()
@@ -70,9 +69,7 @@ public class NotionController {
     public ResponseEntity<ConsultantWithResponsibleDto> getConsultant(
             @Parameter(description = "UUID of the consultant to retrieve", required = true)
             @PathVariable UUID id) throws NotionException {
-
         log.info("Received request to get consultant with ID: {}", id);
-
         return ResponseEntity.ok(ConsultantWithResponsibleDto.fromModel(notionService.getConsultantById(id)));
     }
 
@@ -82,26 +79,17 @@ public class NotionController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @GetMapping("responsible")
-    public <T> ResponseEntity<List<T>> getResponsiblePeople(
+    public ResponseEntity<List<?>> getResponsiblePeople(
             @Parameter(description = "Whether to include the consultants for whom they are responsible", required = false, example = "false")
             @RequestParam(required = false, defaultValue = "false") boolean includeConsultants) throws NotionException {
-
         log.info("Received request to get responsible persons with includeConsultants={}", includeConsultants);
-
+        List<ResponsiblePerson> ResponsiblePerson = notionService.getAllResponsiblePeople(includeConsultants);
         if (includeConsultants) {
-            log.info("Including consultants in the list of responsible persons.");
-            List<ResponsibleWithConsultantsDto> dtos = ResponsibleWithConsultantsDto
-                    .fromModelList(notionService.getAllResponsiblePeople(true));
-            log.debug("Returning response with {} responsible persons with consultants.", dtos.size());
-            return ResponseEntity.ok((List<T>) dtos);
-        } else {
-            log.info("Excluding consultants from the list of responsible persons.");
-            List<BasicResponsiblePersonDto> dtos = BasicResponsiblePersonDto
-                    .fromModelList(notionService.getAllResponsiblePeople(false));
-            log.debug("Returning response with {} responsible persons without consultants.", dtos.size());
-            return ResponseEntity.ok((List<T>) dtos);
+            return ResponseEntity.ok((ResponsibleWithConsultantsDto
+                    .fromModelList(ResponsiblePerson)));
         }
-
+        return ResponseEntity.ok(BasicResponsiblePersonDto
+                .fromModelList(ResponsiblePerson));
     }
 
     @Operation(summary = "Get a specific responsible person by ID", description = "Retrieves details of a specific responsible person by their unique ID.")
