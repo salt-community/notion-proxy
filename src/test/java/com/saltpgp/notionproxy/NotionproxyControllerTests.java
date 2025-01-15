@@ -283,4 +283,9 @@ class NotionControllerTest {
                 .andExpect(status().isUnauthorized());
 
     }
+
+    @Test
+    void getResponsible_shouldReturnInternalServerError() throws Exception {
+
+    }
 }
