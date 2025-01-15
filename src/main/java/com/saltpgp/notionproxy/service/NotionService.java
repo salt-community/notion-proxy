@@ -47,9 +47,6 @@ public class NotionService {
         while (hasMore) {
             JsonNode response = getNotionDataBaseResponse(DATABASE_ID, NotionServiceFilters.getFilterDeveloper(nextCursor, filter));
 
-            if (response == null) {
-                throw new NotionException();
-            }
             response.get("results").elements().forEachRemaining(element -> {
                 if (element.get("properties").get("Name").get("title").get(0) == null) return;
                 String githubUrl = element.get("properties").get("GitHub").get("url").asText().equals("null") ? null
