@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class NotionServiceFiltersTest {
 
     @Test
-    public void testFilterResponsiblePeople() {
+    public void filterResponsiblePeople() {
         String expected = """
                 {
                     \"filter\": {
@@ -21,7 +21,7 @@ public class NotionServiceFiltersTest {
     }
 
     @Test
-    public void testFilterOnAssignment() {
+    public void filterOnAssignment() {
         String expected = """
                 {
                     \"filter\": {
@@ -37,13 +37,13 @@ public class NotionServiceFiltersTest {
 
 
     @Test
-    public void testGetFilterOnAssignmentWithNullCursor() {
+    public void getFilterOnAssignmentWithNullCursor() {
         String expected = NotionServiceFilters.FILTER_ON_ASSIGNMENT;
         assertEquals(expected, NotionServiceFilters.getFilterOnAssignment(null));
     }
 
     @Test
-    public void testGetFilterOnAssignmentWithCursor() {
+    public void getFilterOnAssignmentWithCursor() {
         String cursor = "abc123";
         String expected = String.format("""
                 {
@@ -60,13 +60,13 @@ public class NotionServiceFiltersTest {
     }
 
     @Test
-    public void testGetFilterDeveloperWithNullCursorAndNullFilter() {
+    public void getFilterDeveloperWithNullCursorAndNullFilter() {
         String expected = "{}";
         assertEquals(expected, NotionServiceFilters.getFilterDeveloper(null, null));
     }
 
     @Test
-    public void testGetFilterDeveloperWithCursorAndNullFilter() {
+    public void getFilterDeveloperWithCursorAndNullFilter() {
         String cursor = "abc123";
         String expected = String.format("""
                 {\"start_cursor\": \"%s\"}
@@ -75,7 +75,7 @@ public class NotionServiceFiltersTest {
     }
 
     @Test
-    public void testGetFilterDeveloperWithCursorAndFilter() {
+    public void getFilterDeveloperWithCursorAndFilter() {
         String cursor = "abc123";
         String filter = "In Progress";
         String expected = String.format("""
@@ -93,7 +93,7 @@ public class NotionServiceFiltersTest {
     }
 
     @Test
-    public void testGetFilterDeveloperWithNullCursorAndFilter() {
+    public void getFilterDeveloperWithNullCursorAndFilter() {
         String filter = "Completed";
         String expected = String.format("""
                 {
