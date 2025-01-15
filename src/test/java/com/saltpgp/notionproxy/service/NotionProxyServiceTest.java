@@ -35,14 +35,9 @@ class NotionProxyServiceTest {
 
     ObjectMapper mapper;
 
-    @Value("${DATABASE_ID}")
-    private String DATABASE_ID;
-
-    @Value("${SCORE_DATABASE_ID}")
-    private String SCORE_DATABASE_ID;
-
-    @Value("${CORE_DATABASE_ID}")
-    private String CORE_DATABASE_ID;
+    private final String DATABASE_ID = "DATABASE_ID";
+    private final String SCORE_DATABASE_ID = "SCORE_DATABASE_ID";
+    private final String CORE_DATABASE_ID = "CORE_DATABASE_ID";
 
     private String databaseResponse;
     private String coreDatabaseResponse;
