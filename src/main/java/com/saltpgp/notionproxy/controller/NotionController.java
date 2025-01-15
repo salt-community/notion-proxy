@@ -99,7 +99,7 @@ public class NotionController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @GetMapping("responsible/{id}")
-    public <T> ResponseEntity<T> getResponsiblePeopleById(
+    public ResponseEntity<?> getResponsiblePeopleById(
             @Parameter(description = "UUID of the responsible person to retrieve", required = true)
             @PathVariable UUID id,
             @Parameter(description = "Whether to include the consultants for whom they are responsible", required = false, example = "false")
@@ -108,19 +108,12 @@ public class NotionController {
         log.info("Received request to get responsible person with ID: {}. Include consultants: {}", id, includeConsultants);
         ResponsiblePerson responsiblePerson = notionService
                 .getResponsiblePersonById(id, includeConsultants);
-
         if (includeConsultants) {
-            ResponsibleWithConsultantsDto dtos = ResponsibleWithConsultantsDto
-                    .fromModel(responsiblePerson);
-            log.info("Successfully retrieved responsible person with consultants for ID: {}", id);
-            return ResponseEntity.ok((T) dtos);
+            return ResponseEntity.ok(ResponsibleWithConsultantsDto
+                    .fromModel(responsiblePerson));
         }
-        BasicResponsiblePersonDto dtos = BasicResponsiblePersonDto
-                .fromModel(responsiblePerson);
-        log.info("Successfully retrieved basic responsible person for ID: {}", id);
-        return ResponseEntity.ok((T) dtos);
-
-
+        return ResponseEntity.ok(BasicResponsiblePersonDto
+                .fromModel(responsiblePerson));
     }
 
     @Operation(summary = "Get developer scorecard", description = "Retrieves the scorecard of a specific developer.")
