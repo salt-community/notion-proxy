@@ -37,7 +37,7 @@ public class NotionService {
     }
 
     @Lazy
-    @Cacheable(value = "saltiesInformation")
+    @Cacheable(value = "saltiesInformation", key = "#filter")
     public List<Developer> getAllDevelopers(String filter) throws NotionException {
         List<Developer> allSalties = new ArrayList<>();
         String nextCursor = null;
