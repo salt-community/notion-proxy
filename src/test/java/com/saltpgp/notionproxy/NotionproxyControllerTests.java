@@ -277,5 +277,10 @@ class NotionControllerTest {
     @Test
     void getResponsible_shouldReturnUnAuthorized() throws Exception {
 
+        // Act & Assert
+        mockMvc.perform(get("/api/salt/responsible")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
+
     }
 }
