@@ -24,21 +24,19 @@ public class NotionServiceFilters {
                 }
                 """;
 
-    public static String getFilterOnAssignment (String cursor)  {
-        if(cursor == null) {
-            return FILTER_ON_ASSIGNMENT;
-        }
-            return String.format("""
-                {
-                    "start_cursor": "%s"
-                    "filter": {
-                        "property": "Status",
-                        "select": {
-                            "equals": "On Assignment"
+    public static String getFilterOnAssignment (String cursor) {
+        return cursor == null ? FILTER_ON_ASSIGNMENT :
+                String.format("""
+                        {
+                            "start_cursor": "%s"
+                            "filter": {
+                                "property": "Status",
+                                "select": {
+                                    "equals": "On Assignment"
+                                }
+                            }
                         }
-                    }
-                }
-                """,cursor);
+                        """, cursor);
     }
 
     public static String getFilterDeveloper (String cursor, String filter) {
