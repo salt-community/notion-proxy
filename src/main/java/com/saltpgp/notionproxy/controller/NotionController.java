@@ -83,13 +83,13 @@ public class NotionController {
             @Parameter(description = "Whether to include the consultants for whom they are responsible", required = false, example = "false")
             @RequestParam(required = false, defaultValue = "false") boolean includeConsultants) throws NotionException {
         log.info("Received request to get responsible persons with includeConsultants={}", includeConsultants);
-        List<ResponsiblePerson> ResponsiblePerson = notionService.getAllResponsiblePeople(includeConsultants);
+        List<ResponsiblePerson> responsiblePerson = notionService.getAllResponsiblePeople(includeConsultants);
         if (includeConsultants) {
             return ResponseEntity.ok((ResponsibleWithConsultantsDto
-                    .fromModelList(ResponsiblePerson)));
+                    .fromModelList(responsiblePerson)));
         }
         return ResponseEntity.ok(BasicResponsiblePersonDto
-                .fromModelList(ResponsiblePerson));
+                .fromModelList(responsiblePerson));
     }
 
     @Operation(summary = "Get a specific responsible person by ID", description = "Retrieves details of a specific responsible person by their unique ID.")
@@ -105,21 +105,21 @@ public class NotionController {
             @Parameter(description = "Whether to include the consultants for whom they are responsible", required = false, example = "false")
             @RequestParam(required = false, defaultValue = "false") boolean includeConsultants) throws NotionException {
 
-            log.info("Received request to get responsible person with ID: {}. Include consultants: {}", id, includeConsultants);
-            ResponsiblePerson responsiblePerson = notionService
-                    .getResponsiblePersonById(id, includeConsultants);
+        log.info("Received request to get responsible person with ID: {}. Include consultants: {}", id, includeConsultants);
+        ResponsiblePerson responsiblePerson = notionService
+                .getResponsiblePersonById(id, includeConsultants);
 
-            if (includeConsultants) {
-                ResponsibleWithConsultantsDto dtos = ResponsibleWithConsultantsDto
-                        .fromModel(responsiblePerson);
-                log.info("Successfully retrieved responsible person with consultants for ID: {}", id);
-                return ResponseEntity.ok((T) dtos);
-            } else {
-                BasicResponsiblePersonDto dtos = BasicResponsiblePersonDto
-                        .fromModel(responsiblePerson);
-                log.info("Successfully retrieved basic responsible person for ID: {}", id);
-                return ResponseEntity.ok((T) dtos);
-            }
+        if (includeConsultants) {
+            ResponsibleWithConsultantsDto dtos = ResponsibleWithConsultantsDto
+                    .fromModel(responsiblePerson);
+            log.info("Successfully retrieved responsible person with consultants for ID: {}", id);
+            return ResponseEntity.ok((T) dtos);
+        }
+        BasicResponsiblePersonDto dtos = BasicResponsiblePersonDto
+                .fromModel(responsiblePerson);
+        log.info("Successfully retrieved basic responsible person for ID: {}", id);
+        return ResponseEntity.ok((T) dtos);
+
 
     }
 
