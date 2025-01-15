@@ -29,7 +29,7 @@ public class ApiKeyFilterTest {
     }
 
     @Test
-    void testSwaggerUiPathShouldPass() throws IOException, ServletException {
+    void swaggerUiPathShouldPass() throws IOException, ServletException {
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
         request.setRequestURI("/swagger-ui");
@@ -42,7 +42,7 @@ public class ApiKeyFilterTest {
     }
 
     @Test
-    void testApiKeyValidShouldPass() throws IOException, ServletException {
+    void apiKeyValidShouldPass() throws IOException, ServletException {
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
         request.setRequestURI("/some-protected-endpoint");
@@ -56,7 +56,7 @@ public class ApiKeyFilterTest {
     }
 
     @Test
-    void testApiKeyInvalidShouldFail() throws IOException, ServletException {
+    void apiKeyInvalidShouldFail() throws IOException, ServletException {
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
         request.setRequestURI("/some-protected-endpoint");
