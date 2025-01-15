@@ -10,12 +10,10 @@ import com.saltpgp.notionproxy.models.Developer;
 import com.saltpgp.notionproxy.models.ResponsiblePerson;
 import com.saltpgp.notionproxy.models.Score;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClient;
 
 import java.util.*;
 
@@ -78,6 +76,19 @@ public class NotionService {
             log.debug("Developers found: {}", allSalties.size());
         }
         return allSalties;
+    }
+
+    public Developer getDeveloperById(UUID id) throws NotionException {
+        JsonNode response = notionApiService.fetchPage(id.toString());
+        String name = response.get("properties").get("Name").get("title").get(0).get("plain_text").asText();
+        String githubUrl = response.get("properties").get("GitHub").get("url").asText();
+        String githubImage = githubUrl + "png";
+        String email = response.get("properties").get("Private Email").get("email").asText();
+        String status = NotionServiceUtility.getDeveloperStatus(response);
+        String totalScore = NotionServiceUtility.getDeveloperTotalScore(response);
+        return new Developer(name,id,githubUrl,
+                githubImage,email,status, totalScore, Collections.emptyList());
+
     }
 
     @Cacheable(value = "developerScoreCard", key = "#id")
@@ -286,16 +297,4 @@ public class NotionService {
         );
     }
 
-    private Developer getDeveloperById(UUID id) throws NotionException {
-        JsonNode response = notionApiService.fetchPage(id.toString());
-        String name = response.get("properties").get("Name").get("title").get(0).get("plain_text").asText();
-        String githubUrl = response.get("properties").get("GitHub").get("url").asText();
-        String githubImage = githubUrl + "png";
-        String email = response.get("properties").get("Private Email").get("email").asText();
-        String status = NotionServiceUtility.getDeveloperStatus(response);
-        String totalScore = NotionServiceUtility.getDeveloperTotalScore(response);
-        return new Developer(name,id,githubUrl,
-                githubImage,email,status, totalScore, Collections.emptyList());
-
-    }
 }
