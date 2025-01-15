@@ -38,6 +38,114 @@ public class NotionService {
         this.CORE_DATABASE_ID = CORE_DATABASE_ID;
     }
 
+    public List<Developer> getAllDevelopers(String filter) throws NotionException {
+        List<Developer> allSalties = new ArrayList<>();
+        String nextCursor = null;
+        boolean hasMore = true;
+        while (hasMore) {
+            JsonNode response = getNotionDataBaseResponse(DATABASE_ID, NotionServiceFilters.getFilterDeveloper(nextCursor, filter));
+
+            if (response == null) {
+                throw new NotionException();
+            }
+            response.get("results").elements().forEachRemaining(element -> {
+                if (element.get("properties").get("Name").get("title").get(0) == null) return;
+                String githubUrl = element.get("properties").get("GitHub").get("url").asText().equals("null") ? null
+                        : element.get("properties").get("GitHub").get("url").asText();
+
+                String githubImageUrl = githubUrl == null ? null : githubUrl + ".png";
+                String status = NotionServiceUtility.getDeveloperStatus(element);
+                String totalScore = NotionServiceUtility.getDeveloperTotalScore(element);
+                String email = element.get("properties").get("Private Email").get("email").asText().equals("null") ? null
+                        : element.get("properties").get("Private Email").get("email").asText();
+
+                Developer saltie = new Developer(
+                        element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
+                        UUID.fromString(element.get("id").asText()),
+                        githubUrl,
+                        githubImageUrl,
+                        email,
+                        status,
+                        totalScore,
+                        Collections.emptyList());
+
+                allSalties.add(saltie);
+            });
+
+            nextCursor = response.get("next_cursor").asText();
+            hasMore = response.get("has_more").asBoolean();
+            log.debug("Finished fetch of notion db. Nextcursors: {}, hasMore? = {}", nextCursor, hasMore);
+            log.debug("Developers found: {}", allSalties.size());
+        }
+        return allSalties;
+    }
+
+    @Cacheable(value = "developerScoreCard", key = "#id")
+    public Developer getDeveloperByIdWithScore(UUID id) throws NotionException, NotionNotFoundException {
+        List<Score> allScores = new ArrayList<>();
+        String nextCursor = null;
+        boolean hasMore = true;
+        ObjectNode bodyNode = getDeveloperNode(id);
+        while (hasMore) {
+            if (nextCursor != null) {
+                bodyNode.put("start_cursor", nextCursor);
+            }
+            JsonNode scoreResponse = getNotionDataBaseResponse(SCORE_DATABASE_ID, bodyNode);
+
+            if (scoreResponse.get("results").isEmpty()) {
+                throw new NotionNotFoundException();
+            }
+            scoreResponse.get("results").elements().forEachRemaining(element -> {
+                Score score = extractScore(element);
+                if (score != null) {
+                    allScores.add(score);
+                }
+            });
+            nextCursor = scoreResponse.get("next_cursor").asText();
+            hasMore = scoreResponse.get("has_more").asBoolean();
+        }
+
+        return Developer.addScore(getDeveloperById(id), allScores);
+    }
+
+    @Lazy
+    @Cacheable(value = "allconsultants")
+    public List<Consultant> getAllConsultants(boolean includeEmptyResponsible) throws NotionException {
+        List<Consultant> allConsultants = new ArrayList<>();
+        String nextCursor = null;
+        boolean hasMore = true;
+        List<String> ptPeople = getAllResponsiblePeople(false)
+                .stream()
+                .map(ResponsiblePerson::name)
+                .toList();
+        while (hasMore) {
+            JsonNode response = getNotionDataBaseResponse(DATABASE_ID, NotionServiceFilters.getFilterOnAssignment(nextCursor));
+            response.get("results").elements().forEachRemaining(element -> {
+                if (element.get("properties").get("Name") == null) {
+                    return;
+                }
+                if (element.get("properties").get("Name").get("title").get(0) == null) {
+                    return;
+                }
+                List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(element, ptPeople);
+                if (responsiblePersonList.isEmpty() && !includeEmptyResponsible) {
+                    return;
+                }
+                Consultant consultant = new Consultant(
+                        element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
+                        UUID.fromString(element.get("id").asText()),
+                        responsiblePersonList);
+
+                allConsultants.add(consultant);
+            });
+            nextCursor = response.get("next_cursor").asText();
+            hasMore = response.get("has_more").asBoolean();
+
+        }
+
+        return allConsultants;
+    }
+
     public Consultant getConsultantById(UUID id) throws NotionException {
         JsonNode response = getNotionPageResponse(id.toString());
 
@@ -104,44 +212,6 @@ public class NotionService {
     }
 
     @Lazy
-    @Cacheable(value = "allconsultants")
-    public List<Consultant> getAllConsultants(boolean includeEmptyResponsible) throws NotionException {
-        List<Consultant> allConsultants = new ArrayList<>();
-        String nextCursor = null;
-        boolean hasMore = true;
-        List<String> ptPeople = getAllResponsiblePeople(false)
-                .stream()
-                .map(ResponsiblePerson::name)
-                .toList();
-        while (hasMore) {
-            JsonNode response = getNotionDataBaseResponse(DATABASE_ID, NotionServiceFilters.getFilterOnAssignment(nextCursor));
-            response.get("results").elements().forEachRemaining(element -> {
-                if (element.get("properties").get("Name") == null) {
-                    return;
-                }
-                if (element.get("properties").get("Name").get("title").get(0) == null) {
-                    return;
-                }
-                List<ResponsiblePerson> responsiblePersonList = getResponsiblePersonsFromResponse(element, ptPeople);
-                if (responsiblePersonList.isEmpty() && !includeEmptyResponsible) {
-                   return;
-                }
-                Consultant consultant = new Consultant(
-                        element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
-                        UUID.fromString(element.get("id").asText()),
-                        responsiblePersonList);
-
-                allConsultants.add(consultant);
-            });
-            nextCursor = response.get("next_cursor").asText();
-            hasMore = response.get("has_more").asBoolean();
-
-        }
-
-        return allConsultants;
-    }
-
-    @Lazy
     @Cacheable(value = "saltiesInformation")
     public List<Developer> getAllDevelopers() throws NotionException {
         List<Developer> allSalties = new ArrayList<>();
@@ -184,78 +254,6 @@ public class NotionService {
             log.debug("Developers found: {}", allSalties.size());
         }
         return allSalties;
-    }
-
-
-    public List<Developer> getAllDevelopers(String filter) throws NotionException {
-        List<Developer> allSalties = new ArrayList<>();
-        String nextCursor = null;
-        boolean hasMore = true;
-        while (hasMore) {
-            JsonNode response = getNotionDataBaseResponse(DATABASE_ID, NotionServiceFilters.getFilterDeveloper(nextCursor, filter));
-
-            if (response == null) {
-                throw new NotionException();
-            }
-            response.get("results").elements().forEachRemaining(element -> {
-                if (element.get("properties").get("Name").get("title").get(0) == null) return;
-                String githubUrl = element.get("properties").get("GitHub").get("url").asText().equals("null") ? null
-                        : element.get("properties").get("GitHub").get("url").asText();
-
-                String githubImageUrl = githubUrl == null ? null : githubUrl + ".png";
-                String status = NotionServiceUtility.getDeveloperStatus(element);
-                String totalScore = NotionServiceUtility.getDeveloperTotalScore(element);
-                String email = element.get("properties").get("Private Email").get("email").asText().equals("null") ? null
-                        : element.get("properties").get("Private Email").get("email").asText();
-
-                Developer saltie = new Developer(
-                        element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
-                        UUID.fromString(element.get("id").asText()),
-                        githubUrl,
-                        githubImageUrl,
-                        email,
-                        status,
-                        totalScore,
-                        Collections.emptyList());
-
-                allSalties.add(saltie);
-            });
-
-            nextCursor = response.get("next_cursor").asText();
-            hasMore = response.get("has_more").asBoolean();
-            log.debug("Finished fetch of notion db. Nextcursors: {}, hasMore? = {}", nextCursor, hasMore);
-            log.debug("Developers found: {}", allSalties.size());
-        }
-        return allSalties;
-    }
-
-
-    @Cacheable(value = "developerScoreCard", key = "#id")
-    public Developer getDeveloperByIdWithScore(UUID id) throws NotionException, NotionNotFoundException {
-        List<Score> allScores = new ArrayList<>();
-        String nextCursor = null;
-        boolean hasMore = true;
-        ObjectNode bodyNode = getDeveloperNode(id);
-        while (hasMore) {
-            if (nextCursor != null) {
-                bodyNode.put("start_cursor", nextCursor);
-            }
-            JsonNode scoreResponse = getNotionDataBaseResponse(SCORE_DATABASE_ID, bodyNode);
-
-            if (scoreResponse.get("results").isEmpty()) {
-                throw new NotionNotFoundException();
-            }
-            scoreResponse.get("results").elements().forEachRemaining(element -> {
-                Score score = extractScore(element);
-                if (score != null) {
-                    allScores.add(score);
-                }
-            });
-            nextCursor = scoreResponse.get("next_cursor").asText();
-            hasMore = scoreResponse.get("has_more").asBoolean();
-        }
-
-        return Developer.addScore(getDeveloperById(id), allScores);
     }
 
     private ObjectNode getDeveloperNode(UUID id) {
