@@ -42,36 +42,27 @@ public class NotionServiceFilters {
     }
 
     public static String getFilterDeveloper (String cursor, String filter) {
+        String developerFilter = """
+                {
+                """;
+        if (cursor != null) {
+            developerFilter += String.format("""
+                        "start_cursor": "%s"
+                    """, cursor);
+        }
         if (filter == null || filter.equals("none")) {
-            if (cursor != null) {
-                return String.format("""
-                {"start_cursor": "%s"}
-                """,cursor);
-            }
-            return "{}";
+            return developerFilter += """
+                }
+                """;
         }
-        if (cursor == null) {
-            return String.format("""
-                {
-                    "filter": {
-                        "property": "Status",
-                        "select": {
-                            "equals": "%s"
+        return developerFilter += String.format("""
+                        "filter": {
+                            "property": "Status",
+                            "select": {
+                                "equals": "%s"
+                            }
                         }
                     }
-                }
-                """, filter);
-        }
-        return String.format("""
-                {
-                    "start_cursor": "%s"
-                    "filter": {
-                        "property": "Status",
-                        "select": {
-                            "equals": "%s"
-                        }
-                    }
-                }
-                """, cursor, filter);
+                    """, filter);
     }
 }

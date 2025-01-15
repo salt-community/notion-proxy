@@ -61,7 +61,10 @@ public class NotionServiceFiltersTest {
 
     @Test
     public void getFilterDeveloperWithNullCursorAndNullFilter() {
-        String expected = "{}";
+        String expected = """
+                {
+                }
+                """;
         assertEquals(expected, NotionServiceFilters.getFilterDeveloper(null, null));
     }
 
@@ -69,7 +72,9 @@ public class NotionServiceFiltersTest {
     public void getFilterDeveloperWithCursorAndNullFilter() {
         String cursor = "abc123";
         String expected = String.format("""
-                {\"start_cursor\": \"%s\"}
+                {
+                    \"start_cursor\": \"%s\"
+                }
                 """, cursor);
         assertEquals(expected, NotionServiceFilters.getFilterDeveloper(cursor, null));
     }
