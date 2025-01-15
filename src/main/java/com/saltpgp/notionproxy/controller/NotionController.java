@@ -108,12 +108,9 @@ public class NotionController {
         log.info("Received request to get responsible person with ID: {}. Include consultants: {}", id, includeConsultants);
         ResponsiblePerson responsiblePerson = notionService
                 .getResponsiblePersonById(id, includeConsultants);
-        if (includeConsultants) {
-            return ResponseEntity.ok(ResponsibleWithConsultantsDto
-                    .fromModel(responsiblePerson));
-        }
-        return ResponseEntity.ok(BasicResponsiblePersonDto
-                .fromModel(responsiblePerson));
+        return ResponseEntity.ok(includeConsultants ?
+                ResponsibleWithConsultantsDto.fromModel(responsiblePerson) :
+                BasicResponsiblePersonDto.fromModel(responsiblePerson));
     }
 
     @Operation(summary = "Get developer scorecard", description = "Retrieves the scorecard of a specific developer.")
