@@ -19,4 +19,19 @@ public class NotionServiceFiltersTest {
                 """;
         assertEquals(expected, NotionServiceFilters.FILTER_RESPONSIBLE_PEOPLE);
     }
+
+    @Test
+    public void testFilterOnAssignment() {
+        String expected = """
+                {
+                    \"filter\": {
+                        \"property\": \"Status\",
+                        \"select\": {
+                            \"equals\": \"On Assignment\"
+                        }
+                    }
+                }
+                """;
+        assertEquals(expected, NotionServiceFilters.FILTER_ON_ASSIGNMENT);
+    }
 }
