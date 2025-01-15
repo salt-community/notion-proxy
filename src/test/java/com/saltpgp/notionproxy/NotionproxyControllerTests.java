@@ -292,5 +292,11 @@ class NotionControllerTest {
 
         when(notionService.getAllResponsiblePeople(includeConsultants)).thenThrow(new RuntimeException());
 
+        // Act & Assert
+        mockMvc.perform(get("/api/salt/responsible")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(CUSTOM_API_KEY, TEST_API_KEY))
+                .andExpect(status().isInternalServerError());
+
     }
 }
