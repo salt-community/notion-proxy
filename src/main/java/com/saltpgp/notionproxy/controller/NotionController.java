@@ -42,9 +42,9 @@ public class NotionController {
     }
 
     @GetMapping("developers/{id}")
-    public ResponseEntity<SaltiesDto> getDeveloper(@PathVariable UUID id) throws NotionException{
+    public ResponseEntity<DeveloperDto> getDeveloper(@PathVariable UUID id) throws NotionException{
         log.info("Received request for developer with ID: {}", id);
-        return ResponseEntity.ok(notionService.getDeveloperById(id));
+        return ResponseEntity.ok(DeveloperDto.fromModel(notionService.getDeveloperById(id)));
     }
 
     @Operation(summary = "Get developer scorecard", description = "Retrieves the scorecard of a specific developer.")
