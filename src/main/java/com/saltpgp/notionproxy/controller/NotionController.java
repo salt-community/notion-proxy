@@ -109,11 +109,6 @@ public class NotionController {
             ResponsiblePerson responsiblePerson = notionService
                     .getResponsiblePersonById(id, includeConsultants);
 
-            if (responsiblePerson == null) {
-                log.warn("Responsible person not found for ID: {}", id);
-                return ResponseEntity.notFound().build();
-            }
-
             if (includeConsultants) {
                 ResponsibleWithConsultantsDto dtos = ResponsibleWithConsultantsDto
                         .fromModel(responsiblePerson);
