@@ -305,6 +305,8 @@ class NotionProxyServiceTest {
 
         when(mockApiService.fetchDatabase(DATABASE_ID, NotionServiceFilters.getFilterOnAssignment(null))).thenReturn(mapper.readTree(databaseResponse));
 
+        when(mockApiService.fetchDatabase(DATABASE_ID, NotionServiceFilters.getFilterDeveloper(null, null))).thenReturn(mapper.readTree(databaseResponse));
+
         when(mockApiService.fetchDatabase(DATABASE_ID, mapper.createObjectNode())).thenReturn(mapper.readTree(databaseResponse));
 
         when(mockApiService.fetchDatabase(SCORE_DATABASE_ID, getDeveloperNode(UUID.fromString("11111111-1111-1111-1111-111111111111")))).thenReturn(mapper.readTree(scoreDatabaseResponse));
@@ -342,7 +344,7 @@ class NotionProxyServiceTest {
     @Test
     void shouldFindAllDevelopers() throws NotionException {
 
-        List<Developer> developers = notionService.getAllDevelopers();
+        List<Developer> developers = notionService.getAllDevelopers("none");
 
         assertEquals(2, developers.size());
         assertEquals("Test Saltie 1", developers.get(0).getName());
