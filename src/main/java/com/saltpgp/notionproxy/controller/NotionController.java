@@ -41,6 +41,7 @@ public class NotionController {
     public ResponseEntity<List<SaltiesDto>> getAllSalties(
             @Parameter(description = "A filter to sort devs by current status(on assignment, pgp, etc)", required = false, example = "none")
             @RequestParam(required = false, defaultValue = "none") String filter) throws NotionException {
+        log.info("Received request to get all developers with filter: {}", filter);
         return ResponseEntity.ok(SaltiesDto.fromModel(notionService.getAllDevelopers(filter)));
     }
 
@@ -53,6 +54,7 @@ public class NotionController {
     public ResponseEntity<List<ConsultantWithResponsibleDto>> getConsultants(
             @Parameter(description = "Whether to include consultants with no responsible persons", required = false, example = "false")
             @RequestParam(required = false, defaultValue = "false") boolean includeEmptyResponsible) throws NotionException {
+
         log.info("Received request to get all consultants. Include empty responsible: {}", includeEmptyResponsible);
 
         return ResponseEntity.ok(notionService
@@ -75,12 +77,7 @@ public class NotionController {
 
         log.info("Received request to get consultant with ID: {}", id);
 
-        Consultant consultant = notionService.getConsultantById(id);
-        if (consultant == null) {
-            log.warn("Consultant not found for ID: {}", id);
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(ConsultantWithResponsibleDto.fromModel(consultant));
+        return ResponseEntity.ok(ConsultantWithResponsibleDto.fromModel(notionService.getConsultantById(id)));
     }
 
     @Operation(summary = "Get all responsible persons", description = "Retrieves a list of all responsible persons, with an optional filter to include consultants.")
