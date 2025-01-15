@@ -33,7 +33,7 @@ public class NotionController {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved list of developers"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
-    @GetMapping("developer")
+    @GetMapping("developers")
     public ResponseEntity<List<SaltiesDto>> getAllSalties(
             @Parameter(description = "A filter to sort devs by current status(on assignment, pgp, etc)", required = false, example = "none")
             @RequestParam(required = false, defaultValue = "none") String filter) throws NotionException {

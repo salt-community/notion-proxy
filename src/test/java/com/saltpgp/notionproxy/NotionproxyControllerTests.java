@@ -78,7 +78,7 @@ class NotionControllerTest {
         """;
 
         // Act & Assert
-        mockMvc.perform(get("/api/salt/developer")
+        mockMvc.perform(get("/api/salt/developers")
                         .header(CUSTOM_API_KEY, TEST_API_KEY)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
