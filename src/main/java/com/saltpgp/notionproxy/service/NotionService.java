@@ -40,49 +40,6 @@ public class NotionService {
 
     @Lazy
     @Cacheable(value = "saltiesInformation")
-    public List<Developer> getAllDevelopers() throws NotionException {
-        List<Developer> allSalties = new ArrayList<>();
-        String nextCursor = null;
-        boolean hasMore = true;
-        while (hasMore) {
-            JsonNode response = getNotionDataBaseResponse(DATABASE_ID, createQueryRequestBody(nextCursor));
-
-            if (response == null) {
-                throw new NotionException();
-            }
-            response.get("results").elements().forEachRemaining(element -> {
-                if (element.get("properties").get("Name").get("title").get(0) == null) return;
-                String githubUrl = element.get("properties").get("GitHub").get("url").asText().equals("null") ? null
-                        : element.get("properties").get("GitHub").get("url").asText();
-
-                String githubImageUrl = githubUrl == null ? null : githubUrl + ".png";
-
-                String email = element.get("properties").get("Private Email").get("email").asText().equals("null") ? null
-                        : element.get("properties").get("Private Email").get("email").asText();
-                String status = NotionServiceUtility.getDeveloperStatus(element);
-                String totalScore = NotionServiceUtility.getDeveloperTotalScore(element);
-
-                Developer saltie = new Developer(
-                        element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
-                        UUID.fromString(element.get("id").asText()),
-                        githubUrl,
-                        githubImageUrl,
-                        email,
-                        status,
-                        totalScore,
-                        Collections.emptyList());
-
-                allSalties.add(saltie);
-            });
-
-            nextCursor = response.get("next_cursor").asText();
-            hasMore = response.get("has_more").asBoolean();
-            log.debug("Finished fetch of notion db. Nextcursors: {}, hasMore? = {}", nextCursor, hasMore);
-            log.debug("Developers found: {}", allSalties.size());
-        }
-        return allSalties;
-    }
-
     public List<Developer> getAllDevelopers(String filter) throws NotionException {
         List<Developer> allSalties = new ArrayList<>();
         String nextCursor = null;
