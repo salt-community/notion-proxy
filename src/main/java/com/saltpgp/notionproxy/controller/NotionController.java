@@ -84,12 +84,9 @@ public class NotionController {
             @RequestParam(required = false, defaultValue = "false") boolean includeConsultants) throws NotionException {
         log.info("Received request to get responsible persons with includeConsultants={}", includeConsultants);
         List<ResponsiblePerson> responsiblePerson = notionService.getAllResponsiblePeople(includeConsultants);
-        if (includeConsultants) {
-            return ResponseEntity.ok((ResponsibleWithConsultantsDto
-                    .fromModelList(responsiblePerson)));
-        }
-        return ResponseEntity.ok(BasicResponsiblePersonDto
-                .fromModelList(responsiblePerson));
+        return ResponseEntity.ok(includeConsultants ?
+                ResponsibleWithConsultantsDto.fromModelList(responsiblePerson) :
+                BasicResponsiblePersonDto.fromModelList(responsiblePerson));
     }
 
     @Operation(summary = "Get a specific responsible person by ID", description = "Retrieves details of a specific responsible person by their unique ID.")
