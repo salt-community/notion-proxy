@@ -237,4 +237,33 @@ class NotionControllerTest {
                 .andExpect(status().isInternalServerError());
 
     }
+
+    @Test
+    void getResponsibleShouldReturnListOfResponsiblePersons() throws Exception {
+
+        // Arrange
+        List<ResponsiblePerson> mockResponsiblePersonList = List.of(
+                new ResponsiblePerson("TestResponsible1", UUID.fromString("f0d02a91-50c3-46a7-a4e7-76f8de3db2a9"),"test@gmail.com", List.of()),
+                new ResponsiblePerson("TestResponsible2", UUID.fromString("1450064b-bb9a-80a6-88c5-e9391cdd8974"),"test2@gmail.com", List.of())
+        );
+
+        boolean includeConsultants = false;
+
+        when(notionService.getAllResponsiblePeople(includeConsultants)).thenReturn(mockResponsiblePersonList);
+
+        String expectedResponse = """
+                [
+                    {
+                        "name": "TestResponsible1",
+                        "id": "f0d02a91-50c3-46a7-a4e7-76f8de3db2a9",
+                        "email": "test@gmail.com"
+                    },
+                    {
+                        "name": "TestResponsible2",
+                        "id": "1450064b-bb9a-80a6-88c5-e9391cdd8974",
+                        "email": "test2@gmail.com"
+                    }
+                ]
+                """;
+    }
 }
