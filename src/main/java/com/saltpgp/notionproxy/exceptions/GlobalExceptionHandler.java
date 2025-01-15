@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.NoSuchElementException;
+
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
@@ -19,6 +21,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.notFound().build();
     }
 
+    @ExceptionHandler({NoSuchElementException.class})
+    public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException e) {
+        log.debug("NoSuchElementException was thrown: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
 
     /**
      * Handle NotionException - Returns 500 INTERNAL SERVER ERROR
