@@ -18,6 +18,7 @@ public class Developer {
     private String githubImageUrl;
     private String email;
     private String status;
+    private String totalScore;
     private List<Score> scores;
 
 
@@ -29,6 +30,7 @@ public class Developer {
                 developer.getGithubImageUrl(),
                 developer.getEmail(),
                 developer.getStatus(),
+                developer.getTotalScore(),
                 scores
         );
 

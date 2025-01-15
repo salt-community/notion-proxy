@@ -163,6 +163,7 @@ public class NotionService {
                 String email = element.get("properties").get("Private Email").get("email").asText().equals("null") ? null
                         : element.get("properties").get("Private Email").get("email").asText();
                 String status = NotionServiceUtility.getDeveloperStatus(element);
+                String totalScore = NotionServiceUtility.getDeveloperTotalScore(element);
 
                 Developer saltie = new Developer(
                         element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
@@ -171,6 +172,7 @@ public class NotionService {
                         githubImageUrl,
                         email,
                         status,
+                        totalScore,
                         Collections.emptyList());
 
                 allSalties.add(saltie);
@@ -202,6 +204,7 @@ public class NotionService {
 
                 String githubImageUrl = githubUrl == null ? null : githubUrl + ".png";
                 String status = NotionServiceUtility.getDeveloperStatus(element);
+                String totalScore = NotionServiceUtility.getDeveloperTotalScore(element);
                 String email = element.get("properties").get("Private Email").get("email").asText().equals("null") ? null
                         : element.get("properties").get("Private Email").get("email").asText();
 
@@ -212,6 +215,7 @@ public class NotionService {
                         githubImageUrl,
                         email,
                         status,
+                        totalScore,
                         Collections.emptyList());
 
                 allSalties.add(saltie);
@@ -344,8 +348,9 @@ public class NotionService {
         String githubImage = githubUrl + "png";
         String email = response.get("properties").get("Private Email").get("email").asText();
         String status = NotionServiceUtility.getDeveloperStatus(response);
+        String totalScore = NotionServiceUtility.getDeveloperTotalScore(response);
         return new Developer(name,id,githubUrl,
-                githubImage,email,status, Collections.emptyList());
+                githubImage,email,status, totalScore, Collections.emptyList());
 
     }
 }

@@ -25,4 +25,13 @@ public class NotionServiceUtility {
         }
     }
 
+    public static String getDeveloperTotalScore(JsonNode element) {
+        try {
+            return String.valueOf(element.get("properties").get("Total Score").get("formula")
+                    .get("number").asInt());
+        } catch (Exception e) {
+            return NULL_STATUS;
+        }
+    }
+
 }
