@@ -34,11 +34,17 @@ public class NotionController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @GetMapping("developers")
-    public ResponseEntity<List<SaltiesDto>> getAllSalties(
+    public ResponseEntity<List<SaltiesDto>> getDevelopersList(
             @Parameter(description = "A filter to sort devs by current status(on assignment, pgp, etc)", required = false, example = "none")
             @RequestParam(required = false, defaultValue = "none") String filter) throws NotionException {
         log.info("Received request to get all developers with filter: {}", filter);
         return ResponseEntity.ok(SaltiesDto.fromModel(notionService.getAllDevelopers(filter)));
+    }
+
+    @GetMapping("developers/{id}")
+    public ResponseEntity<SaltiesDto> getDeveloper(@PathVariable UUID id) throws NotionException{
+        log.info("Received request for developer with ID: {}", id);
+        return ResponseEntity.ok(notionService.getDeveloperById(id));
     }
 
     @Operation(summary = "Get developer scorecard", description = "Retrieves the scorecard of a specific developer.")
