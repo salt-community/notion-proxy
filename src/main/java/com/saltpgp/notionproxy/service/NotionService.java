@@ -162,6 +162,7 @@ public class NotionService {
 
                 String email = element.get("properties").get("Private Email").get("email").asText().equals("null") ? null
                         : element.get("properties").get("Private Email").get("email").asText();
+                String status = NotionServiceUtility.getDeveloperStatus(element);
 
                 Developer saltie = new Developer(
                         element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
@@ -169,6 +170,7 @@ public class NotionService {
                         githubUrl,
                         githubImageUrl,
                         email,
+                        status,
                         Collections.emptyList());
 
                 allSalties.add(saltie);
@@ -199,7 +201,7 @@ public class NotionService {
                         : element.get("properties").get("GitHub").get("url").asText();
 
                 String githubImageUrl = githubUrl == null ? null : githubUrl + ".png";
-
+                String status = NotionServiceUtility.getDeveloperStatus(element);
                 String email = element.get("properties").get("Private Email").get("email").asText().equals("null") ? null
                         : element.get("properties").get("Private Email").get("email").asText();
 
@@ -209,6 +211,7 @@ public class NotionService {
                         githubUrl,
                         githubImageUrl,
                         email,
+                        status,
                         Collections.emptyList());
 
                 allSalties.add(saltie);
@@ -340,9 +343,9 @@ public class NotionService {
         String githubUrl = response.get("properties").get("GitHub").get("url").asText();
         String githubImage = githubUrl + "png";
         String email = response.get("properties").get("Private Email").get("email").asText();
-
+        String status = NotionServiceUtility.getDeveloperStatus(response);
         return new Developer(name,id,githubUrl,
-                githubImage,email, Collections.emptyList());
+                githubImage,email,status, Collections.emptyList());
 
     }
 }

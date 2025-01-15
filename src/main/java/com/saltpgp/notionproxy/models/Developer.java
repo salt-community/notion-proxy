@@ -17,7 +17,9 @@ public class Developer {
     private String githubUrl;
     private String githubImageUrl;
     private String email;
+    private String status;
     private List<Score> scores;
+
 
     public static Developer addScore(Developer developer, List<Score> scores) {
         return new Developer(
@@ -26,6 +28,7 @@ public class Developer {
                 developer.getGithubUrl(),
                 developer.getGithubImageUrl(),
                 developer.getEmail(),
+                developer.getStatus(),
                 scores
         );
 
