@@ -46,8 +46,8 @@ class NotionControllerTest {
 
         // Arrange
         List<Developer> mockDevelopers = List.of(
-                new Developer("Carolinne Melo", UUID.fromString("5f972ce7-b8f0-4b27-b97f-b860c9c2fe4c"), "https://github.com/carolinnemelo","https://github.com/carolinnemelo.png" , "carolinnepmelo@gmail.com", null),
-                new Developer("Carl-Henrik Alm", UUID.fromString("1450064b-bb9a-80a6-88c5-e9391cdd8974"), null, null, "carlhalm@gmail.com", null)
+                new Developer("Carolinne Melo", UUID.fromString("5f972ce7-b8f0-4b27-b97f-b860c9c2fe4c"), "https://github.com/carolinnemelo","https://github.com/carolinnemelo.png" , "carolinnepmelo@gmail.com", "Course", "100", List.of() ),
+                new Developer("Carl-Henrik Alm", UUID.fromString("1450064b-bb9a-80a6-88c5-e9391cdd8974"), null, null, "carlhalm@gmail.com", "Course", "100", List.of())
         );
 
         String filter = "none";
@@ -61,14 +61,18 @@ class NotionControllerTest {
             "id": "5f972ce7-b8f0-4b27-b97f-b860c9c2fe4c",
             "email": "carolinnepmelo@gmail.com",
             "githubUrl": "https://github.com/carolinnemelo",
-            "githubImageUrl": "https://github.com/carolinnemelo.png"
+            "githubImageUrl": "https://github.com/carolinnemelo.png",
+            "status": "Course",
+            "totalScore": "100"
           },
           {
             "name": "Carl-Henrik Alm",
             "id": "1450064b-bb9a-80a6-88c5-e9391cdd8974",
             "email": "carlhalm@gmail.com",
             "githubUrl": null,
-            "githubImageUrl": null
+            "githubImageUrl": null,
+            "status": "Course",
+            "totalScore": "100"
           }
         ]
         """;
@@ -222,7 +226,15 @@ class NotionControllerTest {
     void getConsultant_shouldReturnInternalServerError() throws Exception {
 
         // Arrange
-        when(notionService.getConsultantById(UUID.randomUUID())).thenThrow(new RuntimeException());
+        UUID mockConsultantId = UUID.randomUUID();
+
+        when(notionService.getConsultantById(mockConsultantId)).thenThrow(new RuntimeException());
+
+        // Act & Assert
+        mockMvc.perform(get("/api/salt/consultants/" + mockConsultantId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(CUSTOM_API_KEY, TEST_API_KEY))
+                .andExpect(status().isInternalServerError());
 
     }
 }
