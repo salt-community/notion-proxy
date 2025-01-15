@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public record SaltiesDto(String name, UUID id, String email, String githubUrl, String githubImageUrl) {
+public record SaltiesDto(String name, UUID id, String email, String githubUrl, String githubImageUrl, String status) {
 
     public static List<SaltiesDto> fromModel(List<Developer> developers) {
         List<SaltiesDto> salties = new ArrayList<>();
@@ -16,7 +16,8 @@ public record SaltiesDto(String name, UUID id, String email, String githubUrl, S
                     developer.getId(),
                     developer.getEmail(),
                     developer.getGithubUrl(),
-                    developer.getGithubImageUrl()));
+                    developer.getGithubImageUrl(),
+                    developer.getStatus()));
         }
         return salties;
     }
