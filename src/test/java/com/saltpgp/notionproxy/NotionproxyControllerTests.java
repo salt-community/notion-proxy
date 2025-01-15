@@ -287,5 +287,10 @@ class NotionControllerTest {
     @Test
     void getResponsible_shouldReturnInternalServerError() throws Exception {
 
+        // Arrange
+        boolean includeConsultants = false;
+
+        when(notionService.getAllResponsiblePeople(includeConsultants)).thenThrow(new RuntimeException());
+
     }
 }
