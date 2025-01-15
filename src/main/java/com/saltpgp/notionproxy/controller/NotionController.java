@@ -83,10 +83,10 @@ public class NotionController {
             @Parameter(description = "Whether to include the consultants for whom they are responsible", required = false, example = "false")
             @RequestParam(required = false, defaultValue = "false") boolean includeConsultants) throws NotionException {
         log.info("Received request to get responsible persons with includeConsultants={}", includeConsultants);
-        List<ResponsiblePerson> responsiblePerson = notionService.getAllResponsiblePeople(includeConsultants);
+        var responsiblePersonList = notionService.getAllResponsiblePeople(includeConsultants);
         return ResponseEntity.ok(includeConsultants ?
-                ResponsibleWithConsultantsDto.fromModelList(responsiblePerson) :
-                BasicResponsiblePersonDto.fromModelList(responsiblePerson));
+                ResponsibleWithConsultantsDto.fromModelList(responsiblePersonList) :
+                BasicResponsiblePersonDto.fromModelList(responsiblePersonList));
     }
 
     @Operation(summary = "Get a specific responsible person by ID", description = "Retrieves details of a specific responsible person by their unique ID.")
@@ -103,7 +103,7 @@ public class NotionController {
             @RequestParam(required = false, defaultValue = "false") boolean includeConsultants) throws NotionException {
 
         log.info("Received request to get responsible person with ID: {}. Include consultants: {}", id, includeConsultants);
-        ResponsiblePerson responsiblePerson = notionService
+        var responsiblePerson = notionService
                 .getResponsiblePersonById(id, includeConsultants);
         return ResponseEntity.ok(includeConsultants ?
                 ResponsibleWithConsultantsDto.fromModel(responsiblePerson) :

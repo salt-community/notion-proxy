@@ -27,9 +27,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
-@TestPropertySource(properties = {
-
-})
 class NotionProxyServiceTest {
 
     NotionApiService mockApiService;
