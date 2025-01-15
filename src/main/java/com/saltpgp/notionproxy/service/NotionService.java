@@ -45,21 +45,22 @@ public class NotionService {
         String nextCursor = null;
         boolean hasMore = true;
         while (hasMore) {
-            JsonNode response = getNotionDataBaseResponse(DATABASE_ID, NotionServiceFilters.getFilterDeveloper(nextCursor, filter));
+            JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, NotionServiceFilters.getFilterDeveloper(nextCursor, filter));
 
             response.get("results").elements().forEachRemaining(element -> {
-                if (element.get("properties").get("Name").get("title").get(0) == null) return;
+                JsonNode properties = element.get("properties");
+                if (properties.get("Name").get("title").get(0) == null) return;
                 String githubUrl = element.get("properties").get("GitHub").get("url").asText().equals("null") ? null
-                        : element.get("properties").get("GitHub").get("url").asText();
+                        : properties.get("GitHub").get("url").asText();
 
                 String githubImageUrl = githubUrl == null ? null : githubUrl + ".png";
                 String status = NotionServiceUtility.getDeveloperStatus(element);
                 String totalScore = NotionServiceUtility.getDeveloperTotalScore(element);
-                String email = element.get("properties").get("Private Email").get("email").asText().equals("null") ? null
-                        : element.get("properties").get("Private Email").get("email").asText();
+                String email = properties.get("Private Email").get("email").asText().equals("null") ? null
+                        : properties.get("Private Email").get("email").asText();
 
                 Developer saltie = new Developer(
-                        element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
+                        properties.get("Name").get("title").get(0).get("plain_text").asText(),
                         UUID.fromString(element.get("id").asText()),
                         githubUrl,
                         githubImageUrl,
@@ -89,7 +90,7 @@ public class NotionService {
             if (nextCursor != null) {
                 bodyNode.put("start_cursor", nextCursor);
             }
-            JsonNode scoreResponse = getNotionDataBaseResponse(SCORE_DATABASE_ID, bodyNode);
+            JsonNode scoreResponse = notionApiService.fetchDatabase(SCORE_DATABASE_ID, bodyNode);
 
             if (scoreResponse.get("results").isEmpty()) {
                 throw new NotionNotFoundException();
@@ -118,7 +119,7 @@ public class NotionService {
                 .map(ResponsiblePerson::name)
                 .toList();
         while (hasMore) {
-            JsonNode response = getNotionDataBaseResponse(DATABASE_ID, NotionServiceFilters.getFilterOnAssignment(nextCursor));
+            JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, NotionServiceFilters.getFilterOnAssignment(nextCursor));
             response.get("results").elements().forEachRemaining(element -> {
                 if (element.get("properties").get("Name") == null) {
                     return;
@@ -146,7 +147,7 @@ public class NotionService {
     }
 
     public Consultant getConsultantById(UUID id) throws NotionException {
-        JsonNode response = getNotionPageResponse(id.toString());
+        JsonNode response = notionApiService.fetchPage(id.toString());
 
         List<String> ptPeople = getAllResponsiblePeople(false)
                 .stream()
@@ -165,7 +166,7 @@ public class NotionService {
 
         String jsonBody = NotionServiceFilters.FILTER_RESPONSIBLE_PEOPLE;
 
-        JsonNode response = getNotionDataBaseResponse(CORE_DATABASE_ID,jsonBody);
+        JsonNode response = notionApiService.fetchDatabase(CORE_DATABASE_ID,jsonBody);
         response.get("results").elements().forEachRemaining(element -> {
             JsonNode person = element.get("properties").get("Person").get("people").get(0);
             if (person  == null) {
@@ -266,14 +267,6 @@ public class NotionService {
         return responsiblePersonList;
     }
 
-    private JsonNode getNotionDataBaseResponse(String database, Object node) throws NotionException {
-        return notionApiService.fetchDatabase(database, node);
-    }
-
-    private JsonNode getNotionPageResponse(String pageId) throws NotionException {
-        return notionApiService.fetchPage(pageId);
-    }
-
     private Score extractScore(JsonNode element) {
         if (element.get("properties").get("Score") == null) {
             return null;
@@ -294,7 +287,7 @@ public class NotionService {
     }
 
     private Developer getDeveloperById(UUID id) throws NotionException {
-        JsonNode response = getNotionPageResponse(id.toString());
+        JsonNode response = notionApiService.fetchPage(id.toString());
         String name = response.get("properties").get("Name").get("title").get(0).get("plain_text").asText();
         String githubUrl = response.get("properties").get("GitHub").get("url").asText();
         String githubImage = githubUrl + "png";
