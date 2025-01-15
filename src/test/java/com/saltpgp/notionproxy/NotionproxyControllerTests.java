@@ -265,5 +265,17 @@ class NotionControllerTest {
                     }
                 ]
                 """;
+
+        // Act & Assert
+        mockMvc.perform(get("/api/salt/responsible")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(CUSTOM_API_KEY, TEST_API_KEY))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expectedResponse));
+    }
+
+    @Test
+    void getResponsible_shouldReturnUnAuthorized() throws Exception {
+
     }
 }
