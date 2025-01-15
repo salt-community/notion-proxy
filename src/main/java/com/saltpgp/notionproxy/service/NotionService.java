@@ -100,7 +100,7 @@ public class NotionService {
         return responsiblePersonList.stream()
                 .filter(responsiblePerson -> responsiblePerson.id().equals(id))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(()-> new NoSuchElementException("No responsible person found with id: " + id));
     }
 
     @Lazy
