@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public record DeveloperDto(String name, UUID id, String status, String email, String githubUrl, String githubImageUrl, String totalScore) {
+public record DeveloperDto(String name, UUID id, String status, String email, String githubUrl, String githubImageUrl, String totalScore, List<ResponsibleDto> responsibles) {
 
     public static DeveloperDto fromModel(Developer developer) {
         return new DeveloperDto(
