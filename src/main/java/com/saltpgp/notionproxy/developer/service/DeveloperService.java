@@ -19,6 +19,8 @@ import static com.saltpgp.notionproxy.service.NotionServiceFilters.getFilterDeve
 @Slf4j
 public class DeveloperService {
 
+    public static final String NEXT_CURSOR = "next_cursor";
+    public static final String HAS_MORE = "has_more";
     private final NotionApiService notionApiService;
     private final String DATABASE_ID;
     private static final String FILTER = """
@@ -47,8 +49,8 @@ public class DeveloperService {
                 allDevelopers.add(createDeveloperFromNotionPage(page));
             });
 
-            nextCursor = response.get("next_cursor").asText();
-            hasMore = response.get("has_more").asBoolean();
+            nextCursor = response.get(NEXT_CURSOR).asText();
+            hasMore = response.get(HAS_MORE).asBoolean();
         }
         return allDevelopers;
     }

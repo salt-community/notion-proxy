@@ -24,6 +24,10 @@ class DeveloperServiceUtility {
     private static final String PROPERTY_FORMULA = "formula";
     private static final String PROPERTY_NUMBER = "number";
     private static final String PROPERTY_PERSON = "person";
+    public static final String RESPONSIBLE = "Responsible";
+    public static final String PEOPLE = "people";
+    public static final String NULL = "null";
+    public static final String PNG = ".png";
 
     public static String getDeveloperStatus(JsonNode properties) {
         try {
@@ -52,22 +56,22 @@ class DeveloperServiceUtility {
     }
 
     public static String getDeveloperGithubUrl(JsonNode properties) {
-        return properties.get(PROPERTY_GITHUB).get(PROPERTY_URL).asText().equals("null") ? NULL_STATUS
+        return properties.get(PROPERTY_GITHUB).get(PROPERTY_URL).asText().equals(NULL) ? NULL_STATUS
                 : properties.get(PROPERTY_GITHUB).get(PROPERTY_URL).asText();
     }
 
     public static String getDeveloperEmail(JsonNode properties) {
-        return properties.get(PROPERTY_PRIVATE_EMAIL).get(PROPERTY_EMAIL).asText().equals("null") ? NULL_STATUS
+        return properties.get(PROPERTY_PRIVATE_EMAIL).get(PROPERTY_EMAIL).asText().equals(NULL) ? NULL_STATUS
                 : properties.get(PROPERTY_PRIVATE_EMAIL).get(PROPERTY_EMAIL).asText();
     }
 
     public static String getDeveloperGithubImageUrl(String githubUrl) {
-        return githubUrl == null ? null : githubUrl + ".png";
+        return githubUrl == null ? null : githubUrl + PNG;
     }
 
     public static List<Responsible> getResponsibleList(JsonNode properties) {
         List<Responsible> responsibleList = new ArrayList<>();
-        properties.get("Responsible").get("people").elements().forEachRemaining(responsible -> {
+        properties.get(RESPONSIBLE).get(PEOPLE).elements().forEachRemaining(responsible -> {
             try {
                 responsibleList.add(new Responsible(
                         getResponsibleName(responsible),
