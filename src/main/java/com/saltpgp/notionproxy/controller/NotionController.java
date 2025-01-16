@@ -30,27 +30,6 @@ public class NotionController {
         this.notionService = notionService;
     }
 
-    @Operation(summary = "Get all developers", description = "Retrieves a list of all developers.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved list of developers"),
-            @ApiResponse(responseCode = "500", description = "Internal Server Error")
-    })
-    @GetMapping("developers")
-    public ResponseEntity<List<DeveloperDto>> getDevelopersList(
-            @Parameter(description = "A filter to sort devs by current status(on assignment, pgp, etc)", required = false, example = "none")
-            @RequestParam(required = false, defaultValue = "none") String filter) throws NotionException {
-        log.info("Received request to get all developers with filter: {}", filter);
-        return ResponseEntity.ok(DeveloperDto.fromModelList(notionService.getAllDevelopers(filter)));
-    }
-
-    @GetMapping("developers/{id}")
-    public ResponseEntity<DeveloperDto> getDeveloper(
-            @PathVariable UUID id,
-            @RequestParam(required = false, defaultValue = "false") boolean includeScore) throws NotionException{
-        log.info("Received request for developer with ID: {}", id);
-        return ResponseEntity.ok(DeveloperDto.fromModel(notionService.getDeveloperById(id)));
-    }
-
     @Operation(summary = "Get developer scorecard", description = "Retrieves the scorecard of a specific developer.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved the developer scorecard"),
