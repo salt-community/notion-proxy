@@ -65,8 +65,8 @@ public class NotionService {
                         email,
                         status,
                         totalScore,
-                        Collections.emptyList(),
-                        Collections.emptyList());
+                        null,
+                        null);
 
                 allSalties.add(saltie);
             });
@@ -88,7 +88,7 @@ public class NotionService {
         String status = NotionServiceUtility.getDeveloperStatus(response);
         String totalScore = NotionServiceUtility.getDeveloperTotalScore(response);
         return new Developer(name, id, githubUrl,
-                githubImage, email, status, totalScore, Collections.emptyList(), Collections.emptyList());
+                githubImage, email, status, totalScore, null, null);
 
     }
 
