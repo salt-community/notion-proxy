@@ -67,36 +67,25 @@ class DeveloperServiceUtility {
     public static List<Responsible> getResponsibleList(JsonNode properties) {
         List<Responsible> responsibleList = new ArrayList<>();
         properties.get("Responsible").get("people").elements().forEachRemaining(responsible -> {
-            responsibleList.add(new Responsible(
-                    getResponsibleName(responsible),
-                    getResponsibleId(responsible),
-                    getResponsibleEmail(responsible)));
+            try {
+                responsibleList.add(new Responsible(
+                        getResponsibleName(responsible),
+                        getResponsibleId(responsible),
+                        getResponsibleEmail(responsible)));
+            } catch (Exception ignored) {}
         });
         return responsibleList;
     }
 
-    private static String getResponsibleEmail(JsonNode responsible) {
-        try {
+    private static String getResponsibleEmail(JsonNode responsible) throws Exception {
         return responsible.get("person").get("email").asText();
-        } catch (Exception e) {
-            return NULL_STATUS;
-        }
     }
 
-    //TODO:Remove if id don't exist
-    private static UUID getResponsibleId(JsonNode responsible) {
-        try {
+    private static UUID getResponsibleId(JsonNode responsible) throws Exception {
             return UUID.fromString(responsible.get("id").asText());
-        } catch (Exception e) {
-            return null;
-        }
     }
 
-    private static String getResponsibleName(JsonNode responsible) {
-        try {
+    private static String getResponsibleName(JsonNode responsible) throws Exception {
         return responsible.get("name").asText();
-    } catch (Exception e) {
-        return NULL_STATUS;
-        }
     }
 }
