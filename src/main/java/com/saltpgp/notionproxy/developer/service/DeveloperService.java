@@ -2,6 +2,7 @@ package com.saltpgp.notionproxy.developer.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.saltpgp.notionproxy.developer.model.Developer;
+import com.saltpgp.notionproxy.developer.model.Responsible;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.service.NotionApiService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,13 +23,13 @@ public class DeveloperService {
     private final NotionApiService notionApiService;
     private final String DATABASE_ID;
     private static final String FILTER = """
-                        "filter": {
-                            "property": "Status",
-                            "select": {
-                                "equals": "%s"
-                            }
-                        }
-                    """;
+                "filter": {
+                    "property": "Status",
+                    "select": {
+                        "equals": "%s"
+                    }
+                }
+            """;
 
     public DeveloperService(NotionApiService notionApiService, @Value("${DATABASE_ID}") String DATABASE_ID) {
         this.notionApiService = notionApiService;
@@ -61,6 +62,15 @@ public class DeveloperService {
     private static Developer createDeveloperFromNotionPage(JsonNode page) {
         var properties = page.get("properties");
         var githubUrl = getDeveloperGithubUrl(properties);
+
+        List<Responsible> responsibleList = new ArrayList<>();
+        properties.get("Responsible").get("people").elements().forEachRemaining(responsible -> {
+            responsibleList.add(new Responsible(
+                    responsible.get("name").asText(),
+                    UUID.fromString(responsible.get("id").asText()),
+                    responsible.get("person").get("email").asText()));
+        });
+
         return new Developer(
                 getDeveloperName(properties),
                 UUID.fromString(getDeveloperId(page)),
@@ -68,7 +78,8 @@ public class DeveloperService {
                 getDeveloperGithubImageUrl(githubUrl),
                 getDeveloperEmail(properties),
                 getDeveloperStatus(properties),
-                getDeveloperTotalScore(properties));
+                getDeveloperTotalScore(properties),
+                responsibleList
+        );
     }
-
 }
