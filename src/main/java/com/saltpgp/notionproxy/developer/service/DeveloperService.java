@@ -70,7 +70,7 @@ public class DeveloperService {
         return allDevelopers;
     }
 
-    public static class NotionServiceUtility {
+    public static class DeveloperServiceUtility {
 
         public final static String noCommentMessage = "No comment";
         public final static String NULL_STATUS = "none";
