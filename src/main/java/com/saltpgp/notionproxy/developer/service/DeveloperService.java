@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static com.saltpgp.notionproxy.developer.service.DeveloperService.DeveloperServiceUtility.*;
+import static com.saltpgp.notionproxy.developer.service.DeveloperServiceUtility.*;
 import static com.saltpgp.notionproxy.service.NotionServiceFilters.filterBuilder;
 
 @Service
@@ -40,7 +40,6 @@ public class DeveloperService {
         String nextCursor = null;
         boolean hasMore = true;
         while (hasMore) {
-            //TODO:använda nya filterBuilder
             JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, filterBuilder(nextCursor, filter, FILTER));
 
             response.get("results").elements().forEachRemaining(page -> {
@@ -72,60 +71,6 @@ public class DeveloperService {
                 getDeveloperTotalScore(properties));
     }
 
-    public static class DeveloperServiceUtility {
 
-        public final static String noCommentMessage = "No comment";
-        public final static String NULL_STATUS = "none";
-
-        public static String getScoreComment(JsonNode properties) {
-            try {
-                return properties.get("Comment").get("rich_text")
-                        .get(0).get("plain_text").asText();
-            } catch (Exception e) {
-                return noCommentMessage;
-            }
-        }
-
-        public static String getDeveloperStatus(JsonNode properties) {
-            try {
-                return properties.get("Status").get("select")
-                        .get("name").asText();
-            } catch (Exception e) {
-                return NULL_STATUS;
-            }
-        }
-
-        public static String getDeveloperTotalScore(JsonNode properties) {
-            try {
-                return String.valueOf(properties.get("Total Score").get("formula")
-                        .get("number").asInt());
-            } catch (Exception e) {
-                return NULL_STATUS;
-            }
-        }
-
-        public static String getDeveloperId(JsonNode element) {
-            return element.get("id").asText();
-        }
-
-        public static String getDeveloperName(JsonNode properties) {
-            return properties.get("Name").get("title").get(0).get("plain_text").asText();
-        }
-
-        public static String getDeveloperGithubUrl(JsonNode properties) {
-            return properties.get("GitHub").get("url").asText().equals("null") ? NULL_STATUS
-                    : properties.get("GitHub").get("url").asText();
-        }
-
-        public static String getDeveloperEmail(JsonNode properties) {
-            return properties.get("Private Email").get("email").asText().equals("null") ? NULL_STATUS
-                    : properties.get("Private Email").get("email").asText();
-        }
-
-        public static String getDeveloperGithubImageUrl(String githubUrl) {
-            return githubUrl == null ? null : githubUrl + ".png";
-        }
-
-    }
 
 }
