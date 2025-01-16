@@ -1,4 +1,11 @@
 package com.saltpgp.notionproxy.staff.dtos;
 
-public record StaffDto() {
+import com.saltpgp.notionproxy.staff.models.Staff;
+
+import java.util.UUID;
+
+public record StaffDto(String name, String email, UUID id, String role) {
+    public static StaffDto fromModel(Staff staff) {
+        return new StaffDto(staff.getName(), staff.getEmail(), staff.getId(), staff.getRole());
+    }
 }

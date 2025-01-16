@@ -36,6 +36,7 @@ public class NotionServiceFilters {
                         }""", cursor);
     }
 
+    //TODO:Ta bort när uppdaterad
     public static String getFilterDeveloper (String cursor, String filter) {
         String developerFilter = "{\n";
         if (cursor != null) {
@@ -54,5 +55,38 @@ public class NotionServiceFilters {
                     """, filter);
         }
         return developerFilter += "}";
+    }
+
+    public static String filterBuilder(String cursor, String filterParam, String filterString) {
+        return """
+                {
+                """ + buildCursor(cursor) + buildFilter(filterString, filterParam) + """
+                
+                }
+                """;
+    }
+
+    public static String filterBuilder(String cursor) {
+        return """
+                {
+                """ + buildCursor(cursor) +"""
+                }
+                """;
+    }
+
+    private static String buildFilter(String filter, String filterParam) {
+        if(filter == null || filterParam == null || filterParam.equals("none")) {
+            return "";
+        }
+        return String.format(filter, filterParam);
+    }
+
+    private static String buildCursor(String cursor) {
+        if (cursor == null) {
+            return "";
+        }
+        return String.format("""
+                "start_cursor": "%s
+                """, cursor);
     }
 }
