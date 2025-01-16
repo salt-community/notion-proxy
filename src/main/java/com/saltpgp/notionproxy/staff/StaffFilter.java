@@ -18,17 +18,6 @@ public class StaffFilter {
                 }
                 """;
     }
-    public static String filterStaff(String filter) { return String.format(
-        """
-                {
-                    "filter": {
-                        "property": "Guild",
-                        "multi_select": {
-                            "contains": "%s"
-                        }
-                    }
-                }""", filter);
-    }
 
     private static String buildFilter(String filter, String filterParam) {
         return String.format(filter, filterParam);
