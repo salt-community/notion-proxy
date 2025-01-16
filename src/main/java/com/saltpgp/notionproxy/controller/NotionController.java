@@ -42,7 +42,9 @@ public class NotionController {
     }
 
     @GetMapping("developers/{id}")
-    public ResponseEntity<DeveloperDto> getDeveloper(@PathVariable UUID id) throws NotionException{
+    public ResponseEntity<DeveloperDto> getDeveloper(
+            @PathVariable UUID id,
+            @RequestParam(required = false, defaultValue = "false") boolean includeScore) throws NotionException{
         log.info("Received request for developer with ID: {}", id);
         return ResponseEntity.ok(DeveloperDto.fromModel(notionService.getDeveloperById(id)));
     }

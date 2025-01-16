@@ -234,16 +234,6 @@ public class NotionService {
         return bodyNode;
     }
 
-    private JsonNode createQueryRequestBody(String nextCursor) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        ObjectNode body = objectMapper.createObjectNode();
-        if (nextCursor != null) {
-            body.put("start_cursor", nextCursor);
-        }
-        System.out.println("body = " + body);
-        return body;
-    }
-
     private List<ResponsiblePerson> getResponsiblePersonsFromResponse(JsonNode response, List<String> ptPeople) {
         List<ResponsiblePerson> responsiblePersonList = new ArrayList<>();
         if (response.get("properties").get("Responsible").get("people").get(0) != null) {
