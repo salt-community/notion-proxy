@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/developers")
@@ -29,5 +30,11 @@ public class DeveloperController {
         return ResponseEntity.ok(DeveloperDto.fromModelList(developerService.getAllDevelopers(filter)));
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<DeveloperDto> getDeveloper(
+            @PathVariable UUID id,
+            @RequestParam(required = false, defaultValue = "false") boolean includeScore) throws NotionException{
+        return ResponseEntity.ok(DeveloperDto.fromModel(developerService.getDeveloperById(id)));
+    }
 
 }

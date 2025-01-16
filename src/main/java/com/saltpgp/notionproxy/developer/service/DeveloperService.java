@@ -67,7 +67,6 @@ public class DeveloperService {
                 getDeveloperTotalScore(properties));
     }
 
-
     public static class DeveloperServiceUtility {
 
         public final static String noCommentMessage = "No comment";
