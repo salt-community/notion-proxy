@@ -56,7 +56,7 @@ public class DeveloperService {
         var githubUrl = getDeveloperGithubUrl(properties);
         return new Developer(
                 getDeveloperName(properties),
-                UUID.fromString(getDeveloperId(properties)),
+                UUID.fromString(getDeveloperId(resultElement)),
                 githubUrl,
                 getDeveloperGithubImageUrl(githubUrl),
                 getDeveloperEmail(properties),
@@ -105,12 +105,12 @@ public class DeveloperService {
         }
 
         public static String getDeveloperGithubUrl(JsonNode properties) {
-            return properties.get("GitHub").get("url").asText().equals("null") ? null
+            return properties.get("GitHub").get("url").asText().equals("null") ? NULL_STATUS
                     : properties.get("GitHub").get("url").asText();
         }
 
         public static String getDeveloperEmail(JsonNode properties) {
-            return properties.get("Private Email").get("email").asText().equals("null") ? null
+            return properties.get("Private Email").get("email").asText().equals("null") ? NULL_STATUS
                     : properties.get("Private Email").get("email").asText();
         }
 
