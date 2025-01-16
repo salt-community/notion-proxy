@@ -25,7 +25,6 @@ class DeveloperServiceUtility {
     private static final String PROPERTY_NUMBER = "number";
     private static final String PROPERTY_PERSON = "person";
 
-
     public static String getDeveloperStatus(JsonNode properties) {
         try {
             return properties.get(PROPERTY_STATUS).get(PROPERTY_SELECT)
