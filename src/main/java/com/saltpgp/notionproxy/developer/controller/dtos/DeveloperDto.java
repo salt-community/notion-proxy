@@ -16,7 +16,8 @@ public record DeveloperDto(String name, UUID id, String status, String email, St
                 developer.getGithubImageUrl(),
                 developer.getEmail(),
                 developer.getStatus(),
-                developer.getTotalScore()
+                developer.getTotalScore(),
+                ResponsibleDto.fromModel(developer.getResponsible())
         );
     }
 
