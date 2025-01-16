@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import static com.saltpgp.notionproxy.developer.service.DeveloperServiceUtility.*;
 import static com.saltpgp.notionproxy.service.NotionServiceFilters.filterBuilder;
+import static com.saltpgp.notionproxy.service.NotionServiceFilters.getFilterDeveloper;
 
 @Service
 @Slf4j
@@ -41,7 +42,7 @@ public class DeveloperService {
         String nextCursor = null;
         boolean hasMore = true;
         while (hasMore) {
-            JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, filterBuilder(nextCursor, filter, FILTER));
+            JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, getFilterDeveloper(nextCursor, filter));
 
             response.get("results").elements().forEachRemaining(page -> {
                 if (page.get("properties").get("Name").get("title").get(0) == null) return;
@@ -63,14 +64,6 @@ public class DeveloperService {
         var properties = page.get("properties");
         var githubUrl = getDeveloperGithubUrl(properties);
 
-        List<Responsible> responsibleList = new ArrayList<>();
-        properties.get("Responsible").get("people").elements().forEachRemaining(responsible -> {
-            responsibleList.add(new Responsible(
-                    responsible.get("name").asText(),
-                    UUID.fromString(responsible.get("id").asText()),
-                    responsible.get("person").get("email").asText()));
-        });
-
         return new Developer(
                 getDeveloperName(properties),
                 UUID.fromString(getDeveloperId(page)),
@@ -79,7 +72,7 @@ public class DeveloperService {
                 getDeveloperEmail(properties),
                 getDeveloperStatus(properties),
                 getDeveloperTotalScore(properties),
-                responsibleList
+                getResponsibleList(properties)
         );
     }
 }

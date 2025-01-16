@@ -1,6 +1,11 @@
 package com.saltpgp.notionproxy.developer.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.saltpgp.notionproxy.developer.model.Responsible;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 class DeveloperServiceUtility {
     private final static String NULL_STATUS = "none";
@@ -57,5 +62,41 @@ class DeveloperServiceUtility {
 
     public static String getDeveloperGithubImageUrl(String githubUrl) {
         return githubUrl == null ? null : githubUrl + ".png";
+    }
+
+    public static List<Responsible> getResponsibleList(JsonNode properties) {
+        List<Responsible> responsibleList = new ArrayList<>();
+        properties.get("Responsible").get("people").elements().forEachRemaining(responsible -> {
+            responsibleList.add(new Responsible(
+                    getResponsibleName(responsible),
+                    getResponsibleId(responsible),
+                    getResponsibleEmail(responsible)));
+        });
+        return responsibleList;
+    }
+
+    private static String getResponsibleEmail(JsonNode responsible) {
+        try {
+        return responsible.get("person").get("email").asText();
+        } catch (Exception e) {
+            return NULL_STATUS;
+        }
+    }
+
+    //TODO:Remove if id don't exist
+    private static UUID getResponsibleId(JsonNode responsible) {
+        try {
+            return UUID.fromString(responsible.get("id").asText());
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private static String getResponsibleName(JsonNode responsible) {
+        try {
+        return responsible.get("name").asText();
+    } catch (Exception e) {
+        return NULL_STATUS;
+        }
     }
 }
