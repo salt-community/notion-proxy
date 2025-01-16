@@ -20,6 +20,7 @@ public class Developer {
     private String status;
     private String totalScore;
     private List<Score> scores;
+    private List<ResponsiblePerson> responsiblePersonList;
 
 
     public static Developer addScore(Developer developer, List<Score> scores) {
@@ -31,7 +32,8 @@ public class Developer {
                 developer.getEmail(),
                 developer.getStatus(),
                 developer.getTotalScore(),
-                scores
+                scores,
+                developer.getResponsiblePersonList()
         );
 
     }

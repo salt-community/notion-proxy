@@ -115,8 +115,9 @@ public class NotionService {
             nextCursor = scoreResponse.get("next_cursor").asText();
             hasMore = scoreResponse.get("has_more").asBoolean();
         }
-
-        return Developer.addScore(getDeveloperById(id), allScores);
+        Developer developer = getDeveloperById(id);
+        developer.setScores(allScores);
+        return developer;
     }
 
     @Lazy
