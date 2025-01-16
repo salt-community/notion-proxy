@@ -12,4 +12,5 @@ import java.util.UUID;
 public class Staff {
     private String name, email;
     private UUID id;
+    private String role;
 }
