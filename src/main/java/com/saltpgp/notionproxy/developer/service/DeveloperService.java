@@ -35,9 +35,9 @@ public class DeveloperService {
             //TODO:använda nya filterBuilder
             JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, getFilterDeveloper(nextCursor, filter));
 
-            response.get("results").elements().forEachRemaining(element -> {
-                if (element.get("properties").get("Name").get("title").get(0) == null) return;
-                allDevelopers.add(createDeveloperFromResultArrayElement(element));
+            response.get("results").elements().forEachRemaining(page -> {
+                if (page.get("properties").get("Name").get("title").get(0) == null) return;
+                allDevelopers.add(createDeveloperFromNotionPage(page));
             });
 
             nextCursor = response.get("next_cursor").asText();
@@ -47,16 +47,16 @@ public class DeveloperService {
     }
 
     public Developer getDeveloperById(UUID id) throws NotionException {
-        JsonNode response = notionApiService.fetchPage(id.toString());
-        return createDeveloperFromResultArrayElement(response);
+        JsonNode page = notionApiService.fetchPage(id.toString());
+        return createDeveloperFromNotionPage(page);
     }
 
-    private static Developer createDeveloperFromResultArrayElement(JsonNode resultElement) {
-        JsonNode properties = resultElement.get("properties");
+    private static Developer createDeveloperFromNotionPage(JsonNode page) {
+        var properties = page.get("properties");
         var githubUrl = getDeveloperGithubUrl(properties);
         return new Developer(
                 getDeveloperName(properties),
-                UUID.fromString(getDeveloperId(resultElement)),
+                UUID.fromString(getDeveloperId(page)),
                 githubUrl,
                 getDeveloperGithubImageUrl(githubUrl),
                 getDeveloperEmail(properties),
