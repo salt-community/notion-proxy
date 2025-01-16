@@ -40,13 +40,14 @@ public class DeveloperService {
         String nextCursor = null;
         boolean hasMore = true;
         while (hasMore) {
+            //TODO:använda nya filterBuilder
             JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, getFilterDeveloper(nextCursor, filter));
 
             response.get("results").elements().forEachRemaining(element -> {
                 JsonNode properties = element.get("properties");
                 if (properties.get("Name").get("title").get(0) == null) return;
-                var githubUrl = getDeveloperGithubUrl(properties);
 
+                var githubUrl = getDeveloperGithubUrl(properties);
                 allDevelopers.add(new Developer(
                         getDeveloperName(properties),
                         UUID.fromString(getDeveloperId(properties)),

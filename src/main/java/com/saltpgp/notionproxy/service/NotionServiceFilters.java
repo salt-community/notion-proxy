@@ -36,6 +36,7 @@ public class NotionServiceFilters {
                         }""", cursor);
     }
 
+    //TODO:Ta bort när uppdaterad
     public static String getFilterDeveloper (String cursor, String filter) {
         String developerFilter = "{\n";
         if (cursor != null) {
