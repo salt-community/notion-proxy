@@ -15,4 +15,8 @@ public record ScoreDto(String name, int score, List<String>categories, String co
         }
         return scoresDto;
     }
+
+    public static ScoreDto fromModel1(Score score) {
+        return new ScoreDto(score.getName(), score.getScore(), score.getCategories(), score.getComment());
+    }
 }
