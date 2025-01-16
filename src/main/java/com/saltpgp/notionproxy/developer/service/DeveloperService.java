@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.saltpgp.notionproxy.developer.model.Developer;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.service.NotionApiService;
-import com.saltpgp.notionproxy.service.NotionServiceFilters;
-import com.saltpgp.notionproxy.service.NotionServiceUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -50,15 +48,7 @@ public class DeveloperService {
 
     public Developer getDeveloperById(UUID id) throws NotionException {
         JsonNode response = notionApiService.fetchPage(id.toString());
-        String name = response.get("properties").get("Name").get("title").get(0).get("plain_text").asText();
-        String githubUrl = response.get("properties").get("GitHub").get("url").asText();
-        String githubImage = githubUrl + "png";
-        String email = response.get("properties").get("Private Email").get("email").asText();
-        String status = NotionServiceUtility.getDeveloperStatus(response);
-        String totalScore = NotionServiceUtility.getDeveloperTotalScore(response);
-        return new Developer(name, id, githubUrl,
-                githubImage, email, status, totalScore);
-
+        return createDeveloperFromResultArrayElement(response);
     }
 
     private static Developer createDeveloperFromResultArrayElement(JsonNode resultElement) {
