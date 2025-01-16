@@ -52,7 +52,7 @@ public class DeveloperService {
                 String email = properties.get("Private Email").get("email").asText().equals("null") ? null
                         : properties.get("Private Email").get("email").asText();
 
-                Developer developer = new Developer(
+                var developer = new Developer(
                         properties.get("Name").get("title").get(0).get("plain_text").asText(),
                         UUID.fromString(element.get("id").asText()),
                         githubUrl,
@@ -69,4 +69,39 @@ public class DeveloperService {
         }
         return allDevelopers;
     }
+
+    public static class NotionServiceUtility {
+
+        public final static String noCommentMessage = "No comment";
+        public final static String NULL_STATUS = "none";
+
+        public static String getScoreComment(JsonNode element) {
+            try {
+                return element.get("properties").get("Comment").get("rich_text")
+                        .get(0).get("plain_text").asText();
+            } catch (Exception e) {
+                return noCommentMessage;
+            }
+        }
+
+        public static String getDeveloperStatus(JsonNode element) {
+            try {
+                return element.get("properties").get("Status").get("select")
+                        .get("name").asText();
+            } catch (Exception e) {
+                return NULL_STATUS;
+            }
+        }
+
+        public static String getDeveloperTotalScore(JsonNode element) {
+            try {
+                return String.valueOf(element.get("properties").get("Total Score").get("formula")
+                        .get("number").asInt());
+            } catch (Exception e) {
+                return NULL_STATUS;
+            }
+        }
+
+    }
+
 }
