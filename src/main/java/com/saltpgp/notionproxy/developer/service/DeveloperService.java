@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.saltpgp.notionproxy.developer.service.DeveloperService.DeveloperServiceUtility.*;
-import static com.saltpgp.notionproxy.service.NotionServiceFilters.getFilterDeveloper;
+import static com.saltpgp.notionproxy.service.NotionServiceFilters.filterBuilder;
 
 @Service
 @Slf4j
@@ -21,6 +21,14 @@ public class DeveloperService {
 
     private final NotionApiService notionApiService;
     private final String DATABASE_ID;
+    private static final String FILTER = """
+                        "filter": {
+                            "property": "Status",
+                            "select": {
+                                "equals": "%s"
+                            }
+                        }
+                    """;
 
     public DeveloperService(NotionApiService notionApiService, @Value("${DATABASE_ID}") String DATABASE_ID) {
         this.notionApiService = notionApiService;
@@ -33,7 +41,7 @@ public class DeveloperService {
         boolean hasMore = true;
         while (hasMore) {
             //TODO:använda nya filterBuilder
-            JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, getFilterDeveloper(nextCursor, filter));
+            JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, filterBuilder(nextCursor, filter, FILTER));
 
             response.get("results").elements().forEachRemaining(page -> {
                 if (page.get("properties").get("Name").get("title").get(0) == null) return;
