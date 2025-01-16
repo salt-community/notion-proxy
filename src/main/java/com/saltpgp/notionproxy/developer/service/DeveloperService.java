@@ -44,18 +44,8 @@ public class DeveloperService {
             JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, getFilterDeveloper(nextCursor, filter));
 
             response.get("results").elements().forEachRemaining(element -> {
-                JsonNode properties = element.get("properties");
-                if (properties.get("Name").get("title").get(0) == null) return;
-
-                var githubUrl = getDeveloperGithubUrl(properties);
-                allDevelopers.add(new Developer(
-                        getDeveloperName(properties),
-                        UUID.fromString(getDeveloperId(properties)),
-                        githubUrl,
-                        getDeveloperGithubImageUrl(githubUrl),
-                        getDeveloperEmail(properties),
-                        getDeveloperStatus(properties),
-                        getDeveloperTotalScore(properties)));
+                if (element.get("properties").get("Name").get("title").get(0) == null) return;
+                allDevelopers.add(createDeveloperFromResultArrayElement(element));
             });
 
             nextCursor = response.get("next_cursor").asText();
@@ -63,6 +53,20 @@ public class DeveloperService {
         }
         return allDevelopers;
     }
+
+    private static Developer createDeveloperFromResultArrayElement(JsonNode resultElement) {
+        JsonNode properties = resultElement.get("properties");
+        var githubUrl = getDeveloperGithubUrl(properties);
+        return new Developer(
+                getDeveloperName(properties),
+                UUID.fromString(getDeveloperId(properties)),
+                githubUrl,
+                getDeveloperGithubImageUrl(githubUrl),
+                getDeveloperEmail(properties),
+                getDeveloperStatus(properties),
+                getDeveloperTotalScore(properties));
+    }
+
 
     public static class DeveloperServiceUtility {
 
