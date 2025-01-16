@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public record DeveloperDto(String name, UUID id, String githubUrl,String githubImageUrl, String email, String status, String totalScore, List<ScoreDto>scores) {
+public record DeveloperDto(String name, UUID id, String status, String email, String githubUrl, String githubImageUrl, String totalScore, List<ScoreDto>scores) {
 
     public static DeveloperDto fromModel(Developer developer) {
         return new DeveloperDto(
@@ -20,6 +20,7 @@ public record DeveloperDto(String name, UUID id, String githubUrl,String githubI
                 ScoreDto.fromModel(developer.getScores())
         );
     }
+
     public static List<DeveloperDto> fromModelList(List<Developer> developers) {
         List<DeveloperDto> developerDtoList = new ArrayList<>();
         for (Developer developer : developers) {
