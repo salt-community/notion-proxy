@@ -1,7 +1,6 @@
 package com.saltpgp.notionproxy.developer.controller.dtos;
 
-import com.saltpgp.notionproxy.dtos.outgoing.ScoreDto;
-import com.saltpgp.notionproxy.models.Developer;
+import com.saltpgp.notionproxy.developer.model.Developer;
 
 import java.util.ArrayList;
 import java.util.List;
