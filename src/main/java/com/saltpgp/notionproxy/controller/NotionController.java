@@ -3,7 +3,9 @@ package com.saltpgp.notionproxy.controller;
 import com.saltpgp.notionproxy.dtos.outgoing.*;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
+import com.saltpgp.notionproxy.models.Developer;
 import com.saltpgp.notionproxy.models.ResponsiblePerson;
+import com.saltpgp.notionproxy.models.Score;
 import com.saltpgp.notionproxy.service.NotionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -56,9 +58,12 @@ public class NotionController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @GetMapping("developers/{id}/scores")
-    public ResponseEntity<DeveloperDto> getScoreCard(@PathVariable UUID id) throws NotionException, NotionNotFoundException {
+    public ResponseEntity<List<ScoreDto>> getScoreCard(@PathVariable UUID id) throws NotionException, NotionNotFoundException {
         log.info("Received request for developer scorecard with ID: {}", id);
-        return ResponseEntity.ok(DeveloperDto.fromModel(notionService.getDeveloperByIdWithScore(id)));
+
+        Developer developer = notionService.getDeveloperByIdWithScore(id);
+
+        return ResponseEntity.ok(ScoreDto.fromModel(developer.getScores()));
     }
 
     @Operation(summary = "Get all consultants", description = "Retrieves a list of all consultants, with an optional filter to include consultants with empty responsible persons.")
