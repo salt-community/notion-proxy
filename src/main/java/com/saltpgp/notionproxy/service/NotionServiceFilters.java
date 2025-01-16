@@ -56,16 +56,27 @@ public class NotionServiceFilters {
         return developerFilter += "}";
     }
 
-    public static String filterBuilder(String filter, String filterType, String cursor) {
+    public static String filterBuilder(String cursor, String filterParam, String filterString) {
         return """
                 {
-                """ + buildCursor(cursor) + buildFilter(filterType, filter) + """
+                """ + buildCursor(cursor) + buildFilter(filterString, filterParam) + """
                 
                 }
                 """;
     }
 
+    public static String filterBuilder(String cursor) {
+        return """
+                {
+                """ + buildCursor(cursor) +"""
+                }
+                """;
+    }
+
     private static String buildFilter(String filter, String filterParam) {
+        if(filter == null || filterParam == null || filterParam.equals("none")) {
+            return "";
+        }
         return String.format(filter, filterParam);
     }
 

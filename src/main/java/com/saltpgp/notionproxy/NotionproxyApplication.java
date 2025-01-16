@@ -1,5 +1,6 @@
 package com.saltpgp.notionproxy;
 
+import com.saltpgp.notionproxy.service.NotionServiceFilters;
 import com.saltpgp.notionproxy.staff.StaffFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
