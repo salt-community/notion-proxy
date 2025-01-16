@@ -5,7 +5,6 @@ import com.saltpgp.notionproxy.developer.model.Developer;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.service.NotionApiService;
 import com.saltpgp.notionproxy.service.NotionServiceFilters;
-import com.saltpgp.notionproxy.service.NotionServiceUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static com.saltpgp.notionproxy.developer.service.DeveloperService.DeveloperServiceUtility.*;
+import static com.saltpgp.notionproxy.service.NotionServiceFilters.getFilterDeveloper;
 
 @Service
 @Slf4j
@@ -38,30 +40,21 @@ public class DeveloperService {
         String nextCursor = null;
         boolean hasMore = true;
         while (hasMore) {
-            JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, NotionServiceFilters.getFilterDeveloper(nextCursor, filter));
+            JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, getFilterDeveloper(nextCursor, filter));
 
             response.get("results").elements().forEachRemaining(element -> {
                 JsonNode properties = element.get("properties");
                 if (properties.get("Name").get("title").get(0) == null) return;
-                String githubUrl = element.get("properties").get("GitHub").get("url").asText().equals("null") ? null
-                        : properties.get("GitHub").get("url").asText();
+                var githubUrl = getDeveloperGithubUrl(properties);
 
-                String githubImageUrl = githubUrl == null ? null : githubUrl + ".png";
-                String status = NotionServiceUtility.getDeveloperStatus(element);
-                String totalScore = NotionServiceUtility.getDeveloperTotalScore(element);
-                String email = properties.get("Private Email").get("email").asText().equals("null") ? null
-                        : properties.get("Private Email").get("email").asText();
-
-                var developer = new Developer(
-                        properties.get("Name").get("title").get(0).get("plain_text").asText(),
-                        UUID.fromString(element.get("id").asText()),
+                allDevelopers.add(new Developer(
+                        getDeveloperName(properties),
+                        UUID.fromString(getDeveloperId(properties)),
                         githubUrl,
-                        githubImageUrl,
-                        email,
-                        status,
-                        totalScore);
-
-                allDevelopers.add(developer);
+                        getDeveloperGithubImageUrl(githubUrl),
+                        getDeveloperEmail(properties),
+                        getDeveloperStatus(properties),
+                        getDeveloperTotalScore(properties)));
             });
 
             nextCursor = response.get("next_cursor").asText();
@@ -75,31 +68,53 @@ public class DeveloperService {
         public final static String noCommentMessage = "No comment";
         public final static String NULL_STATUS = "none";
 
-        public static String getScoreComment(JsonNode element) {
+        public static String getScoreComment(JsonNode properties) {
             try {
-                return element.get("properties").get("Comment").get("rich_text")
+                return properties.get("Comment").get("rich_text")
                         .get(0).get("plain_text").asText();
             } catch (Exception e) {
                 return noCommentMessage;
             }
         }
 
-        public static String getDeveloperStatus(JsonNode element) {
+        public static String getDeveloperStatus(JsonNode properties) {
             try {
-                return element.get("properties").get("Status").get("select")
+                return properties.get("Status").get("select")
                         .get("name").asText();
             } catch (Exception e) {
                 return NULL_STATUS;
             }
         }
 
-        public static String getDeveloperTotalScore(JsonNode element) {
+        public static String getDeveloperTotalScore(JsonNode properties) {
             try {
-                return String.valueOf(element.get("properties").get("Total Score").get("formula")
+                return String.valueOf(properties.get("Total Score").get("formula")
                         .get("number").asInt());
             } catch (Exception e) {
                 return NULL_STATUS;
             }
+        }
+
+        public static String getDeveloperId(JsonNode element) {
+            return element.get("id").asText();
+        }
+
+        public static String getDeveloperName(JsonNode properties) {
+            return properties.get("Name").get("title").get(0).get("plain_text").asText();
+        }
+
+        public static String getDeveloperGithubUrl(JsonNode properties) {
+            return properties.get("GitHub").get("url").asText().equals("null") ? null
+                    : properties.get("GitHub").get("url").asText();
+        }
+
+        public static String getDeveloperEmail(JsonNode properties) {
+            return properties.get("Private Email").get("email").asText().equals("null") ? null
+                    : properties.get("Private Email").get("email").asText();
+        }
+
+        public static String getDeveloperGithubImageUrl(String githubUrl) {
+            return githubUrl == null ? null : githubUrl + ".png";
         }
 
     }

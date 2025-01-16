@@ -26,7 +26,8 @@ public class DeveloperController {
     public ResponseEntity<List<DeveloperDto>> getDevelopersList(
             @Parameter(description = "A filter to sort devs by current status(on assignment, pgp, etc)", required = false, example = "none")
             @RequestParam(required = false, defaultValue = "none") String filter) throws NotionException {
-        log.info("Received request to get all developers with filter: {}", filter);
         return ResponseEntity.ok(DeveloperDto.fromModelList(developerService.getAllDevelopers(filter)));
     }
+
+
 }
