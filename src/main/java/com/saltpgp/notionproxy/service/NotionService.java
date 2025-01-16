@@ -92,8 +92,8 @@ public class NotionService {
 
     }
 
-    @Cacheable(value = "developerScoreCard", key = "#id")
-    public Developer getDeveloperByIdWithScore(UUID id) throws NotionException, NotionNotFoundException {
+//    @Cacheable(value = "developerScoreCard", key = "#id")
+    public List<Score> getDeveloperByIdWithScore(UUID id) throws NotionException, NotionNotFoundException {
         List<Score> allScores = new ArrayList<>();
         String nextCursor = null;
         boolean hasMore = true;
@@ -116,9 +116,8 @@ public class NotionService {
             nextCursor = scoreResponse.get("next_cursor").asText();
             hasMore = scoreResponse.get("has_more").asBoolean();
         }
-        Developer developer = getDeveloperById(id);
-        developer.setScores(allScores);
-        return developer;
+        allScores.forEach(c -> System.out.println(c.getScore()));
+        return allScores;
     }
 
     @Lazy

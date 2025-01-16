@@ -57,13 +57,14 @@ public class NotionController {
             @ApiResponse(responseCode = "404", description = "Developer not found"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
-    @GetMapping("developers/{id}/scores")
-    public ResponseEntity<List<ScoreDto>> getScoreCard(@PathVariable UUID id) throws NotionException, NotionNotFoundException {
+    @GetMapping("assingments")
+    public ResponseEntity<ListScoreDto> getScoreCard(@RequestParam(required = true) UUID id) throws NotionException, NotionNotFoundException {
         log.info("Received request for developer scorecard with ID: {}", id);
 
-        Developer developer = notionService.getDeveloperByIdWithScore(id);
+        List<Score> scores = notionService.getDeveloperByIdWithScore(id);
 
-        return ResponseEntity.ok(ScoreDto.fromModel(developer.getScores()));
+        return ResponseEntity.ok(new ListScoreDto(id, scores));
+
     }
 
     @Operation(summary = "Get all consultants", description = "Retrieves a list of all consultants, with an optional filter to include consultants with empty responsible persons.")

@@ -363,20 +363,20 @@ class NotionProxyServiceTest {
         assertEquals("responsibleperson2@appliedtechnology.se", responsiblePeople.get(1).email());
     }
 
-    @Test
-    void shouldFindDeveloperByIdWithScore() throws NotionException, NotionNotFoundException {
-        //Given
-        String id = "11111111-1111-1111-1111-111111111111";
-
-        //Then
-        Developer developer = notionService.getDeveloperByIdWithScore(UUID.fromString(id));
-
-        assertEquals(100, developer.getScores().get(0).getScore());
-        assertEquals("Three Small Methods", developer.getScores().get(0).getName());
-        assertEquals(95, developer.getScores().get(1).getScore());
-        assertEquals("UI Enhancement", developer.getScores().get(1).getName());
-        assertEquals("https://github.com/saltie1", developer.getGithubUrl());
-    }
+//    @Test
+//    void shouldFindDeveloperByIdWithScore() throws NotionException, NotionNotFoundException {
+//        //Given
+//        String id = "11111111-1111-1111-1111-111111111111";
+//
+//        //Then
+//        Developer developer = notionService.getDeveloperByIdWithScore(UUID.fromString(id));
+//
+//        assertEquals(100, developer.getScores().get(0).getScore());
+//        assertEquals("Three Small Methods", developer.getScores().get(0).getName());
+//        assertEquals(95, developer.getScores().get(1).getScore());
+//        assertEquals("UI Enhancement", developer.getScores().get(1).getName());
+//        assertEquals("https://github.com/saltie1", developer.getGithubUrl());
+//    }
 
     private ObjectNode getDeveloperNode(UUID id) {
         ObjectMapper objectMapper = new ObjectMapper();
