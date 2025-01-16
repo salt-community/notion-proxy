@@ -5,6 +5,7 @@ import com.saltpgp.notionproxy.developer.model.Developer;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.service.NotionApiService;
 import com.saltpgp.notionproxy.service.NotionServiceFilters;
+import com.saltpgp.notionproxy.service.NotionServiceUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,17 +23,10 @@ public class DeveloperService {
 
     private final NotionApiService notionApiService;
     private final String DATABASE_ID;
-    private final String SCORE_DATABASE_ID;
-    private final String CORE_DATABASE_ID;
 
-    public DeveloperService(NotionApiService notionApiService,
-                            @Value("${DATABASE_ID}") String DATABASE_ID,
-                            @Value("${SCORE_DATABASE_ID}") String SCORE_DATABASE_ID,
-                            @Value("${CORE_DATABASE_ID}") String CORE_DATABASE_ID) {
+    public DeveloperService(NotionApiService notionApiService, @Value("${DATABASE_ID}") String DATABASE_ID) {
         this.notionApiService = notionApiService;
         this.DATABASE_ID = DATABASE_ID;
-        this.SCORE_DATABASE_ID = SCORE_DATABASE_ID;
-        this.CORE_DATABASE_ID = CORE_DATABASE_ID;
     }
 
     public List<Developer> getAllDevelopers(String filter) throws NotionException {
@@ -52,6 +46,19 @@ public class DeveloperService {
             hasMore = response.get("has_more").asBoolean();
         }
         return allDevelopers;
+    }
+
+    public Developer getDeveloperById(UUID id) throws NotionException {
+        JsonNode response = notionApiService.fetchPage(id.toString());
+        String name = response.get("properties").get("Name").get("title").get(0).get("plain_text").asText();
+        String githubUrl = response.get("properties").get("GitHub").get("url").asText();
+        String githubImage = githubUrl + "png";
+        String email = response.get("properties").get("Private Email").get("email").asText();
+        String status = NotionServiceUtility.getDeveloperStatus(response);
+        String totalScore = NotionServiceUtility.getDeveloperTotalScore(response);
+        return new Developer(name, id, githubUrl,
+                githubImage, email, status, totalScore);
+
     }
 
     private static Developer createDeveloperFromResultArrayElement(JsonNode resultElement) {
