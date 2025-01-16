@@ -35,7 +35,7 @@ public class StaffController {
     }
 
     @GetMapping("/{id}")
-    public void getStaffById(@PathVariable UUID id) {
-
+    public ResponseEntity<StaffDto> getStaffById(@PathVariable UUID id) throws NotionException {
+        return ResponseEntity.ok(StaffDto.fromModel(staffService.getStaffById(id)));
     }
 }

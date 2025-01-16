@@ -37,15 +37,26 @@ public class StaffService {
                 if (person == null) {
                     return;
                 }
+
                 staffList.add(new Staff(
                         person.get("name").asText(),
                         person.get("person").get("email").asText(),
-                        UUID.fromString(person.get("id").asText())
+                        UUID.fromString(element.get("id").asText()),
+                        element.get("properties").get("Guild").get("multi_select").get(0).get("name").asText()
                 ));
             });
             nextCursor = response.get("next_cursor").asText();
             hasMore = response.get("has_more").asBoolean();
         }
         return staffList;
+    }
+
+    public Staff getStaffById(UUID id) throws NotionException {
+        JsonNode response = notionApiService.fetchPage(id.toString());
+        JsonNode properties = response.get("properties");
+        return new Staff(properties.get("Name").get("title").get(0).get("plain_text").asText()
+                ,properties.get("Person").get("people").get(0).get("person").get("email").asText(),
+                id,
+                properties.get("Guild").get("multi_select").get(0).get("name").asText());
     }
 }
