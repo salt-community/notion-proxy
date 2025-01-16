@@ -23,6 +23,8 @@ class DeveloperServiceUtility {
     private static final String PROPERTY_NAME_KEY = "name";
     private static final String PROPERTY_FORMULA = "formula";
     private static final String PROPERTY_NUMBER = "number";
+    private static final String PROPERTY_PERSON = "person";
+
 
     public static String getDeveloperStatus(JsonNode properties) {
         try {
@@ -78,14 +80,14 @@ class DeveloperServiceUtility {
     }
 
     private static String getResponsibleEmail(JsonNode responsible) throws Exception {
-        return responsible.get("person").get("email").asText();
+        return responsible.get(PROPERTY_PERSON).get(PROPERTY_EMAIL).asText();
     }
 
     private static UUID getResponsibleId(JsonNode responsible) throws Exception {
-            return UUID.fromString(responsible.get("id").asText());
+            return UUID.fromString(responsible.get(PROPERTY_ID).asText());
     }
 
     private static String getResponsibleName(JsonNode responsible) throws Exception {
-        return responsible.get("name").asText();
+        return responsible.get(PROPERTY_NAME_KEY).asText();
     }
 }
