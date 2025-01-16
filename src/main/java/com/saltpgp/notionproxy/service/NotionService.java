@@ -65,6 +65,7 @@ public class NotionService {
                         email,
                         status,
                         totalScore,
+                        Collections.emptyList(),
                         Collections.emptyList());
 
                 allSalties.add(saltie);
@@ -86,8 +87,8 @@ public class NotionService {
         String email = response.get("properties").get("Private Email").get("email").asText();
         String status = NotionServiceUtility.getDeveloperStatus(response);
         String totalScore = NotionServiceUtility.getDeveloperTotalScore(response);
-        return new Developer(name,id,githubUrl,
-                githubImage,email,status, totalScore, Collections.emptyList());
+        return new Developer(name, id, githubUrl,
+                githubImage, email, status, totalScore, Collections.emptyList(), Collections.emptyList());
 
     }
 
@@ -178,10 +179,10 @@ public class NotionService {
 
         String jsonBody = NotionServiceFilters.FILTER_RESPONSIBLE_PEOPLE;
 
-        JsonNode response = notionApiService.fetchDatabase(CORE_DATABASE_ID,jsonBody);
+        JsonNode response = notionApiService.fetchDatabase(CORE_DATABASE_ID, jsonBody);
         response.get("results").elements().forEachRemaining(element -> {
             JsonNode person = element.get("properties").get("Person").get("people").get(0);
-            if (person  == null) {
+            if (person == null) {
                 return;
             }
 //          If you add these lines then you can filter out inactive P&T
@@ -220,7 +221,7 @@ public class NotionService {
         return responsiblePersonList.stream()
                 .filter(responsiblePerson -> responsiblePerson.id().equals(id))
                 .findFirst()
-                .orElseThrow(()-> new NoSuchElementException("No responsible person found with id: " + id));
+                .orElseThrow(() -> new NoSuchElementException("No responsible person found with id: " + id));
     }
 
     private ObjectNode getDeveloperNode(UUID id) {
