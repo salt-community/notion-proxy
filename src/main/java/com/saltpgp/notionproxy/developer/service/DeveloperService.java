@@ -16,6 +16,7 @@ import java.util.UUID;
 
 import static com.saltpgp.notionproxy.developer.service.DeveloperNotionMapper.*;
 import static com.saltpgp.notionproxy.developer.service.DeveloperNotionProperty.*;
+import static com.saltpgp.notionproxy.service.NotionServiceFilters.filterBuilder;
 import static com.saltpgp.notionproxy.service.NotionServiceFilters.getFilterDeveloper;
 
 @Service
@@ -44,8 +45,7 @@ public class DeveloperService {
         String nextCursor = null;
         boolean hasMore = true;
         while (hasMore) {
-            //TODO:When filter builder is fix use it instead of getFilterDeveloper
-            JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, getFilterDeveloper(nextCursor, filter));
+            JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, filterBuilder(nextCursor, filter, FILTER));
 
             response.get(NotionObject.RESULTS).elements().forEachRemaining(page -> {
                 if (page.get(Results.PROPERTIES).get(Properties.NAME).get(Name.TITLE).get(0) == null) return;
@@ -87,7 +87,8 @@ public class DeveloperService {
                         getResponsibleName(responsible),
                         getResponsibleId(responsible),
                         getResponsibleEmail(responsible)));
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         });
         return responsibleList;
     }
