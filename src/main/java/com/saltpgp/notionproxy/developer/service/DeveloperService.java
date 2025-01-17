@@ -17,7 +17,6 @@ import java.util.UUID;
 import static com.saltpgp.notionproxy.developer.service.DeveloperNotionMapper.*;
 import static com.saltpgp.notionproxy.developer.service.DeveloperNotionProperty.*;
 import static com.saltpgp.notionproxy.service.NotionServiceFilters.filterBuilder;
-import static com.saltpgp.notionproxy.service.NotionServiceFilters.getFilterDeveloper;
 
 @Service
 @Slf4j
