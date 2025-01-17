@@ -18,12 +18,12 @@ class DeveloperNotionMapper {
 
     public static String getDeveloperStatus(JsonNode properties) {
         log.debug("Attempting to retrieve developer status.");
-        return safeGet(() -> properties.get(Properties.STATUS).get(Status.SELECT).get(Select.NAME_KEY).asText());
+        return tryToGet(() -> properties.get(Properties.STATUS).get(Status.SELECT).get(Select.NAME_KEY).asText());
     }
 
     public static String getDeveloperTotalScore(JsonNode properties) {
         log.debug("Attempting to retrieve developer total score.");
-        return safeGet(() -> String.valueOf(properties.get(Properties.TOTAL_SCORE).get(TotalScore.FORMULA).get(Formula.NUMBER).asInt()));
+        return tryToGet(() -> String.valueOf(properties.get(Properties.TOTAL_SCORE).get(TotalScore.FORMULA).get(Formula.NUMBER).asInt()));
     }
 
     public static String getDeveloperId(JsonNode element) {
@@ -70,7 +70,7 @@ class DeveloperNotionMapper {
         return supplier.get().equals(NULL) ? STATUS_NONE : supplier.get();
     }
 
-    private static String safeGet(Supplier<String> supplier) {
+    private static String tryToGet(Supplier<String> supplier) {
         try {
             return supplier.get();
         } catch (Exception e) {

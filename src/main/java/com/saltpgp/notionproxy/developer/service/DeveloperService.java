@@ -44,6 +44,7 @@ public class DeveloperService {
         String nextCursor = null;
         boolean hasMore = true;
         while (hasMore) {
+            //TODO:When filter builder is fix use it instead of getFilterDeveloper
             JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, getFilterDeveloper(nextCursor, filter));
 
             response.get(NotionObject.RESULTS).elements().forEachRemaining(page -> {
