@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.saltpgp.notionproxy.developer.model.Developer;
 import com.saltpgp.notionproxy.developer.model.Responsible;
 import com.saltpgp.notionproxy.exceptions.NotionException;
+import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import com.saltpgp.notionproxy.service.NotionApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -56,7 +57,7 @@ public class DeveloperService {
         return allDevelopers;
     }
 
-    public Developer getDeveloperById(UUID id) throws NotionException {
+    public Developer getDeveloperById(UUID id) throws NotionException, NotionNotFoundException {
         JsonNode page = notionApiService.fetchPage(id.toString());
         return createDeveloperFromNotionPage(page);
     }

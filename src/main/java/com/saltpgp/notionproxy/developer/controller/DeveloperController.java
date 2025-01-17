@@ -3,6 +3,7 @@ package com.saltpgp.notionproxy.developer.controller;
 import com.saltpgp.notionproxy.developer.controller.dtos.DeveloperDto;
 import com.saltpgp.notionproxy.developer.service.DeveloperService;
 import com.saltpgp.notionproxy.exceptions.NotionException;
+import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -50,7 +51,8 @@ public class DeveloperController {
     })
     public ResponseEntity<DeveloperDto> getDeveloper(
             @PathVariable UUID id,
-            @RequestParam(required = false, defaultValue = "false") boolean includeScore) throws NotionException {
+            @RequestParam(required = false, defaultValue = "false") boolean includeScore)
+            throws NotionException, NotionNotFoundException {
         return ResponseEntity.ok(DeveloperDto.fromModel(developerService.getDeveloperById(id)));
     }
 
