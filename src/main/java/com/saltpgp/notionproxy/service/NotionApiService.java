@@ -2,6 +2,7 @@ package com.saltpgp.notionproxy.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.saltpgp.notionproxy.exceptions.NotionException;
+import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -38,6 +39,7 @@ public class NotionApiService {
                     .body(JsonNode.class);
         } catch (HttpClientErrorException e) {
             if(e.getStatusText().equals("Not Found")){
+                //TODO:Ska throw NotionNotFoundException istället för NotionException
                 throw new NotionException("Pages id didn't exist in notion: " + pageId);
             }
             if(e.getStatusText().equals("Unauthorized")){
