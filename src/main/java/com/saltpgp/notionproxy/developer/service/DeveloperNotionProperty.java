@@ -1,7 +1,15 @@
 package com.saltpgp.notionproxy.developer.service;
 
 class DeveloperNotionProperty {
-    
+
+    public static final class NotionObject{
+        public static final String RESULTS = "results";
+    }
+
+    public static final class Results{
+        public static final String PROPERTIES = "properties";
+    }
+
     public static final class Properties {
         public static final String STATUS = "Status";
         public static final String TOTAL_SCORE = "Total Score";

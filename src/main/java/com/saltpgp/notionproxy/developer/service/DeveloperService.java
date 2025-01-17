@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.saltpgp.notionproxy.developer.service.DeveloperServiceUtility.*;
+import static com.saltpgp.notionproxy.developer.service.DeveloperNotionProperty.*;
 import static com.saltpgp.notionproxy.service.NotionServiceFilters.getFilterDeveloper;
 
 @Service
@@ -21,8 +22,10 @@ public class DeveloperService {
 
     public static final String NEXT_CURSOR = "next_cursor";
     public static final String HAS_MORE = "has_more";
+
     private final NotionApiService notionApiService;
     private final String DATABASE_ID;
+
     private static final String FILTER = """
                 "filter": {
                     "property": "Status",
@@ -44,8 +47,8 @@ public class DeveloperService {
         while (hasMore) {
             JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, getFilterDeveloper(nextCursor, filter));
 
-            response.get("results").elements().forEachRemaining(page -> {
-                if (page.get("properties").get("Name").get("title").get(0) == null) return;
+            response.get(NotionObject.RESULTS).elements().forEachRemaining(page -> {
+                if (page.get(Results.PROPERTIES).get(Properties.NAME).get(Name.TITLE).get(0) == null) return;
                 allDevelopers.add(createDeveloperFromNotionPage(page));
             });
 
