@@ -1,14 +1,12 @@
 package com.saltpgp.notionproxy.developer.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.saltpgp.notionproxy.developer.model.Responsible;
+
 import static com.saltpgp.notionproxy.developer.service.DeveloperNotionProperty.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
-class DeveloperServiceUtility {
+class DeveloperNotionMapper {
 
     private static final String STATUS_NONE = "none";
 
@@ -54,28 +52,15 @@ class DeveloperServiceUtility {
         return githubUrl == null ? null : githubUrl + PNG;
     }
 
-    public static List<Responsible> getResponsibleList(JsonNode properties) {
-        List<Responsible> responsibleList = new ArrayList<>();
-        properties.get(Properties.RESPONSIBLE).get(NotionResponsible.PEOPLE).elements().forEachRemaining(responsible -> {
-            try {
-                responsibleList.add(new Responsible(
-                        getResponsibleName(responsible),
-                        getResponsibleId(responsible),
-                        getResponsibleEmail(responsible)));
-            } catch (Exception ignored) {}
-        });
-        return responsibleList;
-    }
-
-    private static String getResponsibleEmail(JsonNode responsible) throws Exception {
+    public static String getResponsibleEmail(JsonNode responsible) throws Exception {
         return responsible.get(NotionResponsible.PERSON).get(NotionResponsible.EMAIL).asText();
     }
 
-    private static UUID getResponsibleId(JsonNode responsible) throws Exception {
+    public static UUID getResponsibleId(JsonNode responsible) throws Exception {
         return UUID.fromString(responsible.get(Properties.ID).asText());
     }
 
-    private static String getResponsibleName(JsonNode responsible) throws Exception {
+    public static String getResponsibleName(JsonNode responsible) throws Exception {
         return responsible.get(Select.NAME_KEY).asText();
     }
 }

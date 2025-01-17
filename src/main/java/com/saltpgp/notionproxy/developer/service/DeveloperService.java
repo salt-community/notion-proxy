@@ -2,6 +2,7 @@ package com.saltpgp.notionproxy.developer.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.saltpgp.notionproxy.developer.model.Developer;
+import com.saltpgp.notionproxy.developer.model.Responsible;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.service.NotionApiService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static com.saltpgp.notionproxy.developer.service.DeveloperServiceUtility.*;
+import static com.saltpgp.notionproxy.developer.service.DeveloperNotionMapper.*;
 import static com.saltpgp.notionproxy.developer.service.DeveloperNotionProperty.*;
 import static com.saltpgp.notionproxy.service.NotionServiceFilters.getFilterDeveloper;
 
@@ -77,5 +78,18 @@ public class DeveloperService {
                 getDeveloperTotalScore(properties),
                 getResponsibleList(properties)
         );
+    }
+
+    private static List<Responsible> getResponsibleList(JsonNode properties) {
+        List<Responsible> responsibleList = new ArrayList<>();
+        properties.get(Properties.RESPONSIBLE).get(NotionResponsible.PEOPLE).elements().forEachRemaining(responsible -> {
+            try {
+                responsibleList.add(new Responsible(
+                        getResponsibleName(responsible),
+                        getResponsibleId(responsible),
+                        getResponsibleEmail(responsible)));
+            } catch (Exception ignored) {}
+        });
+        return responsibleList;
     }
 }
