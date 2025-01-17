@@ -66,12 +66,18 @@ public class StaffService {
     }
 
     public List<StaffDev> getStaffConsultants(UUID id) throws NotionException {
-        JsonNode response = notionApiService.fetchDatabase(DEV_DATABASE_ID,
-                NotionServiceFilters.filterBuilder(null, id.toString(), StaffFilter.STAFF_FILTER_RESPONSIBLE));
+        String nextCursor = null;
+        boolean hasMore = true;
         List<StaffDev> devs = new ArrayList<>();
-        response.get("results").forEach(element -> {
-            devs.add(getStaffFromPage(element));
-        });
+        while(hasMore) {
+            JsonNode response = notionApiService.fetchDatabase(DEV_DATABASE_ID,
+                    NotionServiceFilters.filterBuilder(nextCursor, id.toString(), StaffFilter.STAFF_FILTER_RESPONSIBLE));
+            response.get("results").forEach(element -> {
+                devs.add(getStaffFromPage(element));
+            });
+            nextCursor = response.get("next_cursor").asText();
+            hasMore = response.get("has_more").asBoolean();
+        }
         return devs;
     }
 
