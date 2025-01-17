@@ -9,4 +9,12 @@ public class StaffFilter {
                             "contains": "%s"
                             }
                         }""";
+
+    public static final String STAFF_FILTER_SINGLE = """
+                        "filter": {
+                        "property": "Person",
+                        "multi_select":     {
+                            "contains": "%s"
+                            }
+                        }""";
 }

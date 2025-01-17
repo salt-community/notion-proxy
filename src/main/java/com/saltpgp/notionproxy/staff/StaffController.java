@@ -1,6 +1,6 @@
 package com.saltpgp.notionproxy.staff;
 
-import com.saltpgp.notionproxy.dtos.outgoing.ConsultantWithResponsibleDto;
+
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.staff.dtos.StaffDto;
 import io.swagger.v3.oas.annotations.Parameter;
