@@ -4,6 +4,8 @@ class DeveloperNotionProperty {
 
     public static final class NotionObject{
         public static final String RESULTS = "results";
+        public static final String NEXT_CURSOR = "next_cursor";
+        public static final String HAS_MORE = "has_more";
     }
 
     public static final class Results{
