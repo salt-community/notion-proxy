@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
 
 @Service
@@ -24,32 +26,48 @@ public class NotionApiService {
     }
 
     public JsonNode fetchPage(String pageId) throws NotionException {
-        JsonNode response = restClient
-                .get()
-                .uri(String.format("/pages/%s", pageId))
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + API_KEY)
-                .header("Notion-Version", NOTION_VERSION)
-                .retrieve()
-                .body(JsonNode.class);
-        if (response == null) {
-            throw new NotionException("Pages id didn't exist in notion");
+        JsonNode response = null;
+        try {
+            response = restClient
+                    .get()
+                    .uri(String.format("/pages/%s", pageId))
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", "Bearer " + API_KEY)
+                    .header("Notion-Versions", NOTION_VERSION)
+                    .retrieve()
+                    .body(JsonNode.class);
+        } catch (HttpClientErrorException e) {
+            if(e.getStatusText().equals("Not Found")){
+                throw new NotionException("Pages id didn't exist in notion: " + pageId);
+            }
+            if(e.getStatusText().equals("Unauthorized")){
+                throw new NotionException("Unauthorized to the notion api. Check the apikey to notion");
+            }
+            if(e.getStatusText().equals("Bad Request")){
+                throw new NotionException("Bad Request to the notion api. Check the notion api request");
+            }
+        } catch (ResourceAccessException e) {
+            throw new NotionException("Can't access notion api. Check if the notion proxy can send request");
+        } catch (Exception e){
+            throw new NotionException("Unknown error happened when trying to send request to notion.");
         }
         return response;
     }
 
     public JsonNode fetchDatabase(String database, Object node) throws NotionException {
 
-        JsonNode response =  restClient
-                .post()
-                .uri(String.format("/databases/%s/query", database))
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + API_KEY)
-                .header("Notion-Version", NOTION_VERSION)
-                .body(node)
-                .retrieve()
-                .body(JsonNode.class);
-        if (response == null) {
+        JsonNode response = null;
+        try {
+            response = restClient
+                    .post()
+                    .uri(String.format("/databases/%s/query", database))
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", "Bearer " + API_KEY)
+                    .header("Notion-Version", NOTION_VERSION)
+                    .body(node)
+                    .retrieve()
+                    .body(JsonNode.class);
+        } catch (Exception e) {
             throw new NotionException("Database didn't exist in notion");
         }
         return response;
