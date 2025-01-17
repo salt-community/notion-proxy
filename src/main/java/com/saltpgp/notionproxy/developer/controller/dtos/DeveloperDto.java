@@ -24,15 +24,7 @@ public record DeveloperDto(String name, UUID id, String status, String email, St
     public static List<DeveloperDto> fromModelList(List<Developer> developers) {
         List<DeveloperDto> developerDtoList = new ArrayList<>();
         for (Developer developer : developers) {
-            developerDtoList.add(new DeveloperDto(
-                    developer.getName(),
-                    developer.getId(),
-                    developer.getGithubUrl(),
-                    developer.getGithubImageUrl(),
-                    developer.getEmail(),
-                    developer.getStatus(),
-                    developer.getTotalScore(),
-                    ResponsibleDto.fromModelList(developer.getResponsible())));
+            developerDtoList.add(fromModel(developer));
         }
         return developerDtoList;
     }
