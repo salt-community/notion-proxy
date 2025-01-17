@@ -33,7 +33,7 @@ public class NotionApiService {
                     .uri(String.format("/pages/%s", pageId))
                     .header("Content-Type", "application/json")
                     .header("Authorization", "Bearer " + API_KEY)
-                    .header("Notion-Versions", NOTION_VERSION)
+                    .header("Notion-Version", NOTION_VERSION)
                     .retrieve()
                     .body(JsonNode.class);
         } catch (HttpClientErrorException e) {
@@ -46,6 +46,7 @@ public class NotionApiService {
             if(e.getStatusText().equals("Bad Request")){
                 throw new NotionException("Bad Request to the notion api. Check the notion api request");
             }
+            throw new NotionException("Unknown error happened that cast a HttpClientErrorException when trying to send request to notion.");
         } catch (ResourceAccessException e) {
             throw new NotionException("Can't access notion api. Check if the notion proxy can send request");
         } catch (Exception e){
@@ -67,8 +68,21 @@ public class NotionApiService {
                     .body(node)
                     .retrieve()
                     .body(JsonNode.class);
-        } catch (Exception e) {
-            throw new NotionException("Database didn't exist in notion");
+        } catch (HttpClientErrorException e) {
+            if(e.getStatusText().equals("Not Found")){
+                throw new NotionException("Database didn't exist in notion");
+            }
+            if(e.getStatusText().equals("Unauthorized")){
+                throw new NotionException("Unauthorized to the notion api. Check the apikey to notion");
+            }
+            if(e.getStatusText().equals("Bad Request")){
+                throw new NotionException("Bad Request to the notion api. Check the notion api request");
+            }
+            throw new NotionException("Unknown error happened that cast a HttpClientErrorException when trying to send request to notion.");
+        } catch (ResourceAccessException e) {
+            throw new NotionException("Can't access notion api. Check if the notion proxy can send request");
+        } catch (Exception e){
+            throw new NotionException("Unknown error happened when trying to send request to notion.");
         }
         return response;
     }
