@@ -10,10 +10,18 @@ public class StaffFilter {
                             }
                         }""";
 
+    public static final String STAFF_FILTER_RESPONSIBLE = """
+                        "filter": {
+                        "property": "Responsible",
+                        "people":     {
+                            "contains": "%s"
+                            }
+                        }""";
+
     public static final String STAFF_FILTER_SINGLE = """
                         "filter": {
                         "property": "Person",
-                        "multi_select":     {
+                        "people":     {
                             "contains": "%s"
                             }
                         }""";

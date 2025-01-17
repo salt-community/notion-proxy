@@ -52,11 +52,14 @@ public class StaffService {
     }
 
     public Staff getStaffById(UUID id) throws NotionException {
-        JsonNode response = notionApiService.fetchPage(id.toString());
-        JsonNode properties = response.get("properties");
-        return new Staff(properties.get("Name").get("title").get(0).get("plain_text").asText()
-                ,properties.get("Person").get("people").get(0).get("person").get("email").asText(),
-                id,
-                properties.get("Guild").get("multi_select").get(0).get("name").asText());
+        System.out.println(NotionServiceFilters.filterBuilder(null, id.toString(), StaffFilter.STAFF_FILTER_SINGLE));
+        JsonNode response = notionApiService.fetchDatabase(CORE_DATABASE_ID,
+                NotionServiceFilters.filterBuilder("none", id.toString(), StaffFilter.STAFF_FILTER_SINGLE));
+        System.out.println(response);
+        return new Staff("name", "email",UUID.randomUUID(), "mastaer");
+//        return new Staff(properties.get("Name").get("title").get(0).get("plain_text").asText()
+//                ,properties.get("Person").get("people").get(0).get("person").get("email").asText(),
+//                id,
+//                properties.get("Guild").get("multi_select").get(0).get("name").asText());
     }
 }
