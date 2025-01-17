@@ -12,10 +12,10 @@ public record DeveloperDto(String name, UUID id, String status, String email, St
         return new DeveloperDto(
                 developer.getName(),
                 developer.getId(),
+                developer.getStatus(),
+                developer.getEmail(),
                 developer.getGithubUrl(),
                 developer.getGithubImageUrl(),
-                developer.getEmail(),
-                developer.getStatus(),
                 developer.getTotalScore(),
                 ResponsibleDto.fromModelList(developer.getResponsible())
         );
