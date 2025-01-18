@@ -86,7 +86,7 @@ public class NotionServiceFilters {
             return "";
         }
         return String.format("""
-                "start_cursor": "%s
+                "start_cursor": "%s"
                 """, cursor);
     }
 }

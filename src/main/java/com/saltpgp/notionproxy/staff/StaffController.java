@@ -1,7 +1,8 @@
 package com.saltpgp.notionproxy.staff;
 
-import com.saltpgp.notionproxy.dtos.outgoing.ConsultantWithResponsibleDto;
+
 import com.saltpgp.notionproxy.exceptions.NotionException;
+import com.saltpgp.notionproxy.staff.dtos.StaffConsultantDto;
 import com.saltpgp.notionproxy.staff.dtos.StaffDto;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.slf4j.Slf4j;
@@ -37,5 +38,14 @@ public class StaffController {
     @GetMapping("/{id}")
     public ResponseEntity<StaffDto> getStaffById(@PathVariable UUID id) throws NotionException {
         return ResponseEntity.ok(StaffDto.fromModel(staffService.getStaffById(id)));
+    }
+
+    @GetMapping("/{id}/consultants")
+    public ResponseEntity<List<StaffConsultantDto>> getConsultants(@PathVariable UUID id) throws NotionException {
+        return ResponseEntity.ok(staffService
+                .getStaffConsultants(id)
+                .stream()
+                .map(StaffConsultantDto::fromModel)
+                .toList());
     }
 }

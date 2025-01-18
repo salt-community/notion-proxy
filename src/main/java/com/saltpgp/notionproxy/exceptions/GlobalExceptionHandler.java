@@ -16,11 +16,12 @@ public class GlobalExceptionHandler {
      * Handle NotionNotFoundException - Returns 404 NOT FOUND
      */
     @ExceptionHandler({NotionNotFoundException.class})
-    public ResponseEntity<Void> handleNotionNotFoundException() {
+    public ResponseEntity<String> handleNotionNotFoundException(NotionNotFoundException e) {
         log.debug("NotionNotFoundException was thrown: Resource not found");
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 
+    //TODO:Is it use?
     @ExceptionHandler({NoSuchElementException.class})
     public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException e) {
         log.debug("NoSuchElementException was thrown: {}", e.getMessage());
@@ -33,7 +34,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({NotionException.class})
     public ResponseEntity<String> handleNotionException(NotionException e) {
         log.error("NotionException encountered: {}", e.getMessage(), e);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An internal error occurred: " + e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("An internal error occurred with the request to notion. " +
+                        "Try again, thereafter contact developers on notion-proxy: " + e.getMessage());
     }
 
     /**
