@@ -51,11 +51,9 @@ public class DeveloperController {
             @ApiResponse(responseCode = "404", description = "Developer not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<DeveloperDto> getDeveloper(
-            @PathVariable UUID id,
-            @RequestParam(required = false, defaultValue = "false") boolean includeScore)
+    public ResponseEntity<DeveloperDto> getDeveloper(@PathVariable UUID id)
             throws NotionException, NotionNotFoundException {
-        log.info("Request received to get developer with ID: {} and includeScore: {}", id, includeScore);
+        log.info("Request received to get developer with ID: {}", id);
         DeveloperDto developer = DeveloperDto.fromModel(developerService.getDeveloperById(id));
         return ResponseEntity.ok(developer);
     }
