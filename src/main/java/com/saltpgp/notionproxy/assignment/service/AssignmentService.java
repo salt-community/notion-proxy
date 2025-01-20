@@ -26,6 +26,47 @@ public class AssignmentService {
         this.notionApiService = notionApiService;
     }
 
+    public Assignment getAssignmentFromDeveloper(UUID developerId, UUID assignmentId) throws NotionException {
+        Assignment foundAssignment = null;
+        String nextCursor = null;
+        boolean hasMore = true;
+
+        ObjectNode bodyNode = getDeveloperNode(developerId);
+
+        while (hasMore) {
+            if (nextCursor != null) {
+                bodyNode.put("start_cursor", nextCursor);
+            }
+
+            JsonNode scoreResponse = notionApiService.fetchDatabase(SCORE_DATABASE_ID, bodyNode);
+
+            if (scoreResponse != null && scoreResponse.has("results")) {
+                for (JsonNode element : scoreResponse.get("results")) {
+                    if (element.has("id") ) {
+                        String elementId = element.get("id").asText();
+                        if (assignmentId.toString().equals(elementId)) {
+                            foundAssignment = extractScore(element);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            nextCursor = scoreResponse.has("next_cursor") && !scoreResponse.get("next_cursor").isNull()
+                    ? scoreResponse.get("next_cursor").asText()
+                    : null;
+
+            hasMore = scoreResponse.has("has_more") && scoreResponse.get("has_more").asBoolean();
+
+            if (foundAssignment != null) {
+                break;
+            }
+        }
+
+        return foundAssignment;
+    }
+
+
     public List<Assignment> getAssignmentsFromDeveloper(UUID id) throws NotionException {
         List<Assignment> allScores = new ArrayList<>();
         String nextCursor = null;
@@ -63,15 +104,15 @@ public class AssignmentService {
         return bodyNode;
     }
 
-    private JsonNode createQueryRequestBody(String nextCursor) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        ObjectNode body = objectMapper.createObjectNode();
-        if (nextCursor != null) {
-            body.put("start_cursor", nextCursor);
-        }
-        System.out.println("body = " + body);
-        return body;
-    }
+//    private JsonNode createQueryRequestBody(String nextCursor) {
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        ObjectNode body = objectMapper.createObjectNode();
+//        if (nextCursor != null) {
+//            body.put("start_cursor", nextCursor);
+//        }
+//        System.out.println("body = " + body);
+//        return body;
+//    }
 
     private Assignment extractScore(JsonNode element) {
         if (element.get("properties").get("Score") == null) {
