@@ -24,4 +24,9 @@ public class AssignmentController {
         List<Assignment> assignments = assignmentService.getAssignmentsFromDeveloper(developerId);
         return ResponseEntity.ok(assignments);
     }
+
+    @GetMapping("/{developerId}")
+    public ResponseEntity<Assignment> getAssignmentFomUserByAssignmentId(@RequestParam UUID assignmentId, @PathVariable String developerId) throws NotionException {
+        return ResponseEntity.ok(new Assignment("string", 21, List.of("string"), "string"));
+    }
 }
