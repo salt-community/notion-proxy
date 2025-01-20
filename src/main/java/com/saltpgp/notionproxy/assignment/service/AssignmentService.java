@@ -26,7 +26,7 @@ public class AssignmentService {
         this.notionApiService = notionApiService;
     }
 
-    public List<Assignment> getDeveloperByIdWithScore(UUID id) throws NotionException {
+    public List<Assignment> getAssignmentsFromDeveloper(UUID id) throws NotionException {
         List<Assignment> allScores = new ArrayList<>();
         String nextCursor = null;
         boolean hasMore = true;
