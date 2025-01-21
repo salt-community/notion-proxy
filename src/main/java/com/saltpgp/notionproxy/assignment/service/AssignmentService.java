@@ -60,24 +60,16 @@ public class AssignmentService {
     private List<Assignment> extractAssignments(JsonNode response) {
         List<Assignment> assignments = new ArrayList<>();
         response.get("results").get("properties").elements().forEachRemaining(properties -> {
-            Assignment assignment = extractScore(properties);
-            if (assignment != null) {
-                assignments.add(assignment);
+            if (properties.get("Score") != null) {
+                assignments.add(new Assignment(
+                        properties.get("Name").get("title").get(0).get("plain_text").asText(),
+                        properties.get("Score").get("number").asInt(),
+                        getCategories(properties),
+                        getScoreComment(properties))
+                );
             }
         });
         return assignments;
-    }
-
-    private Assignment extractScore(JsonNode properties) {
-        if (properties.get("Score") == null) {
-            return null;
-        }
-        return new Assignment(
-                properties.get("Name").get("title").get(0).get("plain_text").asText(),
-                properties.get("Score").get("number").asInt(),
-                getCategories(properties),
-                getScoreComment(properties)
-        );
     }
 
     private static List<String> getCategories(JsonNode properties) {
@@ -109,7 +101,7 @@ public class AssignmentService {
                 break;
             }
 
-            foundAssignment = extractAssignmentById(response, assignmentId);
+            //foundAssignment = extractAssignmentById(response, assignmentId);
             if (foundAssignment != null) {
                 break;
             }
@@ -120,7 +112,7 @@ public class AssignmentService {
 
         return foundAssignment;
     }
-
+/*
     private Assignment extractAssignmentById(JsonNode response, UUID assignmentId) {
         for (JsonNode element : response.get("results")) {
             if (element.has("id") && assignmentId.toString().equals(element.get("id").asText())) {
@@ -129,6 +121,6 @@ public class AssignmentService {
         }
         return null;
     }
-
+*/
 
 }
