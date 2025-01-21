@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.saltpgp.notionproxy.assignment.model.Assignment;
+import com.saltpgp.notionproxy.developer.service.DeveloperNotionProperty;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.notionapi.NotionApiService;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,8 +55,8 @@ public class AssignmentService {
                 assignments.addAll(extractAssignments(response));
             }
 
-            nextCursor = getNextCursor(response);
-            hasMore = hasMorePages(response);
+            nextCursor = response.get("next_cursor").asText();
+            hasMore = response.get("has_more").asBoolean();
         }
 
         return assignments;
@@ -81,8 +82,8 @@ public class AssignmentService {
                 break;
             }
 
-            nextCursor = getNextCursor(response);
-            hasMore = hasMorePages(response);
+            nextCursor = response.get("next_cursor").asText();
+            hasMore = response.get("has_more").asBoolean();
         }
 
         return foundAssignment;
