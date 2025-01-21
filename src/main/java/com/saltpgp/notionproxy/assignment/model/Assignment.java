@@ -11,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 
 public class Assignment {
+    private String id;
     private String name;
     private int score;
     private List<String> categories;

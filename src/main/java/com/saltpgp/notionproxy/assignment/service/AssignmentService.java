@@ -51,10 +51,10 @@ public class AssignmentService {
             response.get("results").elements().forEachRemaining(elements -> {
                 assignments.add(extractAssignments(elements));
             });
+
             nextCursor = response.get("next_cursor").asText();
             hasMore = response.get("has_more").asBoolean();
         }
-
         return assignments;
     }
 
@@ -65,32 +65,6 @@ public class AssignmentService {
                 getScore(properties),
                 getCategories(properties),
                 getScoreComment(properties));
-    }
-
-    private static int getScore(JsonNode properties) {
-        return properties.get("Score").get("number").asInt();
-    }
-
-    private static String getName(JsonNode properties) {
-        return properties.get("Name").get("title").get(0).get("plain_text").asText();
-    }
-
-    private static List<String> getCategories(JsonNode properties) {
-        List<String> categories = new ArrayList<>();
-        if (properties.get("Categories") != null) {
-            properties.get("Categories").get("multi_select").forEach(category ->
-                    categories.add(category.get("name").asText()));
-        }
-        return categories;
-    }
-
-    public static String getScoreComment(JsonNode properties) {
-        try {
-            return properties.get("Comment").get("rich_text")
-                    .get(0).get("plain_text").asText();
-        } catch (Exception e) {
-            return noCommentMessage;
-        }
     }
 
     private Assignment fetchAssignmentById(UUID developerId, UUID assignmentId) throws NotionException {
@@ -125,5 +99,31 @@ public class AssignmentService {
         return null;
     }
 */
+
+    private static int getScore(JsonNode properties) {
+        return properties.get("Score").get("number").asInt();
+    }
+
+    private static String getName(JsonNode properties) {
+        return properties.get("Name").get("title").get(0).get("plain_text").asText();
+    }
+
+    private static List<String> getCategories(JsonNode properties) {
+        List<String> categories = new ArrayList<>();
+        if (properties.get("Categories") != null) {
+            properties.get("Categories").get("multi_select").forEach(category ->
+                    categories.add(category.get("name").asText()));
+        }
+        return categories;
+    }
+
+    public static String getScoreComment(JsonNode properties) {
+        try {
+            return properties.get("Comment").get("rich_text")
+                    .get(0).get("plain_text").asText();
+        } catch (Exception e) {
+            return noCommentMessage;
+        }
+    }
 
 }
