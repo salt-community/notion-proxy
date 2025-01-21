@@ -57,6 +57,39 @@ public class AssignmentService {
         return assignments;
     }
 
+    private List<Assignment> extractAssignments(JsonNode response) {
+        List<Assignment> assignments = new ArrayList<>();
+        response.get("results").elements().forEachRemaining(element -> {
+            Assignment assignment = extractScore(element);
+            if (assignment != null) {
+                assignments.add(assignment);
+            }
+        });
+        return assignments;
+    }
+
+    private Assignment extractScore(JsonNode element) {
+        if (element.get("properties").get("Score") == null) {
+            return null;
+        }
+        return new Assignment(
+                element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
+                element.get("properties").get("Score").get("number").asInt(),
+                getCategories(element),
+                getScoreComment(element)
+        );
+    }
+
+    private static List<String> getCategories(JsonNode element) {
+        List<String> categories = new ArrayList<>();
+        if (element.get("properties").get("Categories") != null) {
+            element.get("properties").get("Categories").get("multi_select").forEach(category ->
+                    categories.add(category.get("name").asText()));
+        }
+        return categories;
+    }
+
+
     private Assignment fetchAssignmentById(UUID developerId, UUID assignmentId) throws NotionException {
         String nextCursor = null;
         boolean hasMore = true;
@@ -80,8 +113,6 @@ public class AssignmentService {
         return foundAssignment;
     }
 
-
-
     private Assignment extractAssignmentById(JsonNode response, UUID assignmentId) {
         for (JsonNode element : response.get("results")) {
             if (element.has("id") && assignmentId.toString().equals(element.get("id").asText())) {
@@ -91,35 +122,7 @@ public class AssignmentService {
         return null;
     }
 
-    private List<Assignment> extractAssignments(JsonNode response) {
-        List<Assignment> assignments = new ArrayList<>();
-        response.get("results").elements().forEachRemaining(element -> {
-            Assignment assignment = extractScore(element);
-            if (assignment != null) {
-                assignments.add(assignment);
-            }
-        });
-        return assignments;
-    }
 
-    private Assignment extractScore(JsonNode element) {
-        if (element.get("properties").get("Score") == null) {
-            return null;
-        }
-
-        List<String> categories = new ArrayList<>();
-        if (element.get("properties").get("Categories") != null) {
-            element.get("properties").get("Categories").get("multi_select").forEach(category ->
-                    categories.add(category.get("name").asText()));
-        }
-
-        return new Assignment(
-                element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
-                element.get("properties").get("Score").get("number").asInt(),
-                categories,
-                getScoreComment(element)
-        );
-    }
 
     public static String getScoreComment(JsonNode element) {
         try {
