@@ -2,7 +2,9 @@ package com.saltpgp.notionproxy.developer.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.saltpgp.notionproxy.developer.model.Developer;
+import com.saltpgp.notionproxy.developer.model.DeveloperStatus;
 import com.saltpgp.notionproxy.developer.model.Responsible;
+import com.saltpgp.notionproxy.exceptions.InvalidFilterException;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import com.saltpgp.notionproxy.service.NotionApiService;
@@ -40,6 +42,9 @@ public class DeveloperService {
     }
 
     public List<Developer> getAllDevelopers(String filter) throws NotionException {
+        if (filter != null && !DeveloperStatus.isValid(filter)) {
+            throw new InvalidFilterException("Invalid filter value: " + filter);
+        }
         List<Developer> allDevelopers = new ArrayList<>();
         String nextCursor = null;
         boolean hasMore = true;
