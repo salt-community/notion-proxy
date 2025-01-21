@@ -1,8 +1,7 @@
-package com.saltpgp.notionproxy.service;
+package com.saltpgp.notionproxy.notionapi;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.saltpgp.notionproxy.exceptions.NotionException;
-import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;

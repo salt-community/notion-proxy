@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.saltpgp.notionproxy.assignment.model.Assignment;
 import com.saltpgp.notionproxy.exceptions.NotionException;
-import com.saltpgp.notionproxy.service.NotionApiService;
+import com.saltpgp.notionproxy.notionapi.NotionApiService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
