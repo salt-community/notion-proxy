@@ -35,8 +35,8 @@ public class AssignmentService {
     }
 
 
-    public Assignment getAssignmentFromDeveloper(UUID developerId, UUID assignmentId) throws NotionException {
-        JsonNode response = notionApiService.fetchPage(assignmentId.toString());
+    public Assignment getAssignmentFromDeveloper(String assignmentId) throws NotionException {
+        JsonNode response = notionApiService.fetchPage(assignmentId);
         return extractAssignment(response);
     }
 
