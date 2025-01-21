@@ -1,10 +1,7 @@
 package com.saltpgp.notionproxy.assignment.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.saltpgp.notionproxy.assignment.model.Assignment;
-import com.saltpgp.notionproxy.developer.service.DeveloperNotionProperty;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.notionapi.NotionApiService;
 import org.springframework.beans.factory.annotation.Value;
@@ -109,16 +106,6 @@ public class AssignmentService {
             }
         });
         return assignments;
-    }
-
-    private String getNextCursor(JsonNode response) {
-        return response.has("next_cursor") && !response.get("next_cursor").isNull()
-                ? response.get("next_cursor").asText()
-                : null;
-    }
-
-    private boolean hasMorePages(JsonNode response) {
-        return response.has("has_more") && response.get("has_more").asBoolean();
     }
 
     private Assignment extractScore(JsonNode element) {
