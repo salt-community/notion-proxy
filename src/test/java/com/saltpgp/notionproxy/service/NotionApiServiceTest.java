@@ -31,7 +31,7 @@ class NotionApiServiceTest {
     private String NOTION_VERSION;
 
     @Test
-    void testFetchPage_Success() throws NotionException {
+    void fetchPage_Success() throws NotionException {
         String pageId = "12345";
         String mockResponse = "{\"id\":\"12345\", \"object\":\"page\", \"properties\":{}}";
 
@@ -48,7 +48,7 @@ class NotionApiServiceTest {
     }
 
     @Test
-    void testFetchPage_NotFound() {
+    void fetchPage_NotFound() {
         String pageId = "12345";
 
         server.expect(requestTo("https://api.notion.com/v1/pages/12345"))
@@ -63,7 +63,22 @@ class NotionApiServiceTest {
     }
 
     @Test
-    void testFetchDatabase_Success() throws NotionException {
+    void fetchPage_Unauthorized() {
+        String pageId = "12345";
+
+        server.expect(requestTo("https://api.notion.com/v1/pages/12345"))
+                .andExpect(method(HttpMethod.GET))
+                .andExpect(header("Authorization", "Bearer " + API_KEY))
+                .andExpect(header("Notion-Version", NOTION_VERSION))
+                .andRespond(withStatus(HttpStatus.UNAUTHORIZED));
+
+        NotionException exception = assertThrows(NotionException.class, () -> notionApiService.fetchPage(pageId));
+
+        assertEquals("Unauthorized to the notion api. Check the apikey to notion", exception.getMessage());
+    }
+
+    @Test
+    void fetchDatabase_Success() throws NotionException {
         String databaseId = "abc123";
         String mockDatabaseResponse = "{\"results\":[]}";
 
@@ -84,7 +99,7 @@ class NotionApiServiceTest {
     }
 
     @Test
-    void testFetchDatabase_NotFound() {
+    void fetchDatabase_NotFound() {
         String databaseId = "abc123";
 
         ObjectMapper objectMapper = new ObjectMapper();
