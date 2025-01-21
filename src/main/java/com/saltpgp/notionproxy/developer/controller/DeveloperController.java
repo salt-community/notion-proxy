@@ -29,11 +29,15 @@ public class DeveloperController {
 
     @GetMapping()
     @Operation(summary = "Get a list of developers",
-            description = "Retrieve a list of all developers, with an optional filter to sort by status.")
+            description = "Retrieve a list of all developers. An optional filter can be applied to sort by status. " +
+                    "Valid filter values: 'On Assignment', 'PGP', or 'None'. " +
+                    "If no filter parameter is provided, all developers will be returned.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved developers list"),
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved the developers list"),
+            @ApiResponse(responseCode = "400", description = "Invalid filter value"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
+
     public ResponseEntity<List<DeveloperDto>> getDevelopersList(
             @Parameter(description = "A filter to sort devs by current status(On Assignment, PGP, etc) It is case sensitive",
                     example = "none")
