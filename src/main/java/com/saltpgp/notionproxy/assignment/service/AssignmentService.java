@@ -61,6 +61,7 @@ public class AssignmentService {
     private Assignment extractAssignments(JsonNode elements) {
         var properties = elements.get("properties");
         return new Assignment(
+                elements.get("id").asText(),
                 getName(properties),
                 getScore(properties),
                 getCategories(properties),
