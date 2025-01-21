@@ -1,5 +1,7 @@
 package com.saltpgp.notionproxy.service;
 
+import com.saltpgp.notionproxy.service.NotionProperty.NotionPropertyFilter;
+
 public class NotionServiceFilters {
 
     public static final String FILTER_RESPONSIBLE_PEOPLE = """
@@ -70,6 +72,14 @@ public class NotionServiceFilters {
         return """
                 {
                 """ + buildCursor(cursor) +"""
+                }
+                """;
+    }
+
+    public static String filterBuilder(String cursor, NotionPropertyFilter filter) {
+        return """
+                {
+                """ + buildCursor(cursor) + filter.getFilter() + """
                 }
                 """;
     }
