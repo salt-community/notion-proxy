@@ -49,7 +49,7 @@ public class AssignmentService {
                     SCORE_DATABASE_ID, filterBuilder(nextCursor, developerId.toString(), FILTER));
 
             response.get("results").elements().forEachRemaining(elements -> {
-                assignments.add(extractAssignments(elements));
+                assignments.add(extractAssignment(elements));
             });
 
             nextCursor = response.get("next_cursor").asText();
@@ -58,7 +58,7 @@ public class AssignmentService {
         return assignments;
     }
 
-    private Assignment extractAssignments(JsonNode elements) {
+    private Assignment extractAssignment(JsonNode elements) {
         var properties = elements.get("properties");
         return new Assignment(
                 elements.get("id").asText(),
