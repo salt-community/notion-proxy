@@ -39,14 +39,14 @@ public class AssignmentService {
         return fetchAssignmentById(developerId, assignmentId);
     }
 
-    private List<Assignment> fetchAllAssignments(UUID developerId) throws NotionException {
+    public List<Assignment> getAssignmentsFromDeveloper(UUID developerId) throws NotionException {
         List<Assignment> assignments = new ArrayList<>();
         String nextCursor = null;
         boolean hasMore = true;
 
         while (hasMore) {
             JsonNode response = notionApiService.fetchDatabase(
-                    SCORE_DATABASE_ID, filterBuilder(nextCursor, String.valueOf(developerId), FILTER));
+                    SCORE_DATABASE_ID, filterBuilder(nextCursor, developerId.toString(), FILTER));
 
             if (response != null) {
                 assignments.addAll(extractAssignments(response));
@@ -57,10 +57,6 @@ public class AssignmentService {
         }
 
         return assignments;
-    }
-
-    public List<Assignment> getAssignmentsFromDeveloper(UUID developerId) throws NotionException {
-        return fetchAllAssignments(developerId);
     }
 
     private Assignment fetchAssignmentById(UUID developerId, UUID assignmentId) throws NotionException {
