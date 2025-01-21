@@ -32,7 +32,6 @@ class NotionApiServiceTest {
 
     @Test
     void testFetchPage_Success() throws NotionException {
-        // Sample mock response from Notion API
         String pageId = "12345";
         String mockResponse = "{\"id\":\"12345\", \"object\":\"page\", \"properties\":{}}";
 
@@ -56,11 +55,11 @@ class NotionApiServiceTest {
                 .andExpect(method(HttpMethod.GET))
                 .andExpect(header("Authorization", "Bearer " + API_KEY))
                 .andExpect(header("Notion-Version", NOTION_VERSION))
-                .andRespond(withStatus(HttpStatus.ACCEPTED));
+                .andRespond(withStatus(HttpStatus.NOT_FOUND));
 
         NotionException exception = assertThrows(NotionException.class, () -> notionApiService.fetchPage(pageId));
 
-        assertEquals("Pages id didn't exist in notion", exception.getMessage());
+        assertEquals("Pages id didn't exist in notion: " + pageId, exception.getMessage());
     }
 
     @Test
