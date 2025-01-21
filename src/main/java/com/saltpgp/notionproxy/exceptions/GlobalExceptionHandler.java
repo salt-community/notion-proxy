@@ -48,4 +48,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("An unexpected error occurred: " + e.getMessage());
     }
+
+    /**
+     * Handle InvalidFilterException - Returns 400 BAD REQUEST
+     */
+    @ExceptionHandler({InvalidFilterException.class})
+    public ResponseEntity<String> handleInvalidFilterException(InvalidFilterException e) {
+        log.debug("InvalidFilterException was thrown: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+
 }
