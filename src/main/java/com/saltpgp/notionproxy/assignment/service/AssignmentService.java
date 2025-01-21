@@ -36,7 +36,8 @@ public class AssignmentService {
 
 
     public Assignment getAssignmentFromDeveloper(UUID developerId, UUID assignmentId) throws NotionException {
-        return fetchAssignmentById(developerId, assignmentId);
+        JsonNode response = notionApiService.fetchPage(assignmentId.toString());
+        return extractAssignment(response);
     }
 
     public List<Assignment> getAssignmentsFromDeveloper(UUID developerId) throws NotionException {
@@ -67,39 +68,6 @@ public class AssignmentService {
                 getCategories(properties),
                 getScoreComment(properties));
     }
-
-    private Assignment fetchAssignmentById(UUID developerId, UUID assignmentId) throws NotionException {
-        String nextCursor = null;
-        boolean hasMore = true;
-        Assignment foundAssignment = null;
-        while (hasMore) {
-            JsonNode response = notionApiService.fetchDatabase(
-                    SCORE_DATABASE_ID, filterBuilder(nextCursor, String.valueOf(developerId), FILTER));
-            if (response == null) {
-                break;
-            }
-
-            //foundAssignment = extractAssignmentById(response, assignmentId);
-            if (foundAssignment != null) {
-                break;
-            }
-
-            nextCursor = response.get("next_cursor").asText();
-            hasMore = response.get("has_more").asBoolean();
-        }
-
-        return foundAssignment;
-    }
-/*
-    private Assignment extractAssignmentById(JsonNode response, UUID assignmentId) {
-        for (JsonNode element : response.get("results")) {
-            if (element.has("id") && assignmentId.toString().equals(element.get("id").asText())) {
-                return extractScore(element);
-            }
-        }
-        return null;
-    }
-*/
 
     private static int getScore(JsonNode properties) {
         return properties.get("Score").get("number").asInt();

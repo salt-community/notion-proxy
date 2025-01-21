@@ -4,5 +4,5 @@ import com.saltpgp.notionproxy.assignment.model.Assignment;
 
 import java.util.List;
 
-public record AssignmentDto(String developerId, List<Assignment> assignment) {
+public record AssignmentDto(String developerId, List<Assignment> assignments) {
 }
