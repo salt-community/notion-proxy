@@ -59,16 +59,20 @@ public class AssignmentService {
     }
 
     private Assignment extractAssignments(JsonNode elements) {
-            var properties = elements.get("properties");
-            if (properties.get("Score") != null) {
-                return new Assignment(
-                        properties.get("Name").get("title").get(0).get("plain_text").asText(),
-                        properties.get("Score").get("number").asInt(),
-                        getCategories(properties),
-                        getScoreComment(properties))
-                ;
-            }
+        var properties = elements.get("properties");
+        return new Assignment(
+                getName(properties),
+                getScore(properties),
+                getCategories(properties),
+                getScoreComment(properties));
+    }
 
+    private static int getScore(JsonNode properties) {
+        return properties.get("Score").get("number").asInt();
+    }
+
+    private static String getName(JsonNode properties) {
+        return properties.get("Name").get("title").get(0).get("plain_text").asText();
     }
 
     private static List<String> getCategories(JsonNode properties) {
