@@ -48,8 +48,9 @@ public class AssignmentService {
             JsonNode response = notionApiService.fetchDatabase(
                     SCORE_DATABASE_ID, filterBuilder(nextCursor, developerId.toString(), FILTER));
 
-            assignments.addAll(extractAssignments(response));
-
+            response.get("results").elements().forEachRemaining(elements -> {
+                assignments.add(extractAssignments(elements));
+            });
             nextCursor = response.get("next_cursor").asText();
             hasMore = response.get("has_more").asBoolean();
         }
@@ -57,19 +58,17 @@ public class AssignmentService {
         return assignments;
     }
 
-    private List<Assignment> extractAssignments(JsonNode response) {
-        List<Assignment> assignments = new ArrayList<>();
-        response.get("results").get("properties").elements().forEachRemaining(properties -> {
+    private Assignment extractAssignments(JsonNode elements) {
+            var properties = elements.get("properties");
             if (properties.get("Score") != null) {
-                assignments.add(new Assignment(
+                return new Assignment(
                         properties.get("Name").get("title").get(0).get("plain_text").asText(),
                         properties.get("Score").get("number").asInt(),
                         getCategories(properties),
                         getScoreComment(properties))
-                );
+                ;
             }
-        });
-        return assignments;
+
     }
 
     private static List<String> getCategories(JsonNode properties) {
