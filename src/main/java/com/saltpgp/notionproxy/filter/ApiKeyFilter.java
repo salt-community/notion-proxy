@@ -15,10 +15,15 @@ import java.io.IOException;
 @Slf4j
 public class ApiKeyFilter extends OncePerRequestFilter {
 
-    @Value("${API_KEY_HEADER}")
-    private String API_KEY_HEADER;
-    @Value("${CUSTOM_API_KEY}")
-    private String CUSTOM_API_KEY;
+
+    private final String API_KEY_HEADER;
+
+    private final String CUSTOM_API_KEY;
+
+    public ApiKeyFilter(@Value("${API_KEY_HEADER}")String API_KEY_HEADER,@Value("${CUSTOM_API_KEY}") String CUSTOM_API_KEY) {
+        this.API_KEY_HEADER = API_KEY_HEADER;
+        this.CUSTOM_API_KEY = CUSTOM_API_KEY;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

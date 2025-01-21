@@ -1,5 +1,7 @@
 package com.saltpgp.notionproxy.service;
 
+import com.saltpgp.notionproxy.service.NotionProperty.NotionPropertyFilter;
+
 public class NotionServiceFilters {
 
     public static final String FILTER_RESPONSIBLE_PEOPLE = """
@@ -10,8 +12,7 @@ public class NotionServiceFilters {
                             "contains": "P&T"
                         }
                     }
-                }
-                """;
+                }""";
 
     public static final String FILTER_ON_ASSIGNMENT = """
                 {
@@ -21,57 +22,81 @@ public class NotionServiceFilters {
                             "equals": "On Assignment"
                         }
                     }
-                }
-                """;
+                }""";
 
-    public static String getFilterOnAssignment (String cursor)  {
-        if(cursor == null) {
-            return FILTER_ON_ASSIGNMENT;
-        }
-            return String.format("""
-                {
-                    "start_cursor": "%s"
-                    "filter": {
-                        "property": "Status",
-                        "select": {
-                            "equals": "On Assignment"
-                        }
-                    }
-                }
-                """,cursor);
+    public static String getFilterOnAssignment (String cursor) {
+        return cursor == null ? FILTER_ON_ASSIGNMENT :
+                String.format("""
+                        {
+                            "start_cursor": "%s"
+                            "filter": {
+                                "property": "Status",
+                                "select": {
+                                    "equals": "On Assignment"
+                                }
+                            }
+                        }""", cursor);
     }
 
+    //TODO:Ta bort när uppdaterad
     public static String getFilterDeveloper (String cursor, String filter) {
-        if (filter == null || filter.equals("none")) {
-            if (cursor != null) {
-                return String.format("""
-                {"start_cursor": "%s"}
-                """,cursor);
-            }
-            return "{}";
+        String developerFilter = "{\n";
+        if (cursor != null) {
+            developerFilter += String.format("""
+                        "start_cursor": "%s"
+                    """, cursor);
         }
-        if (cursor == null) {
-            return String.format("""
-                {
-                    "filter": {
-                        "property": "Status",
-                        "select": {
-                            "equals": "%s"
+        if (filter != null && !filter.equals("none")) {
+            developerFilter += String.format("""
+                        "filter": {
+                            "property": "Status",
+                            "select": {
+                                "equals": "%s"
+                            }
                         }
-                    }
+                    """, filter);
+        }
+        return developerFilter += "}";
+    }
+
+    public static String filterBuilder(String cursor, String filterParam, String filterString) {
+        return """
+                {
+                """ + buildCursor(cursor) + buildFilter(filterString, filterParam) + """
+                
                 }
-                """, filter);
+                """;
+    }
+
+    public static String filterBuilder(String cursor) {
+        return """
+                {
+                """ + buildCursor(cursor) +"""
+                }
+                """;
+    }
+
+    public static String filterBuilder(String cursor, NotionPropertyFilter filter) {
+        return """
+                {
+                """ + buildCursor(cursor) + filter.getFilter() + """
+                }
+                """;
+    }
+
+    private static String buildFilter(String filter, String filterParam) {
+        if(filter == null || filterParam == null || filterParam.equals("none")) {
+            return "";
+        }
+        return String.format(filter, filterParam);
+    }
+
+    private static String buildCursor(String cursor) {
+        if (cursor == null) {
+            return "";
         }
         return String.format("""
-                {
-                    "start_cursor": "%s"
-                    "filter": {
-                        "property": "Status",
-                        "select": {
-                            "equals": "%s"
-                        }
-                    }
-                }
-                """, cursor, filter);
+                "start_cursor": "%s"
+                """, cursor);
     }
 }
