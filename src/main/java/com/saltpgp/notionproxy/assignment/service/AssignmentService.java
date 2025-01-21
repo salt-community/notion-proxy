@@ -27,69 +27,92 @@ public class AssignmentService {
     }
 
     public Assignment getAssignmentFromDeveloper(UUID developerId, UUID assignmentId) throws NotionException {
-        Assignment foundAssignment = null;
+        ObjectNode queryBody = getDeveloperNode(developerId);
+        return fetchAssignmentById(queryBody, assignmentId);
+    }
+
+    public List<Assignment> getAssignmentsFromDeveloper(UUID developerId) throws NotionException {
+        ObjectNode queryBody = getDeveloperNode(developerId);
+        return fetchAllAssignments(queryBody);
+    }
+
+    private Assignment fetchAssignmentById(ObjectNode queryBody, UUID assignmentId) throws NotionException {
         String nextCursor = null;
         boolean hasMore = true;
-
-        ObjectNode bodyNode = getDeveloperNode(developerId);
+        Assignment foundAssignment = null;
 
         while (hasMore) {
             if (nextCursor != null) {
-                bodyNode.put("start_cursor", nextCursor);
+                queryBody.put("start_cursor", nextCursor);
             }
 
-            JsonNode scoreResponse = notionApiService.fetchDatabase(SCORE_DATABASE_ID, bodyNode);
-
-            if (scoreResponse != null && scoreResponse.has("results")) {
-                for (JsonNode element : scoreResponse.get("results")) {
-                    if (element.has("id") ) {
-                        String elementId = element.get("id").asText();
-                        if (assignmentId.toString().equals(elementId)) {
-                            foundAssignment = extractScore(element);
-                            break;
-                        }
-                    }
-                }
+            JsonNode response = notionApiService.fetchDatabase(SCORE_DATABASE_ID, queryBody);
+            if (response == null) {
+                break;
             }
 
-            nextCursor = scoreResponse.has("next_cursor") && !scoreResponse.get("next_cursor").isNull()
-                    ? scoreResponse.get("next_cursor").asText()
-                    : null;
-
-            hasMore = scoreResponse.has("has_more") && scoreResponse.get("has_more").asBoolean();
-
+            foundAssignment = extractAssignmentById(response, assignmentId);
             if (foundAssignment != null) {
                 break;
             }
+
+            nextCursor = getNextCursor(response);
+            hasMore = hasMorePages(response);
         }
 
         return foundAssignment;
     }
 
-
-    public List<Assignment> getAssignmentsFromDeveloper(UUID id) throws NotionException {
-        List<Assignment> allScores = new ArrayList<>();
+    private List<Assignment> fetchAllAssignments(ObjectNode queryBody) throws NotionException {
+        List<Assignment> assignments = new ArrayList<>();
         String nextCursor = null;
         boolean hasMore = true;
-        ObjectNode bodyNode = getDeveloperNode(id);
+
         while (hasMore) {
             if (nextCursor != null) {
-                bodyNode.put("start_cursor", nextCursor);
+                queryBody.put("start_cursor", nextCursor);
             }
-            JsonNode scoreResponse = notionApiService.fetchDatabase(SCORE_DATABASE_ID, bodyNode);
 
+            JsonNode response = notionApiService.fetchDatabase(SCORE_DATABASE_ID, queryBody);
+            if (response != null) {
+                assignments.addAll(extractAssignments(response));
+            }
 
-            scoreResponse.get("results").elements().forEachRemaining(element -> {
-                Assignment score = extractScore(element);
-                if (score != null) {
-                    allScores.add(score);
-                }
-            });
-            nextCursor = scoreResponse.get("next_cursor").asText();
-            hasMore = scoreResponse.get("has_more").asBoolean();
+            nextCursor = getNextCursor(response);
+            hasMore = hasMorePages(response);
         }
 
-        return allScores;
+        return assignments;
+    }
+
+    private Assignment extractAssignmentById(JsonNode response, UUID assignmentId) {
+        for (JsonNode element : response.get("results")) {
+            if (element.has("id") && assignmentId.toString().equals(element.get("id").asText())) {
+                return extractScore(element);
+            }
+        }
+        return null;
+    }
+
+    private List<Assignment> extractAssignments(JsonNode response) {
+        List<Assignment> assignments = new ArrayList<>();
+        response.get("results").elements().forEachRemaining(element -> {
+            Assignment assignment = extractScore(element);
+            if (assignment != null) {
+                assignments.add(assignment);
+            }
+        });
+        return assignments;
+    }
+
+    private String getNextCursor(JsonNode response) {
+        return response.has("next_cursor") && !response.get("next_cursor").isNull()
+                ? response.get("next_cursor").asText()
+                : null;
+    }
+
+    private boolean hasMorePages(JsonNode response) {
+        return response.has("has_more") && response.get("has_more").asBoolean();
     }
 
     private ObjectNode getDeveloperNode(UUID id) {
@@ -103,16 +126,6 @@ public class AssignmentService {
         bodyNode.set("filter", filterNode);
         return bodyNode;
     }
-
-//    private JsonNode createQueryRequestBody(String nextCursor) {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        ObjectNode body = objectMapper.createObjectNode();
-//        if (nextCursor != null) {
-//            body.put("start_cursor", nextCursor);
-//        }
-//        System.out.println("body = " + body);
-//        return body;
-//    }
 
     private Assignment extractScore(JsonNode element) {
         if (element.get("properties").get("Score") == null) {
