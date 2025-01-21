@@ -94,6 +94,21 @@ class NotionApiServiceTest {
     }
 
     @Test
+    void fetchPage_Unknown() {
+        String pageId = "12345";
+
+        server.expect(requestTo("https://api.notion.com/v1/pages/12345"))
+                .andExpect(method(HttpMethod.GET))
+                .andExpect(header("Authorization", "Bearer " + API_KEY))
+                .andExpect(header("Notion-Version", NOTION_VERSION))
+                .andRespond(withStatus(HttpStatus.CONFLICT));
+
+        NotionException exception = assertThrows(NotionException.class, () -> notionApiService.fetchPage(pageId));
+
+        assertEquals("Unknown error occurred with HTTP status: Conflict", exception.getMessage());
+    }
+
+    @Test
     void fetchPage_ResourceAccessException() {
         String pageId = "12345";
 
@@ -108,6 +123,23 @@ class NotionApiServiceTest {
         NotionException exception = assertThrows(NotionException.class, () -> notionApiService.fetchPage(pageId));
 
         assertEquals("Can't access Notion API. Check if the Notion proxy can send requests.", exception.getMessage());
+    }
+
+    @Test
+    void fetchPage_Exception() throws Exception {
+        String pageId = "12345";
+
+        server.expect(requestTo("https://api.notion.com/v1/pages/12345"))
+                .andExpect(method(HttpMethod.GET))
+                .andExpect(header("Authorization", "Bearer " + API_KEY))
+                .andExpect(header("Notion-Version", NOTION_VERSION))
+                .andRespond(request -> {
+                    throw new RuntimeException();
+                });
+
+        NotionException exception = assertThrows(NotionException.class, () -> notionApiService.fetchPage(pageId));
+
+        assertEquals("Unknown error occurred while trying to send request to Notion.", exception.getMessage());
     }
 
     @Test
