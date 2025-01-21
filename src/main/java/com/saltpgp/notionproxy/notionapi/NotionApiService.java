@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
+import com.saltpgp.notionproxy.notionapi.NotionApiConstants.*;
 
 @Service
 public class NotionApiService {
@@ -75,41 +76,6 @@ public class NotionApiService {
             throw new NotionException(ErrorNotionMessage.UNKNOWN_ERROR_WHEN_SEND_REQUEST);
         }
         return null;
-    }
-
-    public static class UriNotionFormat{
-        public static final String PAGES = "/pages/%s";
-        public static final String DATABASES = "/databases/%s/query";
-    }
-
-    public static class HeaderValue{
-        public static final String CONTENT_TYPE = "application/json";
-        public static final String BEARER = "Bearer ";
-    }
-
-    public static class RequestHeader{
-        public static final String CONTENT_TYPE = "Content-Type";
-        public static final String AUTHORIZATION = "Authorization";
-        public static final String NOTION_VERSION = "Notion-Version";
-    }
-
-    public static class HttpClientCase {
-        private static final String UNAUTHORIZED = "Unauthorized";
-        private static final String BAD_REQUEST = "Bad Request";
-        private static final String NOT_FOUND = "Not Found";
-    }
-    public static class ErrorNotionMessage{
-        private static final String UNAUTHORIZED_TO_ACCESS = "Unauthorized to access Notion API. Check the API key.";
-        private static final String BAD_REQUEST = "Bad request to the Notion API. Check the API request.";
-        private static final String UNKNOWN_ERROR_WITH_HTTP_STATUS = "Unknown error occurred with HTTP status: ";
-        private static final String CANT_ACCESS = "Can't access Notion API. Check if the Notion proxy can send requests.";
-        private static final String UNKNOWN_ERROR_WHEN_SEND_REQUEST = "Unknown error occurred while trying to send request to Notion.";
-        private static final String PAGE_ID_DIDNT_EXIST = "Page ID didn't exist in Notion: ";
-        private static final String DATABASE_DIDNT_EXIST = "Database didn't exist in Notion";
-    }
-    public static class NotionType{
-        private static final String PAGE = "page";
-        private static final String DATABASE = "database";
     }
 
     @FunctionalInterface
