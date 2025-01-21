@@ -13,6 +13,7 @@ import java.util.UUID;
 
 import static com.saltpgp.notionproxy.assignment.service.AssignmentMapper.*;
 import static com.saltpgp.notionproxy.service.NotionServiceFilters.filterBuilder;
+import com.saltpgp.notionproxy.assignment.service.AssignmentProperty.*;
 
 @Service
 public class AssignmentService {
@@ -49,20 +50,20 @@ public class AssignmentService {
             JsonNode response = notionApiService.fetchDatabase(
                     SCORE_DATABASE_ID, filterBuilder(nextCursor, developerId.toString(), FILTER));
 
-            response.get("results").elements().forEachRemaining(elements -> {
+            response.get(NotionObject.RESULTS).elements().forEachRemaining(elements -> {
                 assignments.add(extractAssignment(elements));
             });
 
-            nextCursor = response.get("next_cursor").asText();
-            hasMore = response.get("has_more").asBoolean();
+            nextCursor = response.get(NotionObject.NEXT_CURSOR).asText();
+            hasMore = response.get(NotionObject.HAS_MORE).asBoolean();
         }
         return assignments;
     }
 
     private Assignment extractAssignment(JsonNode elements) {
-        var properties = elements.get("properties");
+        var properties = elements.get(Results.PROPERTIES);
         return new Assignment(
-                elements.get("id").asText(),
+                elements.get(Results.ID).asText(),
                 getName(properties),
                 getScore(properties),
                 getCategories(properties),
