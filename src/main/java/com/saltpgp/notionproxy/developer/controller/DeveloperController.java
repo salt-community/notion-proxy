@@ -37,7 +37,7 @@ public class DeveloperController {
     public ResponseEntity<List<DeveloperDto>> getDevelopersList(
             @Parameter(description = "A filter to sort devs by current status(On Assignment, PGP, etc) It is case sensitive",
                     example = "none")
-            @RequestParam(required = false, defaultValue = "none") String status) throws NotionException {
+            @RequestParam(required = false) String status) throws NotionException {
         log.info("Request received to get developers list with filter: {}", status);
         return ResponseEntity.ok(DeveloperDto.fromModelList(developerService.getAllDevelopers(status)));
     }
