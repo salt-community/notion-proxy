@@ -1,12 +1,12 @@
 package com.saltpgp.notionproxy;
 
+import com.saltpgp.notionproxy.service.NotionProperty.NotionPropertyFilter;
+import com.saltpgp.notionproxy.service.NotionProperty.SelectFilter;
 import com.saltpgp.notionproxy.service.NotionServiceFilters;
-import com.saltpgp.notionproxy.staff.StaffFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication(exclude = {UserDetailsServiceAutoConfiguration.class})
 @EnableCaching
