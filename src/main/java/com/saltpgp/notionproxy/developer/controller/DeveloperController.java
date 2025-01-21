@@ -36,11 +36,10 @@ public class DeveloperController {
     })
     public ResponseEntity<List<DeveloperDto>> getDevelopersList(
             @Parameter(description = "A filter to sort devs by current status(On Assignment, PGP, etc) It is case sensitive",
-                    required = false, example = "none")
+                    example = "none")
             @RequestParam(required = false, defaultValue = "none") String status) throws NotionException {
         log.info("Request received to get developers list with filter: {}", status);
-        List<DeveloperDto> developers = DeveloperDto.fromModelList(developerService.getAllDevelopers(status));
-        return ResponseEntity.ok(developers);
+        return ResponseEntity.ok(DeveloperDto.fromModelList(developerService.getAllDevelopers(status)));
     }
 
     @GetMapping("{id}")
@@ -54,8 +53,7 @@ public class DeveloperController {
     public ResponseEntity<DeveloperDto> getDeveloper(@PathVariable UUID id)
             throws NotionException, NotionNotFoundException {
         log.info("Request received to get developer with ID: {}", id);
-        DeveloperDto developer = DeveloperDto.fromModel(developerService.getDeveloperById(id));
-        return ResponseEntity.ok(developer);
+        return ResponseEntity.ok(DeveloperDto.fromModel(developerService.getDeveloperById(id)));
     }
 
 }
