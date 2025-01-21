@@ -94,7 +94,7 @@ class NotionApiServiceTest {
                 .andExpect(method(HttpMethod.POST))
                 .andExpect(header("Authorization", "Bearer " + API_KEY))
                 .andExpect(header("Notion-Version", NOTION_VERSION))
-                .andRespond(withStatus(HttpStatus.ACCEPTED));
+                .andRespond(withStatus(HttpStatus.NOT_FOUND));
 
         NotionException exception = assertThrows(NotionException.class, () -> notionApiService.fetchDatabase(databaseId, body));
 
