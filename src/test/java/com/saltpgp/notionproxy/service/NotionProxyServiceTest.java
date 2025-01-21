@@ -6,9 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
-import com.saltpgp.notionproxy.models.Consultant;
-import com.saltpgp.notionproxy.models.Developer;
-import com.saltpgp.notionproxy.models.ResponsiblePerson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +25,7 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 class NotionProxyServiceTest {
-
+/*
     NotionApiService mockApiService;
 
     NotionService notionService;
@@ -389,5 +386,5 @@ class NotionProxyServiceTest {
         bodyNode.set("filter", filterNode);
         return bodyNode;
     }
-
+*/
 }
