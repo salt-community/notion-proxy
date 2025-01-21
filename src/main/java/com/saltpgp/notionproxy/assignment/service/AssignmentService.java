@@ -13,10 +13,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static com.saltpgp.notionproxy.service.NotionServiceFilters.filterBuilder;
+
 @Service
 public class AssignmentService {
 
     public final static String noCommentMessage = "No comment";
+    public static final String FILTER = """
+            "filter": {
+                "property": "💽 Developer",
+                "relation": {
+                    "contains": "%s"
+                }
+            }
+            """;
     private final NotionApiService notionApiService;
 
     @Value("${SCORE_DATABASE_ID}")
@@ -26,27 +36,42 @@ public class AssignmentService {
         this.notionApiService = notionApiService;
     }
 
+
     public Assignment getAssignmentFromDeveloper(UUID developerId, UUID assignmentId) throws NotionException {
-        ObjectNode queryBody = getDeveloperNode(developerId);
-        return fetchAssignmentById(queryBody, assignmentId);
+        return fetchAssignmentById(developerId, assignmentId);
+    }
+
+    private List<Assignment> fetchAllAssignments(UUID developerId) throws NotionException {
+        List<Assignment> assignments = new ArrayList<>();
+        String nextCursor = null;
+        boolean hasMore = true;
+
+        while (hasMore) {
+            JsonNode response = notionApiService.fetchDatabase(
+                    SCORE_DATABASE_ID, filterBuilder(nextCursor, String.valueOf(developerId), FILTER));
+
+            if (response != null) {
+                assignments.addAll(extractAssignments(response));
+            }
+
+            nextCursor = getNextCursor(response);
+            hasMore = hasMorePages(response);
+        }
+
+        return assignments;
     }
 
     public List<Assignment> getAssignmentsFromDeveloper(UUID developerId) throws NotionException {
-        ObjectNode queryBody = getDeveloperNode(developerId);
-        return fetchAllAssignments(queryBody);
+        return fetchAllAssignments(developerId);
     }
 
-    private Assignment fetchAssignmentById(ObjectNode queryBody, UUID assignmentId) throws NotionException {
+    private Assignment fetchAssignmentById(UUID developerId, UUID assignmentId) throws NotionException {
         String nextCursor = null;
         boolean hasMore = true;
         Assignment foundAssignment = null;
-
         while (hasMore) {
-            if (nextCursor != null) {
-                queryBody.put("start_cursor", nextCursor);
-            }
-
-            JsonNode response = notionApiService.fetchDatabase(SCORE_DATABASE_ID, queryBody);
+            JsonNode response = notionApiService.fetchDatabase(
+                    SCORE_DATABASE_ID, filterBuilder(nextCursor, String.valueOf(developerId), FILTER));
             if (response == null) {
                 break;
             }
@@ -63,27 +88,7 @@ public class AssignmentService {
         return foundAssignment;
     }
 
-    private List<Assignment> fetchAllAssignments(ObjectNode queryBody) throws NotionException {
-        List<Assignment> assignments = new ArrayList<>();
-        String nextCursor = null;
-        boolean hasMore = true;
 
-        while (hasMore) {
-            if (nextCursor != null) {
-                queryBody.put("start_cursor", nextCursor);
-            }
-
-            JsonNode response = notionApiService.fetchDatabase(SCORE_DATABASE_ID, queryBody);
-            if (response != null) {
-                assignments.addAll(extractAssignments(response));
-            }
-
-            nextCursor = getNextCursor(response);
-            hasMore = hasMorePages(response);
-        }
-
-        return assignments;
-    }
 
     private Assignment extractAssignmentById(JsonNode response, UUID assignmentId) {
         for (JsonNode element : response.get("results")) {
@@ -113,18 +118,6 @@ public class AssignmentService {
 
     private boolean hasMorePages(JsonNode response) {
         return response.has("has_more") && response.get("has_more").asBoolean();
-    }
-
-    private ObjectNode getDeveloperNode(UUID id) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        ObjectNode relationNode = objectMapper.createObjectNode();
-        relationNode.put("contains", String.valueOf(id));
-        ObjectNode filterNode = objectMapper.createObjectNode();
-        filterNode.put("property", "💽 Developer");
-        filterNode.set("relation", relationNode);
-        ObjectNode bodyNode = objectMapper.createObjectNode();
-        bodyNode.set("filter", filterNode);
-        return bodyNode;
     }
 
     private Assignment extractScore(JsonNode element) {
