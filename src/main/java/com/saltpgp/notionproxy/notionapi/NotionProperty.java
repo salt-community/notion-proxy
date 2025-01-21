@@ -1,7 +1,6 @@
-package com.saltpgp.notionproxy.developer.service;
+package com.saltpgp.notionproxy.notionapi;
 
-class DeveloperNotionProperty {
-
+public class NotionProperty {
     public static final class NotionObject{
         public static final String RESULTS = "results";
         public static final String NEXT_CURSOR = "next_cursor";
@@ -58,5 +57,4 @@ class DeveloperNotionProperty {
         public static final String PERSON = "person";
         public static final String EMAIL = "email";
     }
-    
 }

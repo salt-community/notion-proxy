@@ -28,7 +28,7 @@ class DeveloperNotionMapper {
 
     public static String getDeveloperId(JsonNode element) {
         log.debug("Attempting to retrieve developer ID.");
-        return element.get(Properties.ID).asText();
+        return element.get(Results.ID).asText();
     }
 
     public static String getDeveloperName(JsonNode properties) {
@@ -58,7 +58,7 @@ class DeveloperNotionMapper {
 
     public static UUID getResponsibleId(JsonNode responsible) {
         log.debug("Attempting to retrieve responsible person's ID.");
-        return UUID.fromString(responsible.get(Properties.ID).asText());
+        return UUID.fromString(responsible.get(Results.ID).asText());
     }
 
     public static String getResponsibleName(JsonNode responsible) {
