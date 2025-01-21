@@ -78,6 +78,21 @@ class NotionApiServiceTest {
     }
 
     @Test
+    void fetchPage_BadRequest() {
+        String pageId = "12345";
+
+        server.expect(requestTo("https://api.notion.com/v1/pages/12345"))
+                .andExpect(method(HttpMethod.GET))
+                .andExpect(header("Authorization", "Bearer " + API_KEY))
+                .andExpect(header("Notion-Version", NOTION_VERSION))
+                .andRespond(withStatus(HttpStatus.BAD_REQUEST));
+
+        NotionException exception = assertThrows(NotionException.class, () -> notionApiService.fetchPage(pageId));
+
+        assertEquals("Bad Request to the notion api. Check the notion api request", exception.getMessage());
+    }
+
+    @Test
     void fetchDatabase_Success() throws NotionException {
         String databaseId = "abc123";
         String mockDatabaseResponse = "{\"results\":[]}";
