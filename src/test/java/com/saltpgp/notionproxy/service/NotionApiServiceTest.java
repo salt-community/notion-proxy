@@ -59,7 +59,7 @@ class NotionApiServiceTest {
 
         NotionException exception = assertThrows(NotionException.class, () -> notionApiService.fetchPage(pageId));
 
-        assertEquals("Pages id didn't exist in notion: " + pageId, exception.getMessage());
+        assertEquals("Page ID didn't exist in Notion: " + pageId, exception.getMessage());
     }
 
     @Test
@@ -74,7 +74,7 @@ class NotionApiServiceTest {
 
         NotionException exception = assertThrows(NotionException.class, () -> notionApiService.fetchPage(pageId));
 
-        assertEquals("Unauthorized to the notion api. Check the apikey to notion", exception.getMessage());
+        assertEquals("Unauthorized to access Notion API. Check the API key.", exception.getMessage());
     }
 
     @Test
@@ -89,7 +89,7 @@ class NotionApiServiceTest {
 
         NotionException exception = assertThrows(NotionException.class, () -> notionApiService.fetchPage(pageId));
 
-        assertEquals("Bad Request to the notion api. Check the notion api request", exception.getMessage());
+        assertEquals("Bad request to the Notion API. Check the API request.", exception.getMessage());
     }
 
     @Test
@@ -128,6 +128,6 @@ class NotionApiServiceTest {
 
         NotionException exception = assertThrows(NotionException.class, () -> notionApiService.fetchDatabase(databaseId, body));
 
-        assertEquals("Database didn't exist in notion", exception.getMessage());
+        assertEquals("Database didn't exist in Notion", exception.getMessage());
     }
 }

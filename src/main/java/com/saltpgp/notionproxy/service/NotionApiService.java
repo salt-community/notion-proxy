@@ -13,12 +13,10 @@ import org.springframework.web.client.RestClient;
 public class NotionApiService {
 
     private final RestClient restClient;
-
     private final String API_KEY;
-
     private final String NOTION_VERSION;
 
-    public NotionApiService(RestClient.Builder builder ,
+    public NotionApiService(RestClient.Builder builder,
                             @Value("${NOTION_API_KEY}") String API_KEY,
                             @Value("${NOTION_VERSION}") String NOTION_VERSION) {
         this.restClient = builder.baseUrl("https://api.notion.com/v1").build();
@@ -27,66 +25,59 @@ public class NotionApiService {
     }
 
     public JsonNode fetchPage(String pageId) throws NotionException {
-        JsonNode response = null;
-        try {
-            response = restClient
-                    .get()
-                    .uri(String.format("/pages/%s", pageId))
-                    .header("Content-Type", "application/json")
-                    .header("Authorization", "Bearer " + API_KEY)
-                    .header("Notion-Version", NOTION_VERSION)
-                    .retrieve()
-                    .body(JsonNode.class);
-        } catch (HttpClientErrorException e) {
-            if(e.getStatusText().equals("Not Found")){
-                //TODO:Ska throw NotionNotFoundException istället för NotionException
-                throw new NotionException("Pages id didn't exist in notion: " + pageId);
-            }
-            if(e.getStatusText().equals("Unauthorized")){
-                throw new NotionException("Unauthorized to the notion api. Check the apikey to notion");
-            }
-            if(e.getStatusText().equals("Bad Request")){
-                throw new NotionException("Bad Request to the notion api. Check the notion api request");
-            }
-            throw new NotionException("Unknown error happened that cast a HttpClientErrorException when trying to send request to notion.");
-        } catch (ResourceAccessException e) {
-            throw new NotionException("Can't access notion api. Check if the notion proxy can send request");
-        } catch (Exception e){
-            throw new NotionException("Unknown error happened when trying to send request to notion.");
-        }
-        return response;
+        String uri = String.format("/pages/%s", pageId);
+        return executeRequest(() -> restClient
+                .get()
+                .uri(uri)
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + API_KEY)
+                .header("Notion-Version", NOTION_VERSION)
+                .retrieve()
+                .body(JsonNode.class), pageId, "page");
     }
 
     public JsonNode fetchDatabase(String database, Object node) throws NotionException {
-
-        JsonNode response = null;
-        try {
-            response = restClient
-                    .post()
-                    .uri(String.format("/databases/%s/query", database))
-                    .header("Content-Type", "application/json")
-                    .header("Authorization", "Bearer " + API_KEY)
-                    .header("Notion-Version", NOTION_VERSION)
-                    .body(node)
-                    .retrieve()
-                    .body(JsonNode.class);
-        } catch (HttpClientErrorException e) {
-            if(e.getStatusText().equals("Not Found")){
-                throw new NotionException("Database didn't exist in notion");
-            }
-            if(e.getStatusText().equals("Unauthorized")){
-                throw new NotionException("Unauthorized to the notion api. Check the apikey to notion");
-            }
-            if(e.getStatusText().equals("Bad Request")){
-                throw new NotionException("Bad Request to the notion api. Check the notion api request");
-            }
-            throw new NotionException("Unknown error happened that cast a HttpClientErrorException when trying to send request to notion.");
-        } catch (ResourceAccessException e) {
-            throw new NotionException("Can't access notion api. Check if the notion proxy can send request");
-        } catch (Exception e){
-            throw new NotionException("Unknown error happened when trying to send request to notion.");
-        }
-        return response;
+        String uri = String.format("/databases/%s/query", database);
+        return executeRequest(() -> restClient
+                .post()
+                .uri(uri)
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + API_KEY)
+                .header("Notion-Version", NOTION_VERSION)
+                .body(node)
+                .retrieve()
+                .body(JsonNode.class), database, "database");
     }
 
+    private JsonNode executeRequest(RequestExecutor executor, String id, String type) throws NotionException {
+        try {
+            return executor.execute();
+        } catch (HttpClientErrorException e) {
+            switch (e.getStatusText()) {
+                case "Not Found":
+                    if ("page".equals(type)) {
+                        throw new NotionException("Page ID didn't exist in Notion: " + id);
+                    } else if ("database".equals(type)) {
+                        throw new NotionException("Database didn't exist in Notion");
+                    }
+                    break;
+                case "Unauthorized":
+                    throw new NotionException("Unauthorized to access Notion API. Check the API key.");
+                case "Bad Request":
+                    throw new NotionException("Bad request to the Notion API. Check the API request.");
+                default:
+                    throw new NotionException("Unknown error occurred with HTTP status: " + e.getStatusText());
+            }
+        } catch (ResourceAccessException e) {
+            throw new NotionException("Can't access Notion API. Check if the Notion proxy can send requests.");
+        } catch (Exception e) {
+            throw new NotionException("Unknown error occurred while trying to send request to Notion.");
+        }
+        return null;
+    }
+
+    @FunctionalInterface
+    private interface RequestExecutor {
+        JsonNode execute() throws Exception;
+    }
 }
