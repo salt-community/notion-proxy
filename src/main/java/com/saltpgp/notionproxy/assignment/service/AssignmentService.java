@@ -48,9 +48,7 @@ public class AssignmentService {
             JsonNode response = notionApiService.fetchDatabase(
                     SCORE_DATABASE_ID, filterBuilder(nextCursor, developerId.toString(), FILTER));
 
-            if (response != null) {
-                assignments.addAll(extractAssignments(response));
-            }
+            assignments.addAll(extractAssignments(response));
 
             nextCursor = response.get("next_cursor").asText();
             hasMore = response.get("has_more").asBoolean();
