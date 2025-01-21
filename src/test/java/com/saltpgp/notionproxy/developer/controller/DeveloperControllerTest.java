@@ -30,7 +30,7 @@ class DeveloperControllerTest {
     }
 
     @Test
-    void testGetDevelopersList() throws NotionException {
+    void getDevelopersList() throws NotionException {
         // Arrange
         String status = "none";
         List<Developer> mockDevelopers = new ArrayList<>();
@@ -51,7 +51,7 @@ class DeveloperControllerTest {
     }
 
     @Test
-    void testGetDeveloper() throws NotionException, NotionNotFoundException {
+    void getDeveloper() throws NotionException, NotionNotFoundException {
         // Arrange
         UUID id = UUID.randomUUID();
         Developer mockDeveloper = new Developer("John Doe", id, "https://github.com/johndoe", "https://github.com/johndoe.png", "johndoe@example.com", "On Assignment", "95", new ArrayList<>());
