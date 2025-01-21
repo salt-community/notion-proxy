@@ -2,7 +2,7 @@ package com.saltpgp.notionproxy.staff;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.saltpgp.notionproxy.exceptions.NotionException;
-import com.saltpgp.notionproxy.service.NotionApiService;
+import com.saltpgp.notionproxy.notionapi.NotionApiService;
 import com.saltpgp.notionproxy.service.NotionServiceFilters;
 import com.saltpgp.notionproxy.staff.models.Staff;
 import com.saltpgp.notionproxy.staff.models.StaffDev;

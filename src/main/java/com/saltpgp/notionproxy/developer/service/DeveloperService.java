@@ -7,7 +7,7 @@ import com.saltpgp.notionproxy.developer.model.Responsible;
 import com.saltpgp.notionproxy.exceptions.InvalidFilterException;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
-import com.saltpgp.notionproxy.service.NotionApiService;
+import com.saltpgp.notionproxy.notionapi.NotionApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

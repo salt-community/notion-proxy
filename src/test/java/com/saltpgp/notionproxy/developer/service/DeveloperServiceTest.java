@@ -3,7 +3,7 @@ package com.saltpgp.notionproxy.developer.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saltpgp.notionproxy.exceptions.NotionException;
-import com.saltpgp.notionproxy.service.NotionApiService;
+import com.saltpgp.notionproxy.notionapi.NotionApiService;
 import com.saltpgp.notionproxy.service.NotionServiceFilters;
 import org.junit.jupiter.api.BeforeEach;
 
