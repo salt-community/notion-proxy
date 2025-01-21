@@ -59,8 +59,8 @@ public class AssignmentService {
 
     private List<Assignment> extractAssignments(JsonNode response) {
         List<Assignment> assignments = new ArrayList<>();
-        response.get("results").elements().forEachRemaining(element -> {
-            Assignment assignment = extractScore(element);
+        response.get("results").get("properties").elements().forEachRemaining(properties -> {
+            Assignment assignment = extractScore(properties);
             if (assignment != null) {
                 assignments.add(assignment);
             }
@@ -68,27 +68,35 @@ public class AssignmentService {
         return assignments;
     }
 
-    private Assignment extractScore(JsonNode element) {
-        if (element.get("properties").get("Score") == null) {
+    private Assignment extractScore(JsonNode properties) {
+        if (properties.get("Score") == null) {
             return null;
         }
         return new Assignment(
-                element.get("properties").get("Name").get("title").get(0).get("plain_text").asText(),
-                element.get("properties").get("Score").get("number").asInt(),
-                getCategories(element),
-                getScoreComment(element)
+                properties.get("Name").get("title").get(0).get("plain_text").asText(),
+                properties.get("Score").get("number").asInt(),
+                getCategories(properties),
+                getScoreComment(properties)
         );
     }
 
-    private static List<String> getCategories(JsonNode element) {
+    private static List<String> getCategories(JsonNode properties) {
         List<String> categories = new ArrayList<>();
-        if (element.get("properties").get("Categories") != null) {
-            element.get("properties").get("Categories").get("multi_select").forEach(category ->
+        if (properties.get("Categories") != null) {
+            properties.get("Categories").get("multi_select").forEach(category ->
                     categories.add(category.get("name").asText()));
         }
         return categories;
     }
 
+    public static String getScoreComment(JsonNode properties) {
+        try {
+            return properties.get("Comment").get("rich_text")
+                    .get(0).get("plain_text").asText();
+        } catch (Exception e) {
+            return noCommentMessage;
+        }
+    }
 
     private Assignment fetchAssignmentById(UUID developerId, UUID assignmentId) throws NotionException {
         String nextCursor = null;
@@ -123,13 +131,4 @@ public class AssignmentService {
     }
 
 
-
-    public static String getScoreComment(JsonNode element) {
-        try {
-            return element.get("properties").get("Comment").get("rich_text")
-                    .get(0).get("plain_text").asText();
-        } catch (Exception e) {
-            return noCommentMessage;
-        }
-    }
 }
