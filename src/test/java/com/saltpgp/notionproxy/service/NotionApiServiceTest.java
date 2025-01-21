@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.http.HttpMethod;
+import org.springframework.web.client.ResourceAccessException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
@@ -90,6 +91,23 @@ class NotionApiServiceTest {
         NotionException exception = assertThrows(NotionException.class, () -> notionApiService.fetchPage(pageId));
 
         assertEquals("Bad request to the Notion API. Check the API request.", exception.getMessage());
+    }
+
+    @Test
+    void fetchPage_ResourceAccessException() {
+        String pageId = "12345";
+
+        server.expect(requestTo("https://api.notion.com/v1/pages/12345"))
+                .andExpect(method(HttpMethod.GET))
+                .andExpect(header("Authorization", "Bearer " + API_KEY))
+                .andExpect(header("Notion-Version", NOTION_VERSION))
+                .andRespond(request -> {
+                    throw new ResourceAccessException("");
+                });;
+
+        NotionException exception = assertThrows(NotionException.class, () -> notionApiService.fetchPage(pageId));
+
+        assertEquals("Can't access Notion API. Check if the Notion proxy can send requests.", exception.getMessage());
     }
 
     @Test
