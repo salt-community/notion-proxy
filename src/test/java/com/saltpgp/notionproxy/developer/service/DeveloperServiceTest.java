@@ -4,10 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.service.NotionApiService;
+import com.saltpgp.notionproxy.service.NotionServiceFilters;
 import org.junit.jupiter.api.BeforeEach;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class DeveloperServiceTest {
 
@@ -126,5 +127,8 @@ class DeveloperServiceTest {
                     "has_more": false
                 }
                 """;
+        //Fix getFilterOnAssignment to use the builder
+        when(mockApiService.fetchDatabase(DATABASE_ID, NotionServiceFilters.getFilterOnAssignment(null))).thenReturn(mapper.readTree(databaseResponse));
+
     }
 }
