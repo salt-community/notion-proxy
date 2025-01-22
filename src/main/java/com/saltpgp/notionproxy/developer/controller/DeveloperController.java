@@ -30,8 +30,10 @@ public class DeveloperController {
     @GetMapping()
     @Operation(summary = "Get a list of developers",
             description = "Retrieve a list of all developers. An optional filter can be applied to sort by status. " +
-                    "Valid filter values: 'On Assignment', 'PGP', or 'None'. " +
-                    "If no filter parameter is provided, all developers will be returned.")
+                    "Valid filter values: 'On Assignment', 'PGP', 'Done', 'None', 'LetGo', 'Talent Pool' or 'Precourse'. " +
+                    "The filter is case sensitive so ensure that the values for the filter parameter spelled exactly as provided" +
+                    "If no filter parameter is provided, all developers will be returned.  "
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved the developers list"),
             @ApiResponse(responseCode = "400", description = "Invalid filter value"),
