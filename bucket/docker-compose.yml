@@ -1,0 +1,14 @@
+services:
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    ports:
+      - "9000:9000"
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: admin
+    volumes:
+      - minio-data:/data
+    command: server /data
+volumes:
+  minio-data:
