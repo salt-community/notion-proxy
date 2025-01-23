@@ -84,7 +84,7 @@ public class StaffService {
 
     private StaffDev getStaffFromPage(JsonNode page) {
         String name = page.get("properties").get("Name").get("title").get(0).get("plain_text").asText();
-        String email = "";
+        String email = StaffMapper.getDevEmail(page);
         UUID id = UUID.fromString(page.get("id").asText());
         return new StaffDev(name, email, id);
     }
