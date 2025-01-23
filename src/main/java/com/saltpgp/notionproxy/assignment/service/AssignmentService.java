@@ -1,10 +1,9 @@
 package com.saltpgp.notionproxy.assignment.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.saltpgp.notionproxy.assignment.model.Assignment;
 import com.saltpgp.notionproxy.bucket.BucketApi;
 import com.saltpgp.notionproxy.exceptions.NotionException;
@@ -56,7 +55,7 @@ public class AssignmentService {
         List<Assignment> assignments = new ArrayList<>();
 
         JsonNode cache = bucketApi.getCache("assignment_developer_" + developerId);
-        if(cache != null) {
+        if (cache != null) {
             cache.get(NotionObject.RESULTS).elements().forEachRemaining(elements -> {
                 assignments.add(extractAssignment(elements));
             });
@@ -66,17 +65,25 @@ public class AssignmentService {
         String nextCursor = null;
         boolean hasMore = true;
 
+        ObjectMapper objectMapper = new ObjectMapper();
+        ArrayNode combinedArray = objectMapper.createArrayNode();
+
         while (hasMore) {
             JsonNode response = notionApiService.fetchDatabase(
                     SCORE_DATABASE_ID, filterBuilder(nextCursor, developerId.toString(), FILTER));
 
             response.get(NotionObject.RESULTS).elements().forEachRemaining(elements -> {
+                combinedArray.add(elements);
                 assignments.add(extractAssignment(elements));
             });
 
             nextCursor = response.get(NotionObject.NEXT_CURSOR).asText();
             hasMore = response.get(NotionObject.HAS_MORE).asBoolean();
         }
+        
+        ObjectNode mergedNode = objectMapper.createObjectNode();
+        bucketApi.saveCache("assignment_developer_" + developerId, mergedNode.set(NotionObject.RESULTS, combinedArray));
+
         return assignments;
     }
 
