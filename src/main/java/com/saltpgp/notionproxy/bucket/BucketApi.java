@@ -26,7 +26,7 @@ public class BucketApi {
                      RestClient.Builder builder) {
         CACHE_EXPIRE_IN_MILLISECONDS = cacheExpireInMilliseconds;
         SUPABASE_ANON_KEY = supabaseAnonKey;
-        this.restClient = builder.baseUrl(supabaseUrl + "/storage/v1/object/" + BUCKET_NAME).build();
+        this.restClient = builder.baseUrl(supabaseUrl).build();
     }
 
     public void saveCache(String cacheName, JsonNode jsonNode) {
@@ -36,7 +36,7 @@ public class BucketApi {
 
             restClient
                     .put()
-                    .uri(cacheName)
+                    .uri( "/storage/v1/object/" + BUCKET_NAME+"/"+ cacheName)
                     .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                     .header("Authorization", "Bearer " + SUPABASE_ANON_KEY)
                     .body(objectNode.toString().getBytes(StandardCharsets.UTF_8))
@@ -54,7 +54,7 @@ public class BucketApi {
         try {
             var result =  restClient
                     .get()
-                    .uri(cacheName)
+                    .uri("/storage/v1/object/" + BUCKET_NAME+"/"+ cacheName)
                     .header("Authorization", "Bearer " + SUPABASE_ANON_KEY)
                     .retrieve()
                     .body(byte[].class);
