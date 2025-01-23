@@ -35,8 +35,7 @@ public class AssignmentService {
         this.notionApiService = notionApiService;
     }
 
-
-    public Assignment getAssignmentFromDeveloper(String assignmentId) throws NotionException {
+    public Assignment getAssignment(String assignmentId) throws NotionException {
         JsonNode response = notionApiService.fetchPage(assignmentId);
         return extractAssignment(response);
     }
