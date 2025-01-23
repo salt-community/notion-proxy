@@ -1,7 +1,6 @@
 package com.saltpgp.notionproxy.notionapi;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,53 +25,16 @@ public class NotionApiService {
         this.NOTION_VERSION = NOTION_VERSION;
     }
 
-
     public JsonNode fetchPage(String pageId) throws NotionException {
-        try {
-            // The provided JSON string
-            String jsonString = """
-                {
-                    "object": "page",
-                    "id": "11111111-1111-1111-1111-111111111111",
-                    "properties": {
-                        "Categories": {
-                            "multi_select": [
-                                {"name": "backend"},
-                                {"name": "java"}
-                            ]
-                        },
-                        "Score": {
-                            "number": 100
-                        },
-                        "Name": {
-                            "title": [
-                                {"plain_text": "Three Small Methods"}
-                            ]
-                        }
-                    }
-                }
-                """;
-
-            // Create ObjectMapper instance
-            ObjectMapper objectMapper = new ObjectMapper();
-
-            // Convert the JSON string to a JsonNode
-            JsonNode jsonNode = objectMapper.readTree(jsonString);
-
-            // Return the JsonNode
-            return jsonNode;
-        } catch (Exception e) {
-
-            String uri = String.format(UriNotionFormat.PAGES, pageId);
-            return executeRequest(() -> restClient
-                    .get()
-                    .uri(uri)
-                    .header(RequestHeader.CONTENT_TYPE, HeaderValue.CONTENT_TYPE)
-                    .header(RequestHeader.AUTHORIZATION, HeaderValue.BEARER + API_KEY)
-                    .header(RequestHeader.NOTION_VERSION, NOTION_VERSION)
-                    .retrieve()
-                    .body(JsonNode.class), pageId, NotionType.PAGE);
-        }
+        String uri = String.format(UriNotionFormat.PAGES, pageId);
+        return executeRequest(() -> restClient
+                .get()
+                .uri(uri)
+                .header(RequestHeader.CONTENT_TYPE, HeaderValue.CONTENT_TYPE)
+                .header(RequestHeader.AUTHORIZATION, HeaderValue.BEARER + API_KEY)
+                .header(RequestHeader.NOTION_VERSION, NOTION_VERSION)
+                .retrieve()
+                .body(JsonNode.class), pageId, NotionType.PAGE);
     }
 
     public JsonNode fetchDatabase(String database, Object node) throws NotionException {
