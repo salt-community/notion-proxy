@@ -20,9 +20,7 @@ import com.saltpgp.notionproxy.assignment.service.AssignmentProperty.*;
 public class AssignmentService {
 
     private final NotionApiService notionApiService;
-
     private final BucketApi bucketApi;
-
     private final String SCORE_DATABASE_ID;
 
     public static final String FILTER = """
@@ -41,7 +39,12 @@ public class AssignmentService {
     }
 
     public Assignment getAssignment(String assignmentId) throws NotionException {
+        JsonNode cache = bucketApi.getCache("assignment_" + assignmentId);
+        if(cache != null) {
+            return extractAssignment(cache);
+        }
         JsonNode response = notionApiService.fetchPage(assignmentId);
+        bucketApi.saveCache("assignment_" + assignmentId, response);
         return extractAssignment(response);
     }
 

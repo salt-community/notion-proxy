@@ -33,7 +33,7 @@ public class BucketApi {
                 .getService();
     }
 
-    public void uploadFile(String cacheName, JsonNode jsonNode) {
+    public void saveCache(String cacheName, JsonNode jsonNode) {
         ObjectNode objectNode = (ObjectNode) jsonNode;
         objectNode.put("timestamp", System.currentTimeMillis());
         Bucket bucket = storageClient.get(bucketName);
