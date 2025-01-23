@@ -2,10 +2,7 @@ package com.saltpgp.notionproxy.bucket;
 
 
 import com.google.cloud.NoCredentials;
-import com.google.cloud.storage.Blob;
-import com.google.cloud.storage.Bucket;
-import com.google.cloud.storage.Storage;
-import com.google.cloud.storage.StorageOptions;
+import com.google.cloud.storage.*;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -29,9 +26,10 @@ public class BucketApi {
     }
 
     public void uploadFile(String cacheName, Object cache) {
-        Bucket bucket = storageClient.get(cacheName);
+        Bucket bucket = storageClient.get(bucketName);
         if (bucket == null) {
-            throw new RuntimeException("Bucket not found: " + cacheName);
+            bucket = storageClient.create(BucketInfo.of(bucketName));
+            System.out.println("Bucket created: " + bucketName);
         }
 
         Blob blob = bucket.create(cacheName, cache.toString().getBytes(StandardCharsets.UTF_8));
