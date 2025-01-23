@@ -43,32 +43,33 @@ public class BucketApi {
         System.out.println("File uploaded to " + blob.getMediaLink());
     }
 
-    public JsonNode getCache(String cacheName) throws IOException {
-        Bucket bucket = storageClient.get(bucketName);
-        if (bucket == null) {
-            System.out.println("Bucket not found: " + bucketName);
-            return null;
-        }
-
-        Blob blob = bucket.get(cacheName);
-
-        if (blob == null) {
-            System.out.println("File not found: " + cacheName);
-            return null;
-        }
-        byte[] content = blob.getContent();
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode jsonNode = mapper.readTree(content);
-
-
+    public JsonNode getCache(String cacheName) {
         try {
+            Bucket bucket = storageClient.get(bucketName);
+            if (bucket == null) {
+                System.out.println("Bucket not found: " + bucketName);
+                return null;
+            }
+
+            Blob blob = bucket.get(cacheName);
+
+            if (blob == null) {
+                System.out.println("File not found: " + cacheName);
+                return null;
+            }
+            byte[] content = blob.getContent();
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode jsonNode = mapper.readTree(content);
+
+
             if (System.currentTimeMillis() - jsonNode.get("timestamp").asLong() > 60000) {
                 return null;
             }
+            return jsonNode;
+
         } catch (Exception e) {
             return null;
         }
 
-        return jsonNode;
     }
 }
