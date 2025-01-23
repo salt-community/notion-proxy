@@ -61,35 +61,30 @@ public class AssignmentService {
         List<Assignment> assignments = new ArrayList<>();
 
         JsonNode cache = bucketApi.getCache("assignment_developer_" + developerId);
-        if (cache != null) {
-            cache.get(NotionObject.RESULTS).elements().forEachRemaining(elements -> {
-                assignments.add(extractAssignment(elements));
-            });
-            return assignments;
+        if(cache != null) {
+            try{
+                return Assignment.fromJsonList(cache.toString());
+            }catch (Exception e){
+                System.out.println("Throw");
+            }
         }
 
         String nextCursor = null;
         boolean hasMore = true;
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        ArrayNode combinedArray = objectMapper.createArrayNode();
 
         while (hasMore) {
             JsonNode response = notionApiService.fetchDatabase(
                     SCORE_DATABASE_ID, filterBuilder(nextCursor, developerId.toString(), FILTER));
 
             response.get(NotionObject.RESULTS).elements().forEachRemaining(elements -> {
-                combinedArray.add(elements);
                 assignments.add(extractAssignment(elements));
             });
 
             nextCursor = response.get(NotionObject.NEXT_CURSOR).asText();
             hasMore = response.get(NotionObject.HAS_MORE).asBoolean();
         }
-
-        ObjectNode mergedNode = objectMapper.createObjectNode();
-        bucketApi.saveCache("assignment_developer_" + developerId, mergedNode.set(NotionObject.RESULTS, combinedArray));
-
+        bucketApi.saveCache("assignment_developer_" + developerId, Assignment.toJsonNode(assignments));
         return assignments;
     }
 

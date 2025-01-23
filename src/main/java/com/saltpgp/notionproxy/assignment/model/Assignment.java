@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -31,7 +32,8 @@ public class Assignment {
     }
 
     public static JsonNode toJsonNode(List<Assignment> assignmentList) {
-        return objectMapper.convertValue(assignmentList, JsonNode.class);
+        Map<String, Object> result = Map.of("assignmentList", assignmentList);
+        return objectMapper.convertValue(result, JsonNode.class);
     }
 
     public static Assignment fromJson(String json) throws JsonProcessingException {
@@ -39,6 +41,6 @@ public class Assignment {
     }
 
     public static List<Assignment> fromJsonList(String json) throws JsonProcessingException {
-        return objectMapper.readValue(json, new TypeReference<List<Assignment>>() {});
+        return objectMapper.convertValue(objectMapper.readTree(json).get("assignmentList") ,new TypeReference<List<Assignment>>() {});
     }
 }
