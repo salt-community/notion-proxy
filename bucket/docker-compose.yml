@@ -1,12 +1,22 @@
 services:
-  fake-gcs:
-    image: fsouza/fake-gcs-server:latest
+  fake-gcs-server:
+    image: fsouza/fake-gcs-server:latest  # Use the pre-built image
     container_name: fake-gcs-server
-    ports:
-      - "9000:9000"
     environment:
-      GCS_SCHEME: http
-      GCS_PORT: 9000
-      GCS_BUCKETS: my-local-bucket
+      - BUCKET_NAME=my-local-bucket
+    ports:
+      - "9000:4443"
+    command: "-scheme http"
     volumes:
-      - ./data:/data
+      - fake-gcs-bucket:/fakegcs
+    networks:
+      - fake-gcs-net
+    restart: always
+
+volumes:
+  fake-gcs-bucket:
+    driver: local
+
+networks:
+  fake-gcs-net:
+    driver: bridge
