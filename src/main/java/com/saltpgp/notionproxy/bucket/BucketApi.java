@@ -6,10 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.cloud.NoCredentials;
 import com.google.cloud.storage.*;
-import org.apache.catalina.mapper.Mapper;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @Component
@@ -18,6 +16,8 @@ public class BucketApi {
     private final Storage storageClient;
 
     private final String fakeGcsExternalUrl = "http://localhost:9000";
+
+    private final static long CACHE_EXPIRE_IN_MILLISECONDS = 60000;
 
     String bucketName = "my-local-bucket";
 
@@ -57,14 +57,14 @@ public class BucketApi {
                 System.out.println("File not found: " + cacheName);
                 return null;
             }
-            byte[] content = blob.getContent();
+
             ObjectMapper mapper = new ObjectMapper();
-            JsonNode jsonNode = mapper.readTree(content);
+            JsonNode jsonNode = mapper.readTree(blob.getContent());
 
-
-            if (System.currentTimeMillis() - jsonNode.get("timestamp").asLong() > 60000) {
+            if (System.currentTimeMillis() - jsonNode.get("timestamp").asLong() > CACHE_EXPIRE_IN_MILLISECONDS) {
                 return null;
             }
+
             return jsonNode;
 
         } catch (Exception e) {
