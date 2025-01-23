@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.cloud.NoCredentials;
 import com.google.cloud.storage.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -17,11 +18,13 @@ public class BucketApi {
 
     private final String fakeGcsExternalUrl = "http://localhost:9000";
 
-    private final static long CACHE_EXPIRE_IN_MILLISECONDS = 60000;
+    private final long CACHE_EXPIRE_IN_MILLISECONDS;
 
     String bucketName = "my-local-bucket";
 
-    public BucketApi() {
+
+    public BucketApi(@Value("${CACHE_EXPIRE_IN_MILLISECONDS}") long cacheExpireInMilliseconds) {
+        CACHE_EXPIRE_IN_MILLISECONDS = cacheExpireInMilliseconds;
         storageClient = StorageOptions.newBuilder()
                 .setHost(fakeGcsExternalUrl)
                 .setProjectId("test-project")
