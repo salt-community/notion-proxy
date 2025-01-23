@@ -3,6 +3,7 @@ package com.saltpgp.notionproxy.developer.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saltpgp.notionproxy.developer.model.Developer;
+import com.saltpgp.notionproxy.exceptions.InvalidFilterException;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import com.saltpgp.notionproxy.notionapi.NotionApiService;
@@ -202,5 +203,15 @@ class DeveloperServiceTest {
         assertEquals(UUID.fromString("11111111-1111-1111-1111-111111111111"), developer.getId());
         assertEquals("https://github.com/saltie1", developer.getGithubUrl());
         assertEquals("saltie@example.com", developer.getEmail());
+    }
+    @Test
+    void shouldThrowExceptionForInvalidFilter() {
+        String invalidFilter = "INVALID_STATUS";
+
+        InvalidFilterException exception = assertThrows(InvalidFilterException.class, () -> {
+            developerService.getAllDevelopers(invalidFilter);
+        });
+
+        assertEquals("Invalid filter value: " + invalidFilter, exception.getMessage());
     }
 }
