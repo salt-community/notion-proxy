@@ -10,6 +10,8 @@ import com.saltpgp.notionproxy.service.NotionServiceFilters;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -165,10 +167,12 @@ class DeveloperServiceTest {
                     "has_more": false
                 }
                 """;
-        //Fix getFilterOnAssignment to use the builder
+
         when(mockApiService.fetchDatabase(DATABASE_ID, NotionServiceFilters.getFilterOnAssignment(null))).thenReturn(mapper.readTree(databaseResponse));
-        when(mockApiService.fetchPage("11111111-1111-1111-1111-111111111111"))
-                .thenReturn(mapper.readTree(pageResponse));
+        when(mockApiService.fetchPage("11111111-1111-1111-1111-111111111111")).thenReturn(mapper.readTree(pageResponse));
+        when(mockApiService.fetchDatabase(eq(DATABASE_ID), anyString())).thenReturn(mapper.readTree(databaseResponse));
+
+
     }
 
     @Test
@@ -184,8 +188,19 @@ class DeveloperServiceTest {
 
         assertEquals("https://github.com/saltie1", developer.getGithubUrl());
         assertEquals("saltie@example.com", developer.getEmail());
+    }
 
+    @Test
+    void shouldGetAllDevelopers() throws NotionException {
+        List<Developer> developers = developerService.getAllDevelopers(null);
 
+        assertNotNull(developers);
+        assertEquals(2, developers.size());
 
+        Developer developer = developers.getFirst();
+        assertEquals("Test Saltie 1", developer.getName());
+        assertEquals(UUID.fromString("11111111-1111-1111-1111-111111111111"), developer.getId());
+        assertEquals("https://github.com/saltie1", developer.getGithubUrl());
+        assertEquals("saltie@example.com", developer.getEmail());
     }
 }
