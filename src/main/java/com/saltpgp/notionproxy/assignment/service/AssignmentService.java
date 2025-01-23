@@ -2,6 +2,7 @@ package com.saltpgp.notionproxy.assignment.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.saltpgp.notionproxy.assignment.model.Assignment;
+import com.saltpgp.notionproxy.bucket.BucketApi;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.notionapi.NotionApiService;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +19,12 @@ import com.saltpgp.notionproxy.assignment.service.AssignmentProperty.*;
 @Service
 public class AssignmentService {
 
+    private final NotionApiService notionApiService;
+
+    private final BucketApi bucketApi;
+
+    private final String SCORE_DATABASE_ID;
+
     public static final String FILTER = """
             "filter": {
                 "property": "💽 Developer",
@@ -26,13 +33,11 @@ public class AssignmentService {
                 }
             }
             """;
-    private final NotionApiService notionApiService;
 
-    @Value("${SCORE_DATABASE_ID}")
-    private String SCORE_DATABASE_ID;
-
-    public AssignmentService(NotionApiService notionApiService) {
+    public AssignmentService(NotionApiService notionApiService, BucketApi bucketApi, @Value("${SCORE_DATABASE_ID}")String scoreDatabaseId) {
         this.notionApiService = notionApiService;
+        this.bucketApi = bucketApi;
+        SCORE_DATABASE_ID = scoreDatabaseId;
     }
 
     public Assignment getAssignment(String assignmentId) throws NotionException {
