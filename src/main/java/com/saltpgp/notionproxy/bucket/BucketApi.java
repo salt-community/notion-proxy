@@ -7,13 +7,13 @@ import com.google.cloud.storage.StorageOptions;
 import org.springframework.stereotype.Component;
 
 @Component
-public class bucket {
+public class BucketApi {
 
     private final Storage storageClient;
 
     private final String fakeGcsExternalUrl = "http://localhost:9000";
 
-    public bucket() {
+    public BucketApi() {
         storageClient = StorageOptions.newBuilder()
                 .setHost(fakeGcsExternalUrl)
                 .setProjectId("test-project")
