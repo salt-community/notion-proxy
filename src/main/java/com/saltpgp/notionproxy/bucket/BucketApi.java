@@ -3,6 +3,7 @@ package com.saltpgp.notionproxy.bucket;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -10,7 +11,9 @@ import org.springframework.web.client.RestClient;
 
 import java.nio.charset.StandardCharsets;
 
+
 @Component
+@Slf4j
 public class BucketApi {
 
     private final String SUPABASE_ANON_KEY;
@@ -42,11 +45,9 @@ public class BucketApi {
                     .body(objectNode.toString().getBytes(StandardCharsets.UTF_8))
                     .retrieve()
                     .body(Void.class);
-
-            System.out.println("File uploaded to Supabase storage");
-
+            log.debug("File uploaded to Supabase storage");
         } catch (Exception e) {
-            System.out.println("Failed to upload file to Supabase storage: " + e.getMessage());
+            log.warn("Failed to upload file to Supabase storage: {}", e.getMessage());
         }
     }
 
@@ -62,12 +63,12 @@ public class BucketApi {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(result);
             if (System.currentTimeMillis() - jsonNode.get("timestamp").asLong() > CACHE_EXPIRE_IN_MILLISECONDS) {
-                System.out.println("Cache expired");
+                log.debug("Cache expired");
                 return null;
             }
             return jsonNode;
         } catch (Exception e) {
-            System.out.println("Failed to retrieve cache: " + e.getMessage());
+            log.warn("Failed to retrieve cache: {}", e.getMessage());
         }
         return null;
     }
