@@ -20,7 +20,7 @@ public class NotionApiService {
     public NotionApiService(RestClient.Builder builder,
                             @Value("${NOTION_API_KEY}") String API_KEY,
                             @Value("${NOTION_VERSION}") String NOTION_VERSION) {
-        this.restClient = builder.baseUrl(NOTION_URL).build();
+        this.restClient = builder.baseUrl(NOTION_URL).requestInterceptor(new RestClientInterceptor()).build();
         this.API_KEY = API_KEY;
         this.NOTION_VERSION = NOTION_VERSION;
     }
