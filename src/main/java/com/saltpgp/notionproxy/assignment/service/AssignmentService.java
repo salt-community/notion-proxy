@@ -1,6 +1,10 @@
 package com.saltpgp.notionproxy.assignment.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.saltpgp.notionproxy.assignment.model.Assignment;
 import com.saltpgp.notionproxy.bucket.BucketApi;
 import com.saltpgp.notionproxy.exceptions.NotionException;
@@ -50,6 +54,15 @@ public class AssignmentService {
 
     public List<Assignment> getAssignmentsFromDeveloper(UUID developerId) throws NotionException {
         List<Assignment> assignments = new ArrayList<>();
+
+        JsonNode cache = bucketApi.getCache("assignment_developer_" + developerId);
+        if(cache != null) {
+            cache.get(NotionObject.RESULTS).elements().forEachRemaining(elements -> {
+                assignments.add(extractAssignment(elements));
+            });
+            return assignments;
+        }
+
         String nextCursor = null;
         boolean hasMore = true;
 
