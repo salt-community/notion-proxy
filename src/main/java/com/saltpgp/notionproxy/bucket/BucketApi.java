@@ -13,7 +13,6 @@ import java.nio.charset.StandardCharsets;
 @Component
 public class BucketApi {
 
-    private final String SUPABASE_URL;
     private final String SUPABASE_ANON_KEY;
     private final long CACHE_EXPIRE_IN_MILLISECONDS;
 
@@ -23,11 +22,11 @@ public class BucketApi {
 
     public BucketApi(@Value("${CACHE_EXPIRE_IN_MILLISECONDS}") long cacheExpireInMilliseconds,
                      @Value("${SUPABASE_URL}") String supabaseUrl,
-                     @Value("${SUPABASE_ANON_KEY}") String supabaseAnonKey) {
+                     @Value("${SUPABASE_ANON_KEY}") String supabaseAnonKey,
+                     RestClient.Builder builder) {
         CACHE_EXPIRE_IN_MILLISECONDS = cacheExpireInMilliseconds;
-        SUPABASE_URL = supabaseUrl;
         SUPABASE_ANON_KEY = supabaseAnonKey;
-        this.restClient = RestClient.create();  // Initialize RestClient
+        this.restClient = builder.baseUrl(supabaseUrl + "/storage/v1/object/" + BUCKET_NAME).build();
     }
 
     public void saveCache(String cacheName, JsonNode jsonNode) {
@@ -35,11 +34,9 @@ public class BucketApi {
             ObjectNode objectNode = (ObjectNode) jsonNode;
             objectNode.put("timestamp", System.currentTimeMillis());
 
-            String url = SUPABASE_URL + "/storage/v1/object/" + BUCKET_NAME + "/" + cacheName;
-
             restClient
                     .put()
-                    .uri(url)
+                    .uri(cacheName)
                     .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                     .header("Authorization", "Bearer " + SUPABASE_ANON_KEY)
                     .body(objectNode.toString().getBytes(StandardCharsets.UTF_8))
@@ -55,12 +52,9 @@ public class BucketApi {
 
     public JsonNode getCache(String cacheName) {
         try {
-            String url = SUPABASE_URL + "/storage/v1/object/" + BUCKET_NAME + "/" + cacheName;
-
-            // Send GET request using RestClient in the desired format
             var result =  restClient
                     .get()
-                    .uri(url)
+                    .uri(cacheName)
                     .header("Authorization", "Bearer " + SUPABASE_ANON_KEY)
                     .retrieve()
                     .body(byte[].class);
