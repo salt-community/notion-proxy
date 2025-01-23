@@ -44,11 +44,17 @@ public class AssignmentService {
     public Assignment getAssignment(String assignmentId) throws NotionException {
         JsonNode cache = bucketApi.getCache("assignment_" + assignmentId);
         if(cache != null) {
-            return extractAssignment(cache);
+            try{
+                return Assignment.fromJson(cache.toString());
+            }catch (Exception e){
+                System.out.println("Throw");
+            }
         }
-        JsonNode response = notionApiService.fetchPage(assignmentId);
-        bucketApi.saveCache("assignment_" + assignmentId, response);
-        return extractAssignment(response);
+        Assignment assignment = extractAssignment(notionApiService.fetchPage(assignmentId));
+        try{
+        bucketApi.saveCache("assignment_" + assignmentId, Assignment.toJsonNode(assignment));
+        }catch (Exception e){}
+        return assignment;
     }
 
     public List<Assignment> getAssignmentsFromDeveloper(UUID developerId) throws NotionException {
@@ -80,7 +86,7 @@ public class AssignmentService {
             nextCursor = response.get(NotionObject.NEXT_CURSOR).asText();
             hasMore = response.get(NotionObject.HAS_MORE).asBoolean();
         }
-        
+
         ObjectNode mergedNode = objectMapper.createObjectNode();
         bucketApi.saveCache("assignment_developer_" + developerId, mergedNode.set(NotionObject.RESULTS, combinedArray));
 
