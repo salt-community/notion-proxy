@@ -1,13 +1,12 @@
 services:
-  minio1:
-    image: quay.io/minio/minio
-    container_name: minio
+  fake-gcs:
+    image: fsouza/fake-gcs-server:latest
+    container_name: fake-gcs-server
     ports:
       - "9000:9000"
-      - "9001:9001"
     environment:
-      - MINIO_ROOT_USER=admin
-      - MINIO_ROOT_PASSWORD=admin123
+      GCS_SCHEME: http
+      GCS_PORT: 9000
+      GCS_BUCKETS: my-local-bucket
     volumes:
-      - D:\minio\data:/data
-    command: server /data --console-address ":9001"
+      - ./data:/data
