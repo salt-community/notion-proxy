@@ -12,14 +12,15 @@ import com.saltpgp.notionproxy.notionapi.NotionApiConstants.*;
 @Service
 public class NotionApiService {
 
-    public static final String NOTION_URL = "https://api.notion.com/v1";
+
     private final RestClient restClient;
     private final String API_KEY;
     private final String NOTION_VERSION;
 
     public NotionApiService(RestClient.Builder builder,
                             @Value("${NOTION_API_KEY}") String API_KEY,
-                            @Value("${NOTION_VERSION}") String NOTION_VERSION) {
+                            @Value("${NOTION_VERSION}") String NOTION_VERSION,
+                            @Value("${NOTION_URL}") String NOTION_URL) {
         this.restClient = builder.baseUrl(NOTION_URL).build();
         this.API_KEY = API_KEY;
         this.NOTION_VERSION = NOTION_VERSION;
