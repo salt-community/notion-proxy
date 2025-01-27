@@ -41,10 +41,9 @@ public class AssignmentService {
     }
 
     public Assignment getAssignment(String assignmentId, boolean useCache) throws NotionException {
-        log.debug("Starting to fetch assignment with ID: {}", assignmentId);
         if (useCache) {
+            log.debug("Starting to fetch assignment with ID: {}", assignmentId);
             JsonNode cache = bucketApi.getCache("assignment_" + assignmentId);
-
             try {
                 if (cache != null) {
                     log.debug("Cache hit for assignment ID: {}", assignmentId);
@@ -64,9 +63,9 @@ public class AssignmentService {
     }
 
     public List<Assignment> getAssignmentsFromDeveloper(UUID developerId, boolean useCache) throws NotionException {
-        log.debug("Starting to fetch assignments for developer ID: {}", developerId);
-        JsonNode cache = bucketApi.getCache("assignment_developer_" + developerId);
         if (useCache) {
+            log.debug("Starting to fetch assignments for developer ID: {}", developerId);
+            JsonNode cache = bucketApi.getCache("assignment_developer_" + developerId);
             try {
                 if (cache != null) {
                     log.warn("Cache hit for assignments of developer ID: {}", developerId);
