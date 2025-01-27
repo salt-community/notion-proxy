@@ -1,11 +1,11 @@
 package com.saltpgp.notionproxy.assignment.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.saltpgp.notionproxy.assignment.model.Assignment;
 import com.saltpgp.notionproxy.bucket.BucketApi;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.notionapi.NotionApiService;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -40,24 +40,28 @@ public class AssignmentService {
         SCORE_DATABASE_ID = scoreDatabaseId;
     }
 
-    @SneakyThrows
     public Assignment getAssignment(String assignmentId) throws NotionException {
-        Assignment assignment = getAssignmentFromCache("assignment_" + assignmentId, Assignment::fromJson);
-        if(assignment != null) {
-            return assignment;
+        JsonNode cache = bucketApi.getCache("assignment_" + assignmentId);
+        if(cache != null) {
+            try{
+                return Assignment.fromJson(cache.toString());
+            }catch (Exception e){
+            }
         }
-        assignment = extractAssignment(notionApiService.fetchPage(assignmentId));
+        Assignment assignment = extractAssignment(notionApiService.fetchPage(assignmentId));
         try{
         bucketApi.saveCache("assignment_" + assignmentId, Assignment.toJsonNode(assignment));
         }catch (Exception e){}
         return assignment;
     }
 
-    @SneakyThrows
-    public List<Assignment> getAssignmentsFromDeveloper(UUID developerId) throws NotionException {
-        List<Assignment> assignmentsCache = getAssignmentFromCache("assignment_developer_" + developerId, Assignment::fromJsonList);;
-        if(assignmentsCache != null) {
-            return assignmentsCache;
+    public List<Assignment> getAssignmentsFromDeveloper(UUID developerId) throws NotionException{
+        JsonNode cache = bucketApi.getCache("assignment_developer_" + developerId);
+        if(cache != null) {
+            try{
+                return Assignment.fromJsonList(cache.toString());
+            }catch (Exception e){
+            }
         }
 
         List<Assignment> assignments = new ArrayList<>();
@@ -90,15 +94,4 @@ public class AssignmentService {
                 getScoreComment(properties));
     }
 
-    public <T> T getAssignmentFromCache(String cacheKey, Function<String, T> fromJsonFunction) {
-        JsonNode cache = bucketApi.getCache(cacheKey);
-        if (cache != null) {
-            try {
-                return fromJsonFunction.apply(cache.toString());
-            } catch (Exception e) {
-                System.out.println("Error during JSON deserialization: " + e.getMessage());
-            }
-        }
-        return null;
-    }
 }
