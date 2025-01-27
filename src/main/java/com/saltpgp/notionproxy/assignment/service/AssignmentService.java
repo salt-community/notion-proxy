@@ -50,7 +50,7 @@ public class AssignmentService {
                 return Assignment.fromJson(cache.toString());
             }
         } catch (Exception e) {
-            log.debug("Failed to parse cached assignment for ID: {}. Error: {}", assignmentId, e.getMessage());
+            log.warn("Failed to parse cached assignment for ID: {}. Error: {}", assignmentId, e.getMessage());
         }
 
         log.debug("Cache miss for assignment ID: {}. Fetching from Notion API.", assignmentId);
@@ -67,7 +67,7 @@ public class AssignmentService {
 
         try {
             if (cache != null) {
-                log.debug("Cache hit for assignments of developer ID: {}", developerId);
+                log.warn("Cache hit for assignments of developer ID: {}", developerId);
                 return Assignment.fromJsonList(cache.toString());
             }
         } catch (Exception e) {

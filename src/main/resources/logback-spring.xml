@@ -33,8 +33,9 @@
         <appender-ref ref="SECURITY_FILE" />
     </logger>
 
-    <root level="INFO">
+    <root level="DEBUG">
         <appender-ref ref="CONSOLE" />
-        <appender-ref ref="GENERAL_FILE" />
     </root>
+
+
 </configuration>
