@@ -6,12 +6,6 @@ spring:
   cache:
     jcache:
       config: "classpath:ehcache.xml"
-  cloud:
-    gcp:
-      core:
-        enabled: false
-      storage:
-        enabled: false
 
 server:
   servlet:
