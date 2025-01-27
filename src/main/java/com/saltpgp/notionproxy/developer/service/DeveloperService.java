@@ -57,7 +57,7 @@ public class DeveloperService {
             });
 
             nextCursor = response.get(NotionObject.NEXT_CURSOR).asText();
-            hasMore = false;
+            hasMore = response.get(NotionObject.HAS_MORE).asBoolean();
         }
         return allDevelopers;
     }
