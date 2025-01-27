@@ -42,11 +42,9 @@ public class AssignmentService {
 
     public Assignment getAssignment(String assignmentId, boolean useCache) throws NotionException {
         if (useCache) {
-            log.debug("Starting to fetch assignment with ID: {}", assignmentId);
             JsonNode cache = bucketApi.getCache("assignment_" + assignmentId);
             try {
                 if (cache != null) {
-                    log.debug("Cache hit for assignment ID: {}", assignmentId);
                     return Assignment.fromJson(cache.toString());
                 }
             } catch (Exception e) {
@@ -57,22 +55,19 @@ public class AssignmentService {
         log.debug("Cache miss for assignment ID: {}. Fetching from Notion API.", assignmentId);
         Assignment assignment = extractAssignment(notionApiService.fetchPage(assignmentId));
 
-        log.debug("Saving fetched assignment ID: {} to cache.", assignmentId);
         bucketApi.saveCache("assignment_" + assignmentId, Assignment.toJsonNode(assignment));
         return assignment;
     }
 
     public List<Assignment> getAssignmentsFromDeveloper(UUID developerId, boolean useCache) throws NotionException {
         if (useCache) {
-            log.debug("Starting to fetch assignments for developer ID: {}", developerId);
             JsonNode cache = bucketApi.getCache("assignment_developer_" + developerId);
             try {
                 if (cache != null) {
-                    log.warn("Cache hit for assignments of developer ID: {}", developerId);
                     return Assignment.fromJsonList(cache.toString());
                 }
             } catch (Exception e) {
-                log.debug("Failed to parse cached assignments for developer ID: {}. Error: {}", developerId, e.getMessage());
+                log.warn("Failed to parse cached assignments for developer ID: {}. Error: {}", developerId, e.getMessage());
             }
         }
         log.debug("Cache miss for developer ID: {}. Fetching from Notion API.", developerId);
