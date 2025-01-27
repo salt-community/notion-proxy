@@ -39,7 +39,8 @@ public class AssignmentController {
     })
     @GetMapping()
     public ResponseEntity<DeveloperAssignmentsDto> getAssignmentsByUserId(
-            @RequestParam(value = "developerId", required = true) UUID developerId) throws NotionException {
+            @RequestParam(value = "developerId", required = true) UUID developerId,
+            @RequestParam(value = "useCache", required = false, defaultValue = "true") boolean useCache) throws NotionException {
         List<Assignment> assignments = assignmentService.getAssignmentsFromDeveloper(developerId);
         return ResponseEntity.ok(new DeveloperAssignmentsDto(developerId.toString(), AssignmentDto.fromModelList(assignments)));
     }
@@ -56,7 +57,8 @@ public class AssignmentController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<AssignmentDto> getAssignmentByAssignmentId(
-            @PathVariable String id) throws NotionException {
+            @PathVariable String id,
+            @RequestParam(value = "useCache", required = false, defaultValue = "true") boolean useCache) throws NotionException {
         return ResponseEntity.ok(AssignmentDto.fromModel(assignmentService.getAssignment(id)));
     }
 }
