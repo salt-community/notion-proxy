@@ -1,7 +1,6 @@
 package com.saltpgp.notionproxy.assignment.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.saltpgp.notionproxy.assignment.model.Assignment;
 import com.saltpgp.notionproxy.bucket.BucketApi;
 import com.saltpgp.notionproxy.exceptions.NotionException;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Function;
 
 import static com.saltpgp.notionproxy.assignment.service.AssignmentMapper.*;
 import static com.saltpgp.notionproxy.service.NotionServiceFilters.filterBuilder;
@@ -34,7 +32,7 @@ public class AssignmentService {
             }
             """;
 
-    public AssignmentService(NotionApiService notionApiService, BucketApi bucketApi, @Value("${SCORE_DATABASE_ID}")String scoreDatabaseId) {
+    public AssignmentService(NotionApiService notionApiService, BucketApi bucketApi, @Value("${SCORE_DATABASE_ID}") String scoreDatabaseId) {
         this.notionApiService = notionApiService;
         this.bucketApi = bucketApi;
         SCORE_DATABASE_ID = scoreDatabaseId;
@@ -42,26 +40,23 @@ public class AssignmentService {
 
     public Assignment getAssignment(String assignmentId) throws NotionException {
         JsonNode cache = bucketApi.getCache("assignment_" + assignmentId);
-        if(cache != null) {
-            try{
-                return Assignment.fromJson(cache.toString());
-            }catch (Exception e){
-            }
+        try {
+            return Assignment.fromJson(cache.toString());
+        } catch (Exception e) {
         }
         Assignment assignment = extractAssignment(notionApiService.fetchPage(assignmentId));
-        try{
-        bucketApi.saveCache("assignment_" + assignmentId, Assignment.toJsonNode(assignment));
-        }catch (Exception e){}
+        try {
+            bucketApi.saveCache("assignment_" + assignmentId, Assignment.toJsonNode(assignment));
+        } catch (Exception e) {
+        }
         return assignment;
     }
 
-    public List<Assignment> getAssignmentsFromDeveloper(UUID developerId) throws NotionException{
+    public List<Assignment> getAssignmentsFromDeveloper(UUID developerId) throws NotionException {
         JsonNode cache = bucketApi.getCache("assignment_developer_" + developerId);
-        if(cache != null) {
-            try{
-                return Assignment.fromJsonList(cache.toString());
-            }catch (Exception e){
-            }
+        try {
+            return Assignment.fromJsonList(cache.toString());
+        } catch (Exception e) {
         }
 
         List<Assignment> assignments = new ArrayList<>();
@@ -93,5 +88,4 @@ public class AssignmentService {
                 getCategories(properties),
                 getScoreComment(properties));
     }
-
 }
