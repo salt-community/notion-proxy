@@ -9,6 +9,7 @@ import com.saltpgp.notionproxy.api.notion.filter.NotionProperty.PeopleFilter;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.api.notion.NotionApiService;
 import com.saltpgp.notionproxy.api.notion.filter.NotionServiceFilters;
+import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import com.saltpgp.notionproxy.modules.staff.StaffFilter;
 import com.saltpgp.notionproxy.modules.staff.StaffService;
 import com.saltpgp.notionproxy.modules.staff.models.Staff;
@@ -123,17 +124,22 @@ public class StaffServiceTest {
     }
 
     @Test
-    void getStaffById_ShouldReturnStaff() throws NotionException, JsonProcessingException {
+    void getStaffById_ShouldReturnStaff() throws NotionException, JsonProcessingException, NotionNotFoundException {
 
         // Arrange
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode mockResponse = objectMapper.readTree(sampleJson);
+
+        Staff expected =  new Staff("John Doe", "john.doe@example.com", UUID.fromString("123e4567-e89b-12d3-a456-426614174000"), "Engineering");
 
         UUID testUUID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
 
         NotionPropertyFilter filter = NotionPropertyFilter.peopleFilter(PeopleFilter.CONTAINS,testUUID.toString(),"Person");
 
         when(mockApiService.fetchDatabase(mockCoreDatabaseId, NotionServiceFilters.filterBuilder(null, filter))).thenReturn(mockResponse);
+
+        // Act
+        var result = mockStaffService.getStaffById(testUUID);
     }
 
 }
