@@ -43,9 +43,10 @@ public class DeveloperController {
     public ResponseEntity<List<DeveloperDto>> getDevelopersList(
             @Parameter(description = "A filter to sort devs by current status(On Assignment, PGP, etc) It is case sensitive",
                     example = "none")
-            @RequestParam(required = false) String status) throws NotionException {
+            @RequestParam(required = false) String status,
+            @RequestParam(value = "useCache", required = false, defaultValue = "true") boolean useCache) throws NotionException {
         log.info("Request received to get developers list with filter: {}", status);
-        return ResponseEntity.ok(DeveloperDto.fromModelList(developerService.getAllDevelopers(status)));
+        return ResponseEntity.ok(DeveloperDto.fromModelList(developerService.getAllDevelopers(status, useCache)));
     }
 
     @GetMapping("{id}")
@@ -56,10 +57,12 @@ public class DeveloperController {
             @ApiResponse(responseCode = "404", description = "Developer not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<DeveloperDto> getDeveloper(@PathVariable UUID id)
+    public ResponseEntity<DeveloperDto> getDeveloper(
+            @PathVariable UUID id,
+            @RequestParam(value = "useCache", required = false, defaultValue = "true") boolean useCache)
             throws NotionException, NotionNotFoundException {
         log.info("Request received to get developer with ID: {}", id);
-        return ResponseEntity.ok(DeveloperDto.fromModel(developerService.getDeveloperById(id)));
+        return ResponseEntity.ok(DeveloperDto.fromModel(developerService.getDeveloperById(id, useCache)));
     }
 
 }
