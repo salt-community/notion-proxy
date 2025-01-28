@@ -18,8 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 import java.util.List;
 import java.util.UUID;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -96,7 +94,7 @@ public class StaffServiceTest {
         """;
 
     @Test
-    void getAllCoreShouldReturnAllCore() throws NotionException, JsonProcessingException {
+    void getAllCore_ShouldReturnAllCore() throws NotionException, JsonProcessingException {
 
         // Arrange
 
@@ -120,6 +118,11 @@ public class StaffServiceTest {
         Assertions.assertEquals(expectedResponse.getLast().getEmail(), result.getLast().getEmail());
         Assertions.assertEquals(expectedResponse.getFirst().getId(), result.getFirst().getId());
         Assertions.assertEquals(expectedResponse.getLast().getRole(), result.getLast().getRole());
+    }
+
+    @Test
+    void getStaffById_ShouldReturnStaff() throws NotionException, JsonProcessingException {
+
     }
 
 }
