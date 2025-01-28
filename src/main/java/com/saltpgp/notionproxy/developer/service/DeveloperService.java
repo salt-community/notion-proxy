@@ -1,6 +1,7 @@
 package com.saltpgp.notionproxy.developer.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.saltpgp.notionproxy.assignment.model.Assignment;
 import com.saltpgp.notionproxy.bucket.BucketApi;
 import com.saltpgp.notionproxy.developer.model.Developer;
 import com.saltpgp.notionproxy.developer.model.DeveloperStatus;
@@ -44,7 +45,18 @@ public class DeveloperService {
         this.DATABASE_ID = DATABASE_ID;
     }
 
-    public List<Developer> getAllDevelopers(String filter) throws NotionException {
+    public List<Developer> getAllDevelopers(String filter, boolean useCache) throws NotionException {
+        if (useCache) {
+            JsonNode cache = bucketApi.getCache("developers_" + filter);
+            try {
+                if (cache != null) {
+                    return Developer.fromJsonList(cache.toString());
+                }
+            } catch (Exception e) {
+                log.warn("Failed to parse cached assignment for ID: {}. Error: {}", filter, e.getMessage());
+            }
+        }
+
         if (filter != null && !DeveloperStatus.isValid(filter)) {
             throw new InvalidFilterException("Invalid filter value: " + filter);
         }
