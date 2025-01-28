@@ -3,6 +3,7 @@ package com.saltpgp.notionproxy.staff;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.saltpgp.notionproxy.bucket.BucketApi;
 import com.saltpgp.notionproxy.exceptions.NotionException;
+import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import com.saltpgp.notionproxy.notionapi.NotionApiService;
 import com.saltpgp.notionproxy.service.NotionServiceFilters;
 import com.saltpgp.notionproxy.staff.models.Staff;
@@ -57,16 +58,21 @@ public class StaffService {
         return staffList;
     }
 
-    public Staff getStaffById(UUID id) throws NotionException {
+    public Staff getStaffById(UUID id) throws NotionException, NotionNotFoundException {
         JsonNode response = notionApiService.fetchDatabase(CORE_DATABASE_ID,
                 NotionServiceFilters.filterBuilder(null, id.toString(), StaffFilter.STAFF_FILTER_SINGLE));
-        JsonNode element = response.get("results").get(0);
-        JsonNode person = element.get("properties").get("Person").get("people").get(0);
-        return new Staff(
-                person.get("name").asText(),
-                person.get("person").get("email").asText(),
-                UUID.fromString(person.get("id").asText()),
-                element.get("properties").get("Guild").get("multi_select").get(0).get("name").asText());
+        try {
+            JsonNode element = response.get("results").get(0);
+            JsonNode person = element.get("properties").get("Person").get("people").get(0);
+            return new Staff(
+                    person.get("name").asText(),
+                    person.get("person").get("email").asText(),
+                    UUID.fromString(person.get("id").asText()),
+                    element.get("properties").get("Guild").get("multi_select").get(0).get("name").asText());
+        } catch (Exception e) {
+            throw new NotionNotFoundException();
+        }
+
     }
 
     public List<StaffDev> getStaffConsultants(UUID id) throws NotionException {

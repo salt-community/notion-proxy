@@ -2,6 +2,7 @@ package com.saltpgp.notionproxy.staff;
 
 
 import com.saltpgp.notionproxy.exceptions.NotionException;
+import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import com.saltpgp.notionproxy.staff.dtos.StaffConsultantDto;
 import com.saltpgp.notionproxy.staff.dtos.StaffDto;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -36,7 +37,7 @@ public class StaffController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StaffDto> getStaffById(@PathVariable UUID id) throws NotionException {
+    public ResponseEntity<StaffDto> getStaffById(@PathVariable UUID id) throws NotionException, NotionNotFoundException {
         return ResponseEntity.ok(StaffDto.fromModel(staffService.getStaffById(id)));
     }
 
