@@ -60,7 +60,7 @@ public class DeveloperService {
         if (filter != null && !DeveloperStatus.isValid(filter)) {
             throw new InvalidFilterException("Invalid filter value: " + filter);
         }
-        List<Developer> allDevelopers = new ArrayList<>();
+        List<Developer> developers = new ArrayList<>();
         String nextCursor = null;
         boolean hasMore = true;
         while (hasMore) {
@@ -68,13 +68,15 @@ public class DeveloperService {
 
             response.get(NotionObject.RESULTS).elements().forEachRemaining(page -> {
                 if (page.get(Results.PROPERTIES).get(Properties.NAME).get(Name.TITLE).get(0) == null) return;
-                allDevelopers.add(createDeveloperFromNotionPage(page));
+                developers.add(createDeveloperFromNotionPage(page));
             });
 
             nextCursor = response.get(NotionObject.NEXT_CURSOR).asText();
             hasMore = response.get(NotionObject.HAS_MORE).asBoolean();
         }
-        return allDevelopers;
+
+        bucketApi.saveCache("developers_" + filter, Developer.toJsonNode(developers));
+        return developers;
     }
 
     public Developer getDeveloperById(UUID id) throws NotionException, NotionNotFoundException {
