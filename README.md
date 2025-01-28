@@ -184,15 +184,15 @@ Retrieve details of a specific assignment by its unique ID
 **Sample Response**:
 ```json
 {
-      "id": "a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6",
-      "name": "Code Optimization",
-      "score": 92,
-      "categories": [
-        "performance",
-        "refactoring"
-      ],
-      "comment": "Great improvements in code efficiency and readability."
-    }
+  "id": "a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6",
+  "name": "Code Optimization",
+  "score": 92,
+  "categories": [
+    "performance",
+    "refactoring"
+  ],
+  "comment": "Great improvements in code efficiency and readability."
+}
 ```
 
 ---
