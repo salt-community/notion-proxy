@@ -82,9 +82,21 @@ public class DeveloperService {
         return developers;
     }
 
-    public Developer getDeveloperById(UUID id) throws NotionException, NotionNotFoundException {
-        JsonNode page = notionApiService.fetchPage(id.toString());
-        return createDeveloperFromNotionPage(page);
+    public Developer getDeveloperById(UUID id, boolean useCache) throws NotionException, NotionNotFoundException {
+        if (useCache) {
+            JsonNode cache = bucketApi.getCache("developer_" + id);
+            try {
+                if (cache != null) {
+                    return Developer.fromJson(cache.toString());
+                }
+            } catch (Exception e) {
+                log.warn("Failed to parse cached developer for ID: {}. Error: {}", id, e.getMessage());
+            }
+        }
+        log.debug("Cache miss for developer ID: {}. Fetching from Notion API.", id);
+        Developer developer = createDeveloperFromNotionPage(notionApiService.fetchPage(id.toString()));
+        bucketApi.saveCache("developer_" + id, Developer.toJsonNode(developer));
+        return developer;
     }
 
     private static Developer createDeveloperFromNotionPage(JsonNode page) {
