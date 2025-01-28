@@ -37,17 +37,17 @@ class DeveloperControllerTest {
         mockDevelopers.add(new Developer("Jane Smith", UUID.randomUUID(), "https://github.com/janesmith", "https://github.com/janesmith.png", "janesmith@example.com", "PGP", "89", new ArrayList<>()));
         mockDevelopers.add(new Developer("John Doe", UUID.randomUUID(), "https://github.com/johndoe", "https://github.com/johndoe.png", "johndoe@example.com", "On Assignment", "95", new ArrayList<>()));
 
-        when(developerService.getAllDevelopers(status)).thenReturn(mockDevelopers);
+        when(developerService.getAllDevelopers(status,false)).thenReturn(mockDevelopers);
 
 
         // Act
-        ResponseEntity<List<DeveloperDto>> response = developerController.getDevelopersList(status);
+        ResponseEntity<List<DeveloperDto>> response = developerController.getDevelopersList(status,false);
 
         // Assert
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(2, response.getBody().size());
-        verify(developerService, times(1)).getAllDevelopers(status);
+        verify(developerService, times(1)).getAllDevelopers(status,false);
     }
 
     @Test
@@ -56,15 +56,15 @@ class DeveloperControllerTest {
         UUID id = UUID.randomUUID();
         Developer mockDeveloper = new Developer("John Doe", id, "https://github.com/johndoe", "https://github.com/johndoe.png", "johndoe@example.com", "On Assignment", "95", new ArrayList<>());
 
-        when(developerService.getDeveloperById(id)).thenReturn(mockDeveloper);
+        when(developerService.getDeveloperById(id,false)).thenReturn(mockDeveloper);
 
         // Act
-        ResponseEntity<DeveloperDto> response = developerController.getDeveloper(id);
+        ResponseEntity<DeveloperDto> response = developerController.getDeveloper(id,false);
 
         // Assert
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(DeveloperDto.fromModel(mockDeveloper), response.getBody());
-        verify(developerService, times(1)).getDeveloperById(id);
+        verify(developerService, times(1)).getDeveloperById(id,false);
     }
 }

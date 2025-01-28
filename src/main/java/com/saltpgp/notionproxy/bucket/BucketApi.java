@@ -11,7 +11,6 @@ import org.springframework.web.client.RestClient;
 
 import java.nio.charset.StandardCharsets;
 
-
 @Component
 @Slf4j
 public class BucketApi {
