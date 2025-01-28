@@ -41,9 +41,9 @@ public class StaffController {
     @GetMapping("")
     public ResponseEntity<List<StaffDto>> getAllStaff(
             @Parameter(description = "A filter to sort staff by role", required = false, example = "none")
-            @RequestParam(required = false, defaultValue = "none") String filter) throws NotionException {
+            @RequestParam(required = false, defaultValue = "none") String role) throws NotionException {
         return ResponseEntity.ok(staffService
-                .getAllCore(filter)
+                .getAllCore(role)
                 .stream()
                 .map(StaffDto::fromModel)
                 .toList());
