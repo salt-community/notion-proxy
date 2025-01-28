@@ -1,6 +1,7 @@
 package com.saltpgp.notionproxy.developer.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.saltpgp.notionproxy.bucket.BucketApi;
 import com.saltpgp.notionproxy.developer.model.Developer;
 import com.saltpgp.notionproxy.developer.model.DeveloperStatus;
 import com.saltpgp.notionproxy.developer.model.Responsible;
@@ -25,6 +26,7 @@ import static com.saltpgp.notionproxy.service.NotionServiceFilters.filterBuilder
 public class DeveloperService {
 
     private final NotionApiService notionApiService;
+    private final BucketApi bucketApi;
     private final String DATABASE_ID;
 
     private static final String FILTER = """
@@ -36,8 +38,9 @@ public class DeveloperService {
                 }
             """;
 
-    public DeveloperService(NotionApiService notionApiService, @Value("${DATABASE_ID}") String DATABASE_ID) {
+    public DeveloperService(NotionApiService notionApiService, BucketApi bucketApi, @Value("${DATABASE_ID}") String DATABASE_ID) {
         this.notionApiService = notionApiService;
+        this.bucketApi = bucketApi;
         this.DATABASE_ID = DATABASE_ID;
     }
 
