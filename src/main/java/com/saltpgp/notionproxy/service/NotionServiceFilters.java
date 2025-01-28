@@ -64,8 +64,7 @@ public class NotionServiceFilters {
                 {
                 """ + buildCursor(cursor) + buildFilter(filterString, filterParam) + """
                 
-                }
-                """;
+                }""";
     }
 
     public static String filterBuilder(String cursor) {
@@ -80,8 +79,7 @@ public class NotionServiceFilters {
         return """
                 {
                 """ + buildCursor(cursor) + filter.getFilter() + """
-                }
-                """;
+                }""";
     }
 
     private static String buildFilter(String filter, String filterParam) {

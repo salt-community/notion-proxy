@@ -1,8 +1,12 @@
 package com.saltpgp.notionproxy.staff;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.saltpgp.notionproxy.bucket.BucketApi;
 import com.saltpgp.notionproxy.exceptions.NotionException;
+import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import com.saltpgp.notionproxy.notionapi.NotionApiService;
+import com.saltpgp.notionproxy.service.NotionProperty.NotionPropertyFilter;
+import com.saltpgp.notionproxy.service.NotionProperty.PeopleFilter;
 import com.saltpgp.notionproxy.service.NotionServiceFilters;
 import com.saltpgp.notionproxy.staff.models.Staff;
 import com.saltpgp.notionproxy.staff.models.StaffDev;
@@ -18,13 +22,16 @@ import java.util.UUID;
 @Slf4j
 public class StaffService {
 
-    private NotionApiService notionApiService;
+    private final NotionApiService notionApiService;
     private final String CORE_DATABASE_ID, DEV_DATABASE_ID;
+    private final BucketApi BUCKET_API;
 
-    public StaffService(NotionApiService notionApiService, @Value("${CORE_DATABASE_ID}")String coreDatabaseId, @Value("${DATABASE_ID}") String devDatabaseId) {
+    public StaffService(NotionApiService notionApiService, @Value("${CORE_DATABASE_ID}")String coreDatabaseId, @Value("${DATABASE_ID}") String devDatabaseId
+    ,BucketApi bucketApi) {
         this.notionApiService = notionApiService;
         CORE_DATABASE_ID = coreDatabaseId;
         DEV_DATABASE_ID = devDatabaseId;
+        BUCKET_API = bucketApi;
     }
 
     public List<Staff> getAllCore(String filter) throws NotionException {
@@ -53,16 +60,22 @@ public class StaffService {
         return staffList;
     }
 
-    public Staff getStaffById(UUID id) throws NotionException {
+    public Staff getStaffById(UUID id) throws NotionException, NotionNotFoundException {
+        NotionPropertyFilter filter = NotionPropertyFilter.peopleFilter(PeopleFilter.CONTAINS,id.toString(),"Person");
         JsonNode response = notionApiService.fetchDatabase(CORE_DATABASE_ID,
-                NotionServiceFilters.filterBuilder(null, id.toString(), StaffFilter.STAFF_FILTER_SINGLE));
-        JsonNode element = response.get("results").get(0);
-        JsonNode person = element.get("properties").get("Person").get("people").get(0);
-        return new Staff(
-                person.get("name").asText(),
-                person.get("person").get("email").asText(),
-                UUID.fromString(person.get("id").asText()),
-                element.get("properties").get("Guild").get("multi_select").get(0).get("name").asText());
+                NotionServiceFilters.filterBuilder(null, filter));
+        try {
+            JsonNode element = response.get("results").get(0);
+            JsonNode person = element.get("properties").get("Person").get("people").get(0);
+            return new Staff(
+                    person.get("name").asText(),
+                    person.get("person").get("email").asText(),
+                    UUID.fromString(person.get("id").asText()),
+                    element.get("properties").get("Guild").get("multi_select").get(0).get("name").asText());
+        } catch (Exception e) {
+            throw new NotionNotFoundException();
+        }
+
     }
 
     public List<StaffDev> getStaffConsultants(UUID id) throws NotionException {

@@ -3,6 +3,7 @@ package com.saltpgp.notionproxy.staff.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.saltpgp.notionproxy.bucket.BucketApi;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.notionapi.NotionApiService;
 import com.saltpgp.notionproxy.service.NotionServiceFilters;
@@ -28,6 +29,7 @@ public class StaffServiceTest {
     NotionApiService mockApiService;
 
     StaffService mockStaffService;
+    BucketApi mockBucketApi;
 
     @Value("${CORE_DATABASE_ID}")
     private String mockCoreDatabaseId;
@@ -36,8 +38,9 @@ public class StaffServiceTest {
 
     @BeforeEach
     void setUp() {
+        mockBucketApi = mock(BucketApi.class);
         mockApiService = mock(NotionApiService.class);
-        mockStaffService = new StaffService(mockApiService,mockCoreDatabaseId, mockDeveloperDatabaseId);
+        mockStaffService = new StaffService(mockApiService,mockCoreDatabaseId, mockDeveloperDatabaseId, mockBucketApi);
     }
 
     private static String sampleJson = """
