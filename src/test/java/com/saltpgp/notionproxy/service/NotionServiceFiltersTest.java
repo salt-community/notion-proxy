@@ -1,5 +1,6 @@
 package com.saltpgp.notionproxy.service;
 
+import com.saltpgp.notionproxy.api.notion.filter.NotionServiceFilters;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

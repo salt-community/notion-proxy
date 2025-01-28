@@ -3,17 +3,16 @@ package com.saltpgp.notionproxy.staff.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.saltpgp.notionproxy.bucket.BucketApi;
+import com.saltpgp.notionproxy.api.bucket.BucketApiService;
 import com.saltpgp.notionproxy.exceptions.NotionException;
-import com.saltpgp.notionproxy.notionapi.NotionApiService;
-import com.saltpgp.notionproxy.service.NotionServiceFilters;
-import com.saltpgp.notionproxy.staff.StaffFilter;
-import com.saltpgp.notionproxy.staff.StaffService;
-import com.saltpgp.notionproxy.staff.models.Staff;
+import com.saltpgp.notionproxy.api.notion.NotionApiService;
+import com.saltpgp.notionproxy.api.notion.filter.NotionServiceFilters;
+import com.saltpgp.notionproxy.modules.staff.StaffFilter;
+import com.saltpgp.notionproxy.modules.staff.StaffService;
+import com.saltpgp.notionproxy.modules.staff.models.Staff;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
@@ -29,7 +28,7 @@ public class StaffServiceTest {
     NotionApiService mockApiService;
 
     StaffService mockStaffService;
-    BucketApi mockBucketApi;
+    BucketApiService mockBucketApiService;
 
     @Value("${CORE_DATABASE_ID}")
     private String mockCoreDatabaseId;
@@ -38,9 +37,9 @@ public class StaffServiceTest {
 
     @BeforeEach
     void setUp() {
-        mockBucketApi = mock(BucketApi.class);
+        mockBucketApiService = mock(BucketApiService.class);
         mockApiService = mock(NotionApiService.class);
-        mockStaffService = new StaffService(mockApiService,mockCoreDatabaseId, mockDeveloperDatabaseId, mockBucketApi);
+        mockStaffService = new StaffService(mockApiService,mockCoreDatabaseId, mockDeveloperDatabaseId, mockBucketApiService);
     }
 
     private static String sampleJson = """
