@@ -5,6 +5,8 @@ import com.saltpgp.notionproxy.bucket.BucketApi;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import com.saltpgp.notionproxy.notionapi.NotionApiService;
+import com.saltpgp.notionproxy.service.NotionProperty.NotionPropertyFilter;
+import com.saltpgp.notionproxy.service.NotionProperty.PeopleFilter;
 import com.saltpgp.notionproxy.service.NotionServiceFilters;
 import com.saltpgp.notionproxy.staff.models.Staff;
 import com.saltpgp.notionproxy.staff.models.StaffDev;
@@ -59,11 +61,9 @@ public class StaffService {
     }
 
     public Staff getStaffById(UUID id) throws NotionException, NotionNotFoundException {
+        NotionPropertyFilter filter = NotionPropertyFilter.peopleFilter(PeopleFilter.CONTAINS,id.toString(),"Person");
         JsonNode response = notionApiService.fetchDatabase(CORE_DATABASE_ID,
-                NotionServiceFilters.filterBuilder(null, id.toString(), StaffFilter.STAFF_FILTER_SINGLE));
-        System.out.println("Response " + response);
-        System.out.println(NotionServiceFilters.filterBuilder(null, id.toString(), StaffFilter.STAFF_FILTER_SINGLE));
-        System.out.println("EndOfLine");
+                NotionServiceFilters.filterBuilder(null, filter));
         try {
             JsonNode element = response.get("results").get(0);
             JsonNode person = element.get("properties").get("Person").get("people").get(0);
