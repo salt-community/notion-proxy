@@ -1,7 +1,6 @@
 package com.saltpgp.notionproxy.developer.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.saltpgp.notionproxy.assignment.model.Assignment;
 import com.saltpgp.notionproxy.bucket.BucketApi;
 import com.saltpgp.notionproxy.developer.model.Developer;
 import com.saltpgp.notionproxy.developer.model.DeveloperStatus;
@@ -100,6 +99,7 @@ public class DeveloperService {
     }
 
     private static Developer createDeveloperFromNotionPage(JsonNode page) {
+        log.debug("Create developer with ID: {}", getDeveloperId(page));
         var properties = page.get("properties");
         var githubUrl = getDeveloperGithubUrl(properties);
 
@@ -119,6 +119,7 @@ public class DeveloperService {
         List<Responsible> responsibleList = new ArrayList<>();
         properties.get(Properties.RESPONSIBLE).get(NotionResponsible.PEOPLE).elements().forEachRemaining(responsible -> {
             try {
+                log.debug("Create responsible with ID: {}", getResponsibleId(responsible));
                 responsibleList.add(new Responsible(
                         getResponsibleName(responsible),
                         getResponsibleId(responsible),
