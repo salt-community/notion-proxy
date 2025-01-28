@@ -45,6 +45,10 @@ public class DeveloperService {
     }
 
     public List<Developer> getAllDevelopers(String filter, boolean useCache) throws NotionException {
+        if (filter != null && !DeveloperStatus.isValid(filter)) {
+            throw new InvalidFilterException("Invalid filter value: " + filter);
+        }
+
         if (useCache) {
             JsonNode cache = bucketApi.getCache("developers_" + filter);
             try {
@@ -56,9 +60,7 @@ public class DeveloperService {
             }
         }
         log.debug("Cache miss for filter: {}. Fetching from Notion API.", filter);
-        if (filter != null && !DeveloperStatus.isValid(filter)) {
-            throw new InvalidFilterException("Invalid filter value: " + filter);
-        }
+
         List<Developer> developers = new ArrayList<>();
         String nextCursor = null;
         boolean hasMore = true;
