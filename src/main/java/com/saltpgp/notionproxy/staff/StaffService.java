@@ -39,11 +39,13 @@ public class StaffService {
         boolean hasMore = true;
         List<Staff> staffList= new ArrayList<>();
         while(hasMore) {
+            log.debug("Getting staff list started new loop, using filter {}", filter);
             JsonNode response = notionApiService.fetchDatabase(CORE_DATABASE_ID,
                     NotionServiceFilters.filterBuilder(nextCursor,filter,StaffFilter.STAFF_FILTER));
             response.get("results").elements().forEachRemaining(element -> {
                 JsonNode person = element.get("properties").get("Person").get("people").get(0);
                 if (person == null) {
+                    log.debug("Skipped empty person");
                     return;
                 }
 
@@ -62,6 +64,7 @@ public class StaffService {
 
     public Staff getStaffById(UUID id) throws NotionException, NotionNotFoundException {
         NotionPropertyFilter filter = NotionPropertyFilter.peopleFilter(PeopleFilter.CONTAINS,id.toString(),"Person");
+        log.debug("Fetching staff by id: {}", filter);
         JsonNode response = notionApiService.fetchDatabase(CORE_DATABASE_ID,
                 NotionServiceFilters.filterBuilder(null, filter));
         try {
@@ -73,6 +76,7 @@ public class StaffService {
                     UUID.fromString(person.get("id").asText()),
                     element.get("properties").get("Guild").get("multi_select").get(0).get("name").asText());
         } catch (Exception e) {
+            log.error(e.getMessage());
             throw new NotionNotFoundException();
         }
 
@@ -82,6 +86,7 @@ public class StaffService {
         String nextCursor = null;
         boolean hasMore = true;
         List<StaffDev> devs = new ArrayList<>();
+        log.debug("Fetching staff consultants by id: {}", id);
         while(hasMore) {
             JsonNode response = notionApiService.fetchDatabase(DEV_DATABASE_ID,
                     NotionServiceFilters.filterBuilder(nextCursor, id.toString(), StaffFilter.STAFF_FILTER_RESPONSIBLE));
