@@ -172,7 +172,7 @@ Retrieve all assignments associated with a specific developer by their unique de
 
 ---
 
-### 6. **`GET /api/assignments/{id}`**
+### 7. **`GET /api/assignments/{id}`**
 Retrieve details of a specific assignment by its unique ID
 
 **Path Parameters**:
