@@ -59,21 +59,21 @@ This returns a developer by ID with details such as name, email, and GitHub info
 **Sample Response**:
 ```json
 {
-    "name": "John Doe",
-    "id": "123e4567-e89b-12d3-a456-426614174000",
-    "status": "active",
-    "email": "johndoe@example.com",
-    "githubUrl": "https://github.com/johndoe",
-    "githubImageUrl": "https://avatars.githubusercontent.com/u/12345678?v=4",
-    "totalScore": "85",
-    "responsibles": [
-      {
-        "name": "Jane Smith",
-        "id": "987e6543-e21b-34d3-a789-426614174111",
-        "email": "janesmith@example.com"
-      }
-    ]
-  }
+  "name": "John Doe",
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "status": "active",
+  "email": "johndoe@example.com",
+  "githubUrl": "https://github.com/johndoe",
+  "githubImageUrl": "https://avatars.githubusercontent.com/u/12345678?v=4",
+  "totalScore": "85",
+  "responsibles": [
+    {
+      "name": "Jane Smith",
+      "id": "987e6543-e21b-34d3-a789-426614174111",
+      "email": "janesmith@example.com"
+    }
+  ]
+}
 ```
 
 ---
