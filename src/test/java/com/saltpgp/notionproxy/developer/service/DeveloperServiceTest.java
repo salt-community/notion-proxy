@@ -2,13 +2,14 @@ package com.saltpgp.notionproxy.developer.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.saltpgp.notionproxy.bucket.BucketApi;
-import com.saltpgp.notionproxy.developer.model.Developer;
+import com.saltpgp.notionproxy.api.bucket.BucketApiService;
+import com.saltpgp.notionproxy.modules.developer.model.Developer;
 import com.saltpgp.notionproxy.exceptions.InvalidFilterException;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
-import com.saltpgp.notionproxy.notionapi.NotionApiService;
-import com.saltpgp.notionproxy.service.NotionServiceFilters;
+import com.saltpgp.notionproxy.api.notion.NotionApiService;
+import com.saltpgp.notionproxy.api.notion.filter.NotionServiceFilters;
+import com.saltpgp.notionproxy.modules.developer.service.DeveloperService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.*;
 class DeveloperServiceTest {
 
     NotionApiService mockApiService;
-    BucketApi mockBucketApi;
+    BucketApiService mockBucketApiService;
 
     DeveloperService developerService;
 
@@ -36,9 +37,9 @@ class DeveloperServiceTest {
         String databaseResponse;
 
         mockApiService = mock(NotionApiService.class);
-        mockBucketApi = mock(BucketApi.class);
+        mockBucketApiService = mock(BucketApiService.class);
 
-        developerService = new DeveloperService(mockApiService,mockBucketApi ,DATABASE_ID);
+        developerService = new DeveloperService(mockApiService, mockBucketApiService,DATABASE_ID);
 
         mapper = new ObjectMapper();
 

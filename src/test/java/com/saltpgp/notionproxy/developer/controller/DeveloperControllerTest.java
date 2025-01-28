@@ -1,8 +1,9 @@
 package com.saltpgp.notionproxy.developer.controller;
 
-import com.saltpgp.notionproxy.developer.controller.dtos.DeveloperDto;
-import com.saltpgp.notionproxy.developer.model.Developer;
-import com.saltpgp.notionproxy.developer.service.DeveloperService;
+import com.saltpgp.notionproxy.modules.developer.controller.DeveloperController;
+import com.saltpgp.notionproxy.modules.developer.controller.dtos.DeveloperDto;
+import com.saltpgp.notionproxy.modules.developer.model.Developer;
+import com.saltpgp.notionproxy.modules.developer.service.DeveloperService;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
