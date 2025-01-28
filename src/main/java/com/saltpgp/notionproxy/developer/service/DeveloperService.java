@@ -53,10 +53,10 @@ public class DeveloperService {
                     return Developer.fromJsonList(cache.toString());
                 }
             } catch (Exception e) {
-                log.warn("Failed to parse cached assignment for ID: {}. Error: {}", filter, e.getMessage());
+                log.warn("Failed to parse cached developers for ID: {}. Error: {}", filter, e.getMessage());
             }
         }
-
+        log.debug("Cache miss for filter: {}. Fetching from Notion API.", filter);
         if (filter != null && !DeveloperStatus.isValid(filter)) {
             throw new InvalidFilterException("Invalid filter value: " + filter);
         }
@@ -64,6 +64,7 @@ public class DeveloperService {
         String nextCursor = null;
         boolean hasMore = true;
         while (hasMore) {
+            log.debug("Fetching developer for filter: {} with cursor: {}", filter, nextCursor);
             JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, filterBuilder(nextCursor, filter, FILTER));
 
             response.get(NotionObject.RESULTS).elements().forEachRemaining(page -> {
@@ -73,8 +74,10 @@ public class DeveloperService {
 
             nextCursor = response.get(NotionObject.NEXT_CURSOR).asText();
             hasMore = response.get(NotionObject.HAS_MORE).asBoolean();
+            log.debug("Fetched {} developers so far for filter: {}", developers.size(), filter);
         }
 
+        log.debug("Fetched total {} developers for filter: {}. Saving to cache.", developers.size(), filter);
         bucketApi.saveCache("developers_" + filter, Developer.toJsonNode(developers));
         return developers;
     }
