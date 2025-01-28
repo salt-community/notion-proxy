@@ -61,6 +61,9 @@ public class StaffService {
     public Staff getStaffById(UUID id) throws NotionException, NotionNotFoundException {
         JsonNode response = notionApiService.fetchDatabase(CORE_DATABASE_ID,
                 NotionServiceFilters.filterBuilder(null, id.toString(), StaffFilter.STAFF_FILTER_SINGLE));
+        System.out.println("Response " + response);
+        System.out.println(NotionServiceFilters.filterBuilder(null, id.toString(), StaffFilter.STAFF_FILTER_SINGLE));
+        System.out.println("EndOfLine");
         try {
             JsonNode element = response.get("results").get(0);
             JsonNode person = element.get("properties").get("Person").get("people").get(0);
