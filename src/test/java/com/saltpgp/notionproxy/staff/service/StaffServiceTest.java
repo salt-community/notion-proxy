@@ -130,9 +130,8 @@ public class StaffServiceTest {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode mockResponse = objectMapper.readTree(sampleJson);
 
-        Staff expected =  new Staff("John Doe", "john.doe@example.com", UUID.fromString("123e4567-e89b-12d3-a456-426614174000"), "Engineering");
-
         UUID testUUID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
+        Staff expected =  new Staff("John Doe", "john.doe@example.com", testUUID, "Engineering");
 
         NotionPropertyFilter filter = NotionPropertyFilter.peopleFilter(PeopleFilter.CONTAINS,testUUID.toString(),"Person");
 
@@ -140,6 +139,12 @@ public class StaffServiceTest {
 
         // Act
         var result = mockStaffService.getStaffById(testUUID);
+
+        // Assert
+        Assertions.assertEquals(expected.getName(), result.getName());
+        Assertions.assertEquals(expected.getEmail(), result.getEmail());
+        Assertions.assertEquals(expected.getRole(), result.getRole());
+        Assertions.assertEquals(expected.getId(), result.getId());
     }
 
 }
