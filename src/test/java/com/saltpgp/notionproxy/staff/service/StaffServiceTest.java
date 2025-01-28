@@ -103,15 +103,15 @@ public class StaffServiceTest {
 
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode mockResponse = objectMapper.readTree(sampleJson);
+        String filter = "none";
+
         when(mockApiService.fetchDatabase(mockCoreDatabaseId,
-                NotionServiceFilters.filterBuilder(null,"none", StaffFilter.STAFF_FILTER))).thenReturn(mockResponse);
+                NotionServiceFilters.filterBuilder(null, filter, StaffFilter.STAFF_FILTER))).thenReturn(mockResponse);
 
         List<Staff> expectedResponse = List.of(
                 new Staff("John Doe", "john.doe@example.com", UUID.fromString("123e4567-e89b-12d3-a456-426614174000"), "Engineering"),
                 new Staff("Jane Smith", "jane.smith@example.com", UUID.fromString("123e4567-e89b-12d3-a456-426614174001"), "Design")
         );
-
-        String filter = "none";
 
         // Act
         var result = mockStaffService.getAllCore(filter);
