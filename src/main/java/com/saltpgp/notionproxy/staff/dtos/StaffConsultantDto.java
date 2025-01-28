@@ -1,6 +1,5 @@
 package com.saltpgp.notionproxy.staff.dtos;
 
-import com.saltpgp.notionproxy.staff.models.Staff;
 import com.saltpgp.notionproxy.staff.models.StaffDev;
 
 import java.util.UUID;
