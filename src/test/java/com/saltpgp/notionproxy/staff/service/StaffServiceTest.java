@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saltpgp.notionproxy.api.bucket.BucketApiService;
+import com.saltpgp.notionproxy.api.notion.filter.NotionProperty.NotionPropertyFilter;
+import com.saltpgp.notionproxy.api.notion.filter.NotionProperty.PeopleFilter;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.api.notion.NotionApiService;
 import com.saltpgp.notionproxy.api.notion.filter.NotionServiceFilters;
@@ -123,6 +125,15 @@ public class StaffServiceTest {
     @Test
     void getStaffById_ShouldReturnStaff() throws NotionException, JsonProcessingException {
 
+        // Arrange
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode mockResponse = objectMapper.readTree(sampleJson);
+
+        UUID testUUID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
+
+        NotionPropertyFilter filter = NotionPropertyFilter.peopleFilter(PeopleFilter.CONTAINS,testUUID.toString(),"Person");
+
+        when(mockApiService.fetchDatabase(mockCoreDatabaseId, NotionServiceFilters.filterBuilder(null, filter))).thenReturn(mockResponse);
     }
 
 }
