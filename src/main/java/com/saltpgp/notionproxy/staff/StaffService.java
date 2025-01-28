@@ -1,6 +1,7 @@
 package com.saltpgp.notionproxy.staff;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.saltpgp.notionproxy.bucket.BucketApi;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.notionapi.NotionApiService;
 import com.saltpgp.notionproxy.service.NotionServiceFilters;
@@ -18,13 +19,16 @@ import java.util.UUID;
 @Slf4j
 public class StaffService {
 
-    private NotionApiService notionApiService;
+    private final NotionApiService notionApiService;
     private final String CORE_DATABASE_ID, DEV_DATABASE_ID;
+    private final BucketApi BUCKET_API;
 
-    public StaffService(NotionApiService notionApiService, @Value("${CORE_DATABASE_ID}")String coreDatabaseId, @Value("${DATABASE_ID}") String devDatabaseId) {
+    public StaffService(NotionApiService notionApiService, @Value("${CORE_DATABASE_ID}")String coreDatabaseId, @Value("${DATABASE_ID}") String devDatabaseId
+    ,BucketApi bucketApi) {
         this.notionApiService = notionApiService;
         CORE_DATABASE_ID = coreDatabaseId;
         DEV_DATABASE_ID = devDatabaseId;
+        BUCKET_API = bucketApi;
     }
 
     public List<Staff> getAllCore(String filter) throws NotionException {
