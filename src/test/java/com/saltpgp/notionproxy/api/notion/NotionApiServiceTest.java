@@ -1,10 +1,9 @@
-package com.saltpgp.notionproxy.service;
+package com.saltpgp.notionproxy.api.notion;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.saltpgp.notionproxy.exceptions.NotionException;
-import com.saltpgp.notionproxy.api.notion.NotionApiService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,13 +31,16 @@ class NotionApiServiceTest {
     private String API_KEY;
     @Value("${NOTION_VERSION}")
     private String NOTION_VERSION;
+    @Value("${NOTION_URL}")
+    private String NOTION_URL;
+
 
     @Test
     void fetchPage_Success() throws NotionException {
         String pageId = "12345";
         String mockResponse = "{\"id\":\"12345\", \"object\":\"page\", \"properties\":{}}";
 
-        server.expect(requestTo("https://api.notion.com/v1/pages/12345"))
+        server.expect(requestTo(NOTION_URL+"/pages/12345"))
                 .andExpect(method(HttpMethod.GET))
                 .andExpect(header("Authorization", "Bearer " + API_KEY))
                 .andExpect(header("Notion-Version", NOTION_VERSION))
@@ -54,7 +56,7 @@ class NotionApiServiceTest {
     void fetchPage_NotFound() {
         String pageId = "12345";
 
-        server.expect(requestTo("https://api.notion.com/v1/pages/12345"))
+        server.expect(requestTo(NOTION_URL+"/pages/12345"))
                 .andExpect(method(HttpMethod.GET))
                 .andExpect(header("Authorization", "Bearer " + API_KEY))
                 .andExpect(header("Notion-Version", NOTION_VERSION))
@@ -69,7 +71,7 @@ class NotionApiServiceTest {
     void fetchPage_Unauthorized() {
         String pageId = "12345";
 
-        server.expect(requestTo("https://api.notion.com/v1/pages/12345"))
+        server.expect(requestTo(NOTION_URL+"/pages/12345"))
                 .andExpect(method(HttpMethod.GET))
                 .andExpect(header("Authorization", "Bearer " + API_KEY))
                 .andExpect(header("Notion-Version", NOTION_VERSION))
@@ -84,7 +86,7 @@ class NotionApiServiceTest {
     void fetchPage_BadRequest() {
         String pageId = "12345";
 
-        server.expect(requestTo("https://api.notion.com/v1/pages/12345"))
+        server.expect(requestTo(NOTION_URL+"/pages/12345"))
                 .andExpect(method(HttpMethod.GET))
                 .andExpect(header("Authorization", "Bearer " + API_KEY))
                 .andExpect(header("Notion-Version", NOTION_VERSION))
@@ -99,7 +101,7 @@ class NotionApiServiceTest {
     void fetchPage_Unknown() {
         String pageId = "12345";
 
-        server.expect(requestTo("https://api.notion.com/v1/pages/12345"))
+        server.expect(requestTo(NOTION_URL+"/pages/12345"))
                 .andExpect(method(HttpMethod.GET))
                 .andExpect(header("Authorization", "Bearer " + API_KEY))
                 .andExpect(header("Notion-Version", NOTION_VERSION))
@@ -114,7 +116,7 @@ class NotionApiServiceTest {
     void fetchPage_ResourceAccessException() {
         String pageId = "12345";
 
-        server.expect(requestTo("https://api.notion.com/v1/pages/12345"))
+        server.expect(requestTo(NOTION_URL+"/pages/12345"))
                 .andExpect(method(HttpMethod.GET))
                 .andExpect(header("Authorization", "Bearer " + API_KEY))
                 .andExpect(header("Notion-Version", NOTION_VERSION))
@@ -131,7 +133,7 @@ class NotionApiServiceTest {
     void fetchPage_Exception() throws Exception {
         String pageId = "12345";
 
-        server.expect(requestTo("https://api.notion.com/v1/pages/12345"))
+        server.expect(requestTo(NOTION_URL+"/pages/12345"))
                 .andExpect(method(HttpMethod.GET))
                 .andExpect(header("Authorization", "Bearer " + API_KEY))
                 .andExpect(header("Notion-Version", NOTION_VERSION))
@@ -152,7 +154,7 @@ class NotionApiServiceTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode body = objectMapper.createObjectNode();
 
-        server.expect(requestTo("https://api.notion.com/v1/databases/abc123/query"))
+        server.expect(requestTo(NOTION_URL+"/databases/abc123/query"))
                 .andExpect(method(HttpMethod.POST))
                 .andExpect(header("Authorization", "Bearer " + API_KEY))
                 .andExpect(header("Notion-Version", NOTION_VERSION))
@@ -172,7 +174,7 @@ class NotionApiServiceTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode body = objectMapper.createObjectNode();
 
-        server.expect(requestTo("https://api.notion.com/v1/databases/abc123/query"))
+        server.expect(requestTo(NOTION_URL+"/databases/abc123/query"))
                 .andExpect(method(HttpMethod.POST))
                 .andExpect(header("Authorization", "Bearer " + API_KEY))
                 .andExpect(header("Notion-Version", NOTION_VERSION))
@@ -190,7 +192,7 @@ class NotionApiServiceTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode body = objectMapper.createObjectNode();
 
-        server.expect(requestTo("https://api.notion.com/v1/databases/abc123/query"))
+        server.expect(requestTo(NOTION_URL+"/databases/abc123/query"))
                 .andExpect(method(HttpMethod.POST))
                 .andExpect(header("Authorization", "Bearer " + API_KEY))
                 .andExpect(header("Notion-Version", NOTION_VERSION))
@@ -208,7 +210,7 @@ class NotionApiServiceTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode body = objectMapper.createObjectNode();
 
-        server.expect(requestTo("https://api.notion.com/v1/databases/abc123/query"))
+        server.expect(requestTo(NOTION_URL+"/databases/abc123/query"))
                 .andExpect(method(HttpMethod.POST))
                 .andExpect(header("Authorization", "Bearer " + API_KEY))
                 .andExpect(header("Notion-Version", NOTION_VERSION))
@@ -226,7 +228,7 @@ class NotionApiServiceTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode body = objectMapper.createObjectNode();
 
-        server.expect(requestTo("https://api.notion.com/v1/databases/abc123/query"))
+        server.expect(requestTo(NOTION_URL+"/databases/abc123/query"))
                 .andExpect(method(HttpMethod.POST))
                 .andExpect(header("Authorization", "Bearer " + API_KEY))
                 .andExpect(header("Notion-Version", NOTION_VERSION))
@@ -244,7 +246,7 @@ class NotionApiServiceTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode body = objectMapper.createObjectNode();
 
-        server.expect(requestTo("https://api.notion.com/v1/databases/abc123/query"))
+        server.expect(requestTo(NOTION_URL+"/databases/abc123/query"))
                 .andExpect(method(HttpMethod.POST))
                 .andExpect(header("Authorization", "Bearer " + API_KEY))
                 .andExpect(header("Notion-Version", NOTION_VERSION))
@@ -265,7 +267,7 @@ class NotionApiServiceTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode body = objectMapper.createObjectNode();
 
-        server.expect(requestTo("https://api.notion.com/v1/databases/abc123/query"))
+        server.expect(requestTo(NOTION_URL+"/databases/abc123/query"))
                 .andExpect(method(HttpMethod.POST))
                 .andExpect(header("Authorization", "Bearer " + API_KEY))
                 .andExpect(header("Notion-Version", NOTION_VERSION))
