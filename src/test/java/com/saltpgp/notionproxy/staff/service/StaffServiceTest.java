@@ -206,7 +206,8 @@ public class StaffServiceTest {
         String filter = NotionServiceFilters.filterBuilder(null, testUUID.toString() ,StaffFilter.STAFF_FILTER_RESPONSIBLE);
         when(mockApiService.fetchDatabase(mockDeveloperDatabaseId, filter)).thenReturn(mockResponse);
 
-
+        // Act
+        List<StaffDev> result = mockStaffService.getStaffConsultants(testUUID);
 
 
     }
