@@ -209,7 +209,10 @@ public class StaffServiceTest {
         // Act
         List<StaffDev> result = mockStaffService.getStaffConsultants(testUUID);
 
-
+        // Assert
+        Assertions.assertEquals(expectedResponse.getFirst().getName(), result.getFirst().getName());
+        Assertions.assertEquals(expectedResponse.getLast().getId(), result.getLast().getId());
+        Assertions.assertEquals(expectedResponse.getFirst().getEmail(), result.getFirst().getEmail());
     }
 
 }
