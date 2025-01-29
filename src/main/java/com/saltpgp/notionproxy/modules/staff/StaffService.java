@@ -25,6 +25,9 @@ public class StaffService {
     private final NotionApiService notionApiService;
     private final String CORE_DATABASE_ID, DEV_DATABASE_ID;
     private final BucketApiService BUCKET_API;
+    private final String BUCKET_ID_ALL = "staff_getAll_filter_";
+    private final String BUCKET_ID_DEV = "staff_getAll_dev_id_";
+    private final String BUCKET_ID_SINGLE = "staff_getAll_single";
 
     public StaffService(NotionApiService notionApiService, @Value("${CORE_DATABASE_ID}")String coreDatabaseId, @Value("${DATABASE_ID}") String devDatabaseId
     , BucketApiService bucketApiService) {
@@ -37,6 +40,7 @@ public class StaffService {
     public List<Staff> getAllCore(String filter) throws NotionException {
         String nextCursor = null;
         boolean hasMore = true;
+        JsonNode bucket = BUCKET_API.getCache(BUCKET_ID_ALL+filter);
         List<Staff> staffList= new ArrayList<>();
         while(hasMore) {
             log.debug("Getting staff list started new loop, using filter {}", filter);
@@ -59,6 +63,7 @@ public class StaffService {
             nextCursor = response.get("next_cursor").asText();
             hasMore = response.get("has_more").asBoolean();
         }
+        //BUCKET_API.saveCache(BUCKET_ID_ALL+filter, stafflist);
         return staffList;
     }
 
