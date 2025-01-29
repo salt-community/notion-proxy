@@ -43,7 +43,7 @@ public class StaffServiceTest {
         mockStaffService = new StaffService(mockApiService,mockCoreDatabaseId, mockDeveloperDatabaseId, mockBucketApiService);
     }
 
-    private static String sampleJson = """
+    private static final String sampleStaffJson = """
             {
                 "results": [
                     {
@@ -96,13 +96,55 @@ public class StaffServiceTest {
             }
         """;
 
+    private static final String sampleStaffDeveloperJson = """
+    {
+      "object": "list",
+      "results": [
+        {
+          "object": "page",
+          "id": "550e8400-e29b-41d4-a716-446655440000",
+          "properties": {
+            "Name": {
+              "title": [
+                {
+                  "plain_text": "John Doe"
+                }
+              ]
+            },
+            "Email": {
+              "email": "john.doe@example.com"
+            }
+          }
+        },
+        {
+          "object": "page",
+          "id": "123e4567-e89b-12d3-a456-426614174000",
+          "properties": {
+            "Name": {
+              "title": [
+                {
+                  "plain_text": "Jane Smith"
+                }
+              ]
+            },
+            "Email": {
+              "email": "jane.smith@example.com"
+            }
+          }
+        }
+      ],
+      "next_cursor": "some-cursor-token",
+      "has_more": false
+    }            
+""";
+
     @Test
     void getAllCore_ShouldReturnAllCore() throws NotionException, JsonProcessingException {
 
         // Arrange
 
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode mockResponse = objectMapper.readTree(sampleJson);
+        JsonNode mockResponse = objectMapper.readTree(sampleStaffJson);
         String filter = "none";
 
         when(mockApiService.fetchDatabase(mockCoreDatabaseId,
@@ -128,7 +170,7 @@ public class StaffServiceTest {
 
         // Arrange
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode mockResponse = objectMapper.readTree(sampleJson);
+        JsonNode mockResponse = objectMapper.readTree(sampleStaffJson);
 
         UUID testUUID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
         Staff expected =  new Staff("John Doe", "john.doe@example.com", testUUID, "Engineering");
