@@ -23,6 +23,10 @@ public class Staff {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
+    public static JsonNode toJsonNode(Staff staff) {
+        return objectMapper.convertValue(staff, JsonNode.class);
+    }
+
     public static JsonNode toJsonNode(List<Staff> staffList) {
         Map<String, Object> result = Map.of("staffList", staffList);
         return objectMapper.convertValue(result, JsonNode.class);
