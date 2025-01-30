@@ -157,7 +157,7 @@ public class StaffServiceTest {
         );
 
         // Act
-        var result = mockStaffService.getAllCore(filter);
+        List<Staff> result = mockStaffService.getAllCore(filter);
 
         // Assert
         Assertions.assertEquals(expectedResponse.getFirst().getName(), result.getFirst().getName());
