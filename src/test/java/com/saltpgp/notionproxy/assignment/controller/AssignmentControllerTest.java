@@ -2,6 +2,7 @@ package com.saltpgp.notionproxy.assignment.controller;
 
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.modules.assignment.controller.AssignmentController;
+import com.saltpgp.notionproxy.modules.assignment.controller.dtos.AssignmentDto;
 import com.saltpgp.notionproxy.modules.assignment.controller.dtos.DeveloperAssignmentsDto;
 import com.saltpgp.notionproxy.modules.assignment.model.Assignment;
 import com.saltpgp.notionproxy.modules.assignment.service.AssignmentService;
@@ -49,4 +50,23 @@ public class AssignmentControllerTest {
         verify(assignmentService, times(1)).getAssignmentsFromDeveloper(developerId, true);
     }
 
+    @Test
+    void getAssignmentByAssignmentId() throws NotionException {
+        // Arrange
+        String assignmentId = "1";
+        Assignment mockedAssignment = new Assignment("1", "Assignment 1", 90, List.of("Category1", "Category2"), "Great work!");
+        when(assignmentService.getAssignment(assignmentId, true)).thenReturn(mockedAssignment);
+
+        // Act
+        ResponseEntity<AssignmentDto> response = assignmentController.getAssignmentByAssignmentId(assignmentId, true);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(AssignmentDto.fromModel(mockedAssignment), response.getBody());
+        verify(assignmentService, times(1)).getAssignment(assignmentId, true);
+
+    }
 }
+
+
