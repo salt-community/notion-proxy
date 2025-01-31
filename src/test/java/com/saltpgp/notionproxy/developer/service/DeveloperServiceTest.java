@@ -2,12 +2,14 @@ package com.saltpgp.notionproxy.developer.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.saltpgp.notionproxy.developer.model.Developer;
+import com.saltpgp.notionproxy.api.bucket.BucketApiService;
+import com.saltpgp.notionproxy.modules.developer.model.Developer;
 import com.saltpgp.notionproxy.exceptions.InvalidFilterException;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
-import com.saltpgp.notionproxy.notionapi.NotionApiService;
-import com.saltpgp.notionproxy.service.NotionServiceFilters;
+import com.saltpgp.notionproxy.api.notion.NotionApiService;
+import com.saltpgp.notionproxy.api.notion.filter.NotionServiceFilters;
+import com.saltpgp.notionproxy.modules.developer.service.DeveloperService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,6 +24,7 @@ import static org.mockito.Mockito.*;
 class DeveloperServiceTest {
 
     NotionApiService mockApiService;
+    BucketApiService mockBucketApiService;
 
     DeveloperService developerService;
 
@@ -34,8 +37,9 @@ class DeveloperServiceTest {
         String databaseResponse;
 
         mockApiService = mock(NotionApiService.class);
+        mockBucketApiService = mock(BucketApiService.class);
 
-        developerService = new DeveloperService(mockApiService, DATABASE_ID);
+        developerService = new DeveloperService(mockApiService, mockBucketApiService,DATABASE_ID);
 
         mapper = new ObjectMapper();
 
@@ -181,7 +185,7 @@ class DeveloperServiceTest {
 
         UUID developerId = UUID.fromString("11111111-1111-1111-1111-111111111111");
 
-        Developer developer = developerService.getDeveloperById(developerId);
+        Developer developer = developerService.getDeveloperById(developerId,false);
 
         assertNotNull(developer);
         assertEquals("Test Saltie 1", developer.getName());
@@ -193,7 +197,7 @@ class DeveloperServiceTest {
 
     @Test
     void shouldGetAllDevelopers() throws NotionException {
-        List<Developer> developers = developerService.getAllDevelopers(null);
+        List<Developer> developers = developerService.getAllDevelopers(null,false);
 
         assertNotNull(developers);
         assertEquals(2, developers.size());
@@ -209,7 +213,7 @@ class DeveloperServiceTest {
         String invalidFilter = "INVALID_STATUS";
 
         InvalidFilterException exception = assertThrows(InvalidFilterException.class, () -> {
-            developerService.getAllDevelopers(invalidFilter);
+            developerService.getAllDevelopers(invalidFilter,false);
         });
 
         assertEquals("Invalid filter value: " + invalidFilter, exception.getMessage());
