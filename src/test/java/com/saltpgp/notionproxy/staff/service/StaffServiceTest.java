@@ -13,6 +13,7 @@ import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import com.saltpgp.notionproxy.modules.staff.StaffFilter;
 import com.saltpgp.notionproxy.modules.staff.StaffService;
 import com.saltpgp.notionproxy.modules.staff.models.Staff;
+import com.saltpgp.notionproxy.modules.staff.models.StaffDev;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
@@ -43,7 +44,7 @@ public class StaffServiceTest {
         mockStaffService = new StaffService(mockApiService,mockCoreDatabaseId, mockDeveloperDatabaseId, mockBucketApiService);
     }
 
-    private static String sampleJson = """
+    private static final String sampleStaffJson = """
             {
                 "results": [
                     {
@@ -96,13 +97,55 @@ public class StaffServiceTest {
             }
         """;
 
+    private static final String sampleStaffDeveloperJson = """
+    {
+      "object": "list",
+      "results": [
+        {
+          "object": "page",
+          "id": "550e8400-e29b-41d4-a716-446655440000",
+          "properties": {
+            "Name": {
+              "title": [
+                {
+                  "plain_text": "John Doe"
+                }
+              ]
+            },
+            "Email": {
+              "email": "john.doe@example.com"
+            }
+          }
+        },
+        {
+          "object": "page",
+          "id": "123e4567-e89b-12d3-a456-426614174000",
+          "properties": {
+            "Name": {
+              "title": [
+                {
+                  "plain_text": "Jane Smith"
+                }
+              ]
+            },
+            "Email": {
+              "email": "jane.smith@example.com"
+            }
+          }
+        }
+      ],
+      "next_cursor": "some-cursor-token",
+      "has_more": false
+    }            
+""";
+
     @Test
     void getAllCore_ShouldReturnAllCore() throws NotionException, JsonProcessingException {
 
         // Arrange
 
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode mockResponse = objectMapper.readTree(sampleJson);
+        JsonNode mockResponse = objectMapper.readTree(sampleStaffJson);
         String filter = "none";
 
         when(mockApiService.fetchDatabase(mockCoreDatabaseId,
@@ -114,7 +157,7 @@ public class StaffServiceTest {
         );
 
         // Act
-        var result = mockStaffService.getAllCore(filter);
+        List<Staff> result = mockStaffService.getAllCore(filter);
 
         // Assert
         Assertions.assertEquals(expectedResponse.getFirst().getName(), result.getFirst().getName());
@@ -128,7 +171,7 @@ public class StaffServiceTest {
 
         // Arrange
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode mockResponse = objectMapper.readTree(sampleJson);
+        JsonNode mockResponse = objectMapper.readTree(sampleStaffJson);
 
         UUID testUUID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
         Staff expected =  new Staff("John Doe", "john.doe@example.com", testUUID, "Engineering");
@@ -145,6 +188,31 @@ public class StaffServiceTest {
         Assertions.assertEquals(expected.getEmail(), result.getEmail());
         Assertions.assertEquals(expected.getRole(), result.getRole());
         Assertions.assertEquals(expected.getId(), result.getId());
+    }
+
+    @Test
+    void getStaffConsultants_ShouldReturnConsultants() throws JsonProcessingException, NotionException, NotionNotFoundException {
+
+        // Arrange
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode mockResponse = objectMapper.readTree(sampleStaffDeveloperJson);
+
+        UUID testUUID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
+        List<StaffDev> expectedResponse = List.of(
+                new StaffDev("John Doe", "john.doe@example.com", UUID.fromString("550e8400-e29b-41d4-a716-446655440000")),
+                new StaffDev("Jane Smith", "jane.smith@example.com", UUID.fromString("123e4567-e89b-12d3-a456-426614174000"))
+        );
+
+        String filter = NotionServiceFilters.filterBuilder(null, testUUID.toString() ,StaffFilter.STAFF_FILTER_RESPONSIBLE);
+        when(mockApiService.fetchDatabase(mockDeveloperDatabaseId, filter)).thenReturn(mockResponse);
+
+        // Act
+        List<StaffDev> result = mockStaffService.getStaffConsultants(testUUID);
+
+        // Assert
+        Assertions.assertEquals(expectedResponse.getFirst().getName(), result.getFirst().getName());
+        Assertions.assertEquals(expectedResponse.getLast().getId(), result.getLast().getId());
+        Assertions.assertEquals(expectedResponse.getFirst().getEmail(), result.getFirst().getEmail());
     }
 
 }

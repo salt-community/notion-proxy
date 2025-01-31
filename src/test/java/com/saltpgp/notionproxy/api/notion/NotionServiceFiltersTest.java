@@ -1,4 +1,4 @@
-package com.saltpgp.notionproxy.service;
+package com.saltpgp.notionproxy.api.notion;
 
 import com.saltpgp.notionproxy.api.notion.filter.NotionServiceFilters;
 import org.junit.jupiter.api.Test;
