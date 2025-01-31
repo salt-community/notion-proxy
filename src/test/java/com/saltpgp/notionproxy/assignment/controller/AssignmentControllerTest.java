@@ -83,6 +83,24 @@ public class AssignmentControllerTest {
         assertEquals("Developer not found", exception.getMessage());
         verify(assignmentService, times(1)).getAssignmentsFromDeveloper(developerId, true);
     }
+
+    @Test
+    void getAssignmentByAssignmentIdThrowsNotionException() throws NotionException {
+        //Arrange
+        String assignmentId = "1337";
+        when(assignmentService.getAssignment(assignmentId, true)).thenThrow(new NotionException("Assignment not found"));
+
+
+        // Act & Assert
+
+        NotionException exception = assertThrows(NotionException.class, () -> {
+            assignmentController.getAssignmentByAssignmentId(assignmentId, true);
+        });
+
+        assertEquals("Assignment not found", exception.getMessage());
+        verify(assignmentService, times(1)).getAssignment(assignmentId, true);
+
+    }
 }
 
 
