@@ -1,7 +1,11 @@
 package com.saltpgp.notionproxy.developer.model;
 
 public enum DeveloperStatus {
+    PRE_COURSE("Precourse"),
+    TALENT_POOL("Talent Pool"),
+    LET_GO("LetGo"),
     ON_ASSIGNMENT("On Assignment"),
+    DONE("Done"),
     PGP("PGP"),
     NONE("none");
 
@@ -17,7 +21,7 @@ public enum DeveloperStatus {
 
     public static boolean isValid(String filter) {
         for (DeveloperStatus value : values()) {
-            if (value.getStatus().equalsIgnoreCase(filter)) {
+            if (value.getStatus().equals(filter)) {
                 return true;
             }
         }
