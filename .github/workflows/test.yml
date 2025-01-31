@@ -42,7 +42,7 @@ jobs:
 
       - name: Upload Success Marker
         if: success()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-success-marker
           path: marker.txt
