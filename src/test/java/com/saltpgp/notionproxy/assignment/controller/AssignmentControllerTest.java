@@ -67,6 +67,22 @@ public class AssignmentControllerTest {
         verify(assignmentService, times(1)).getAssignment(assignmentId, true);
 
     }
+
+    @Test
+    void getAssignmentsByDeveloperIdThrowsNotionException() throws NotionException {
+        // Arrange
+        UUID developerId = UUID.randomUUID();
+        when(assignmentService.getAssignmentsFromDeveloper(developerId, true))
+                .thenThrow(new NotionException("Developer not found"));
+
+        // Act & Assert
+        NotionException exception = assertThrows(NotionException.class, () -> {
+            assignmentController.getAssignmentsByUserId(developerId, true);
+        });
+
+        assertEquals("Developer not found", exception.getMessage());
+        verify(assignmentService, times(1)).getAssignmentsFromDeveloper(developerId, true);
+    }
 }
 
 
