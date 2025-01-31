@@ -62,6 +62,9 @@ jobs:
             API_KEY_HEADER=${{ secrets.API_KEY_HEADER }}
             SCORE_DATABASE_ID=${{ secrets.SCORE_DATABASE_ID }}
             CORE_DATABASE_ID=${{ secrets.CORE_DATABASE_ID }}
+            SUPABASE_URL=${{ secrets.SUPABASE_URL }}
+            SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
+            NOTION_URL=${{ secrets.NOTION_URL }}
           region: ${{ vars.GC_REGION }}
           service: ${{ vars.GC_REPO_NAME }}
           image: ${{ env.IMAGE_URL }}
