@@ -2,8 +2,10 @@ package com.saltpgp.notionproxy.assignment.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.saltpgp.notionproxy.assignment.model.Assignment;
+import com.saltpgp.notionproxy.bucket.BucketApi;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.notionapi.NotionApiService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +18,12 @@ import static com.saltpgp.notionproxy.service.NotionServiceFilters.filterBuilder
 import com.saltpgp.notionproxy.assignment.service.AssignmentProperty.*;
 
 @Service
+@Slf4j
 public class AssignmentService {
+
+    private final NotionApiService notionApiService;
+    private final BucketApi bucketApi;
+    private final String SCORE_DATABASE_ID;
 
     public static final String FILTER = """
             "filter": {
@@ -26,27 +33,51 @@ public class AssignmentService {
                 }
             }
             """;
-    private final NotionApiService notionApiService;
 
-    @Value("${SCORE_DATABASE_ID}")
-    private String SCORE_DATABASE_ID;
-
-    public AssignmentService(NotionApiService notionApiService) {
+    public AssignmentService(NotionApiService notionApiService, BucketApi bucketApi, @Value("${SCORE_DATABASE_ID}") String scoreDatabaseId) {
         this.notionApiService = notionApiService;
+        this.bucketApi = bucketApi;
+        SCORE_DATABASE_ID = scoreDatabaseId;
     }
 
+    public Assignment getAssignment(String assignmentId, boolean useCache) throws NotionException {
+        if (useCache) {
+            JsonNode cache = bucketApi.getCache("assignment_" + assignmentId);
+            try {
+                if (cache != null) {
+                    return Assignment.fromJson(cache.toString());
+                }
+            } catch (Exception e) {
+                log.warn("Failed to parse cached assignment for ID: {}. Error: {}", assignmentId, e.getMessage());
+            }
+        }
 
-    public Assignment getAssignmentFromDeveloper(String assignmentId) throws NotionException {
-        JsonNode response = notionApiService.fetchPage(assignmentId);
-        return extractAssignment(response);
+        log.debug("Cache miss for assignment ID: {}. Fetching from Notion API.", assignmentId);
+        Assignment assignment = extractAssignment(notionApiService.fetchPage(assignmentId));
+
+        bucketApi.saveCache("assignment_" + assignmentId, Assignment.toJsonNode(assignment));
+        return assignment;
     }
 
-    public List<Assignment> getAssignmentsFromDeveloper(UUID developerId) throws NotionException {
+    public List<Assignment> getAssignmentsFromDeveloper(UUID developerId, boolean useCache) throws NotionException {
+        if (useCache) {
+            JsonNode cache = bucketApi.getCache("assignment_developer_" + developerId);
+            try {
+                if (cache != null) {
+                    return Assignment.fromJsonList(cache.toString());
+                }
+            } catch (Exception e) {
+                log.warn("Failed to parse cached assignments for developer ID: {}. Error: {}", developerId, e.getMessage());
+            }
+        }
+        log.debug("Cache miss for developer ID: {}. Fetching from Notion API.", developerId);
         List<Assignment> assignments = new ArrayList<>();
         String nextCursor = null;
         boolean hasMore = true;
 
         while (hasMore) {
+            log.debug("Fetching assignments for developer ID: {} with cursor: {}", developerId, nextCursor);
+
             JsonNode response = notionApiService.fetchDatabase(
                     SCORE_DATABASE_ID, filterBuilder(nextCursor, developerId.toString(), FILTER));
 
@@ -56,17 +87,28 @@ public class AssignmentService {
 
             nextCursor = response.get(NotionObject.NEXT_CURSOR).asText();
             hasMore = response.get(NotionObject.HAS_MORE).asBoolean();
+
+            log.debug("Fetched {} assignments so far for developer ID: {}", assignments.size(), developerId);
         }
+
+        log.debug("Fetched total {} assignments for developer ID: {}. Saving to cache.", assignments.size(), developerId);
+        bucketApi.saveCache("assignment_developer_" + developerId, Assignment.toJsonNode(assignments));
         return assignments;
     }
 
     private Assignment extractAssignment(JsonNode elements) {
+        log.debug("Extracting assignment from JSON elements.");
         var properties = elements.get(Results.PROPERTIES);
-        return new Assignment(
+
+        Assignment assignment = new Assignment(
                 elements.get(Results.ID).asText(),
                 getName(properties),
                 getScore(properties),
                 getCategories(properties),
-                getScoreComment(properties));
+                getScoreComment(properties)
+        );
+
+        log.debug("Extracted assignment with ID: {}", assignment.getId());
+        return assignment;
     }
 }
