@@ -31,8 +31,7 @@ public class DeveloperService {
     private final String DATABASE_ID;
     private final static String CACHE_ID = "developer_";
     private final static String INVALID_FILTER_ERROR_MESSAGE = "Invalid filter value: ";
-
-    private static final String FILTER = """
+    private final static String FILTER = """
                 "filter": {
                     "property": "Status",
                     "select": {
