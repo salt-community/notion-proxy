@@ -7,6 +7,7 @@ import com.saltpgp.notionproxy.api.notion.NotionApiService;
 import com.saltpgp.notionproxy.api.notion.filter.NotionProperty.NotionPropertyFilter;
 import com.saltpgp.notionproxy.api.notion.filter.NotionProperty.PeopleFilter;
 import com.saltpgp.notionproxy.api.notion.filter.NotionServiceFilters;
+import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import com.saltpgp.notionproxy.modules.staff.model.Staff;
 import com.saltpgp.notionproxy.modules.staff.model.Consultant;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +37,7 @@ public class StaffService {
         BUCKET_API = bucketApiService;
     }
 
-    public List<Staff> getAllCore(String filter, boolean useCache) throws NotionException {
+    public List<Staff> getAllCore(String filter, boolean useCache) throws NotionException, NotionNotFoundException {
         if(useCache){
             JsonNode cache = BUCKET_API.getCache(CACHE_ID + filter);
             try {
@@ -67,7 +68,7 @@ public class StaffService {
         return staffList;
     }
 
-    public Staff getStaffById(UUID id, boolean useCache) throws NotionException {
+    public Staff getStaffById(UUID id, boolean useCache) throws NotionException, NotionNotFoundException {
         NotionPropertyFilter filter = NotionPropertyFilter.peopleFilter(PeopleFilter.CONTAINS, id.toString(), "Person");
         if(useCache) {
             JsonNode cache = BUCKET_API.getCache(CACHE_ID + id);
@@ -87,7 +88,7 @@ public class StaffService {
 
     }
 
-    public List<Consultant> getStaffConsultants(UUID id, boolean useCache) throws NotionException {
+    public List<Consultant> getStaffConsultants(UUID id, boolean useCache) throws NotionException, NotionNotFoundException {
         String nextCursor = null;
         boolean hasMore = true;
         List<Consultant> devs = new ArrayList<>();

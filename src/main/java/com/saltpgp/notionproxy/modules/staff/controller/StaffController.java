@@ -43,7 +43,7 @@ public class StaffController {
     public ResponseEntity<List<StaffDto>> getAllStaff(
             @Parameter(description = "A filter to sort staff by role", required = false, example = "none")
             @RequestParam(required = false, defaultValue = "none") String role,
-            @RequestParam(value = "useCache", required = false, defaultValue = "true") boolean useCache) throws NotionException {
+            @RequestParam(value = "useCache", required = false, defaultValue = "true") boolean useCache) throws NotionException, NotionNotFoundException {
         return ResponseEntity.ok(staffService
                 .getAllCore(role, useCache)
                 .stream()
@@ -77,7 +77,7 @@ public class StaffController {
     @GetMapping("/{id}/consultants")
     public ResponseEntity<List<StaffConsultantDto>> getConsultants(
             @PathVariable UUID id,
-            @RequestParam(value = "useCache", required = false, defaultValue = "true") boolean useCache) throws NotionException {
+            @RequestParam(value = "useCache", required = false, defaultValue = "true") boolean useCache) throws NotionException, NotionNotFoundException {
         return ResponseEntity.ok(staffService
                 .getStaffConsultants(id, useCache)
                 .stream()

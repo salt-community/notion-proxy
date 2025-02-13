@@ -2,6 +2,7 @@ package com.saltpgp.notionproxy.api.notion;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.saltpgp.notionproxy.exceptions.NotionException;
+import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -26,7 +27,7 @@ public class NotionApiService {
         this.NOTION_VERSION = NOTION_VERSION;
     }
 
-    public JsonNode fetchPage(String pageId) throws NotionException {
+    public JsonNode fetchPage(String pageId) throws NotionException, NotionNotFoundException {
 
         String uri = String.format(UriNotionFormat.PAGES, pageId);
         return executeRequest(() -> restClient
@@ -40,7 +41,7 @@ public class NotionApiService {
 
     }
 
-    public JsonNode fetchDatabase(String database, Object node) throws NotionException {
+    public JsonNode fetchDatabase(String database, Object node) throws NotionException, NotionNotFoundException {
 
         String uri = String.format(UriNotionFormat.DATABASES, database);
         return executeRequest(() -> restClient
@@ -55,14 +56,14 @@ public class NotionApiService {
 
     }
 
-    private JsonNode executeRequest(RequestExecutor executor, String id, String type) throws NotionException {
+    private JsonNode executeRequest(RequestExecutor executor, String id, String type) throws NotionException, NotionNotFoundException {
         try {
             return executor.execute();
         } catch (HttpClientErrorException e) {
             switch (e.getStatusText()) {
                 case HttpClientCase.NOT_FOUND:
                     if (NotionType.PAGE.equals(type)) {
-                        throw new NotionException(ErrorNotionMessage.PAGE_ID_DIDNT_EXIST + id);
+                        throw new NotionNotFoundException(ErrorNotionMessage.PAGE_ID_DIDNT_EXIST + id);
                     }
                     if (NotionType.DATABASE.equals(type)) {
                         throw new NotionException(ErrorNotionMessage.DATABASE_DIDNT_EXIST);

@@ -1,6 +1,7 @@
 package com.saltpgp.notionproxy.modules.assignment.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import com.saltpgp.notionproxy.modules.assignment.model.Assignment;
 import com.saltpgp.notionproxy.api.bucket.BucketApiService;
 import com.saltpgp.notionproxy.exceptions.NotionException;
@@ -41,7 +42,7 @@ public class AssignmentService {
         SCORE_DATABASE_ID = scoreDatabaseId;
     }
 
-    public Assignment getAssignment(String assignmentId, boolean useCache) throws NotionException {
+    public Assignment getAssignment(String assignmentId, boolean useCache) throws NotionException, NotionNotFoundException {
         if (useCache) {
             JsonNode cache = bucketApiService.getCache(CACHE_ID_SINGLE + assignmentId);
             try {
@@ -60,7 +61,7 @@ public class AssignmentService {
         return assignment;
     }
 
-    public List<Assignment> getAssignmentsFromDeveloper(UUID developerId, boolean useCache) throws NotionException {
+    public List<Assignment> getAssignmentsFromDeveloper(UUID developerId, boolean useCache) throws NotionException, NotionNotFoundException {
         if (useCache) {
             JsonNode cache = bucketApiService.getCache(CACHE_ID_DEVELOPER + developerId);
             try {

@@ -1,5 +1,6 @@
 package com.saltpgp.notionproxy.modules.assignment.controller;
 
+import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import com.saltpgp.notionproxy.modules.assignment.controller.dtos.AssignmentDto;
 import com.saltpgp.notionproxy.modules.assignment.controller.dtos.DeveloperAssignmentsDto;
 import com.saltpgp.notionproxy.modules.assignment.model.Assignment;
@@ -40,7 +41,7 @@ public class AssignmentController {
     @GetMapping()
     public ResponseEntity<DeveloperAssignmentsDto> getAssignmentsByUserId(
             @RequestParam(value = "developerId", required = true) UUID developerId,
-            @RequestParam(value = "useCache", required = false, defaultValue = "true") boolean useCache) throws NotionException {
+            @RequestParam(value = "useCache", required = false, defaultValue = "true") boolean useCache) throws NotionException, NotionNotFoundException {
         List<Assignment> assignments = assignmentService.getAssignmentsFromDeveloper(developerId, useCache);
         return ResponseEntity.ok(new DeveloperAssignmentsDto(developerId.toString(), AssignmentDto.fromModelList(assignments)));
     }
@@ -58,7 +59,7 @@ public class AssignmentController {
     @GetMapping("/{id}")
     public ResponseEntity<AssignmentDto> getAssignmentByAssignmentId(
             @PathVariable String id,
-            @RequestParam(value = "useCache", required = false, defaultValue = "true") boolean useCache) throws NotionException {
+            @RequestParam(value = "useCache", required = false, defaultValue = "true") boolean useCache) throws NotionException, NotionNotFoundException {
         return ResponseEntity.ok(AssignmentDto.fromModel(assignmentService.getAssignment(id, useCache)));
     }
 }

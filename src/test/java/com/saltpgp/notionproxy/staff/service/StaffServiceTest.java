@@ -140,7 +140,7 @@ public class StaffServiceTest {
 """;
 
     @Test
-    void getAllCore_ShouldReturnAllCore() throws NotionException, JsonProcessingException {
+    void getAllCore_ShouldReturnAllCore() throws NotionException, JsonProcessingException, NotionNotFoundException {
 
         // Arrange
 

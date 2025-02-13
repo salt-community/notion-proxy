@@ -1,6 +1,7 @@
 package com.saltpgp.notionproxy.assignment.controller;
 
 import com.saltpgp.notionproxy.exceptions.NotionException;
+import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import com.saltpgp.notionproxy.modules.assignment.controller.AssignmentController;
 import com.saltpgp.notionproxy.modules.assignment.controller.dtos.AssignmentDto;
 import com.saltpgp.notionproxy.modules.assignment.controller.dtos.DeveloperAssignmentsDto;
@@ -31,7 +32,7 @@ public class AssignmentControllerTest {
     }
 
     @Test
-    void getAssignmentsByDeveloperId() throws NotionException {
+    void getAssignmentsByDeveloperId() throws NotionException, NotionNotFoundException {
         // Arrange
         UUID developerId = UUID.randomUUID();
         List<Assignment> mockedAssignments = List.of(
@@ -51,7 +52,7 @@ public class AssignmentControllerTest {
     }
 
     @Test
-    void getAssignmentByAssignmentId() throws NotionException {
+    void getAssignmentByAssignmentId() throws NotionException, NotionNotFoundException {
         // Arrange
         String assignmentId = "1";
         Assignment mockedAssignment = new Assignment("1", "Assignment 1", 90, List.of("Category1", "Category2"), "Great work!");
@@ -69,7 +70,7 @@ public class AssignmentControllerTest {
     }
 
     @Test
-    void getAssignmentsByDeveloperIdThrowsNotionException() throws NotionException {
+    void getAssignmentsByDeveloperIdThrowsNotionException() throws NotionException, NotionNotFoundException {
         // Arrange
         UUID developerId = UUID.randomUUID();
         when(assignmentService.getAssignmentsFromDeveloper(developerId, true))
@@ -85,7 +86,7 @@ public class AssignmentControllerTest {
     }
 
     @Test
-    void getAssignmentByAssignmentIdThrowsNotionException() throws NotionException {
+    void getAssignmentByAssignmentIdThrowsNotionException() throws NotionException, NotionNotFoundException {
         //Arrange
         String assignmentId = "1337";
         when(assignmentService.getAssignment(assignmentId, true)).thenThrow(new NotionException("Assignment not found"));

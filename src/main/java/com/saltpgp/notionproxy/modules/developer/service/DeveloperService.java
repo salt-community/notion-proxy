@@ -45,7 +45,7 @@ public class DeveloperService {
         this.DATABASE_ID = DATABASE_ID;
     }
 
-    public List<Developer> getAllDevelopers(String filter, boolean useCache) throws NotionException {
+    public List<Developer> getAllDevelopers(String filter, boolean useCache) throws NotionException, NotionNotFoundException {
         if (filter != null && !DeveloperStatus.isValid(filter)) {
             throw new InvalidFilterException(INVALID_FILTER_ERROR_MESSAGE + filter);
         }
