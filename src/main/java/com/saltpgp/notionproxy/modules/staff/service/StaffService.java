@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.saltpgp.notionproxy.modules.staff.service.StaffMapper.*;
+import static com.saltpgp.notionproxy.modules.staff.service.StaffProperty.*;
 
 @Service
 @Slf4j
@@ -53,14 +54,14 @@ public class StaffService {
             JsonNode response = notionApiService.fetchDatabase(CORE_DATABASE_ID,
                     NotionServiceFilters.filterBuilder(nextCursor, filter, StaffFilter.STAFF_FILTER));
 
-            response.get("results").elements().forEachRemaining(element -> {
+            response.get(NotionObject.RESULTS).elements().forEachRemaining(element -> {
                 Staff staff = createStaffFromNotionPage(element);
                 if(staff != null)
                     staffList.add(staff);
             });
 
-            nextCursor = response.get("next_cursor").asText();
-            hasMore = response.get("has_more").asBoolean();
+            nextCursor = response.get(NotionObject.NEXT_CURSOR).asText();
+            hasMore = response.get(NotionObject.HAS_MORE).asBoolean();
         }
         BUCKET_API.saveCache(CACHE_ID + filter, Staff.toJsonNode(staffList));
         return staffList;
@@ -78,7 +79,7 @@ public class StaffService {
         JsonNode response = notionApiService.fetchDatabase(CORE_DATABASE_ID,
                 NotionServiceFilters.filterBuilder(null, filter));
 
-        Staff staff = createStaffFromNotionPage(response.get("results").get(0));
+        Staff staff = createStaffFromNotionPage(response.get(NotionObject.RESULTS).get(0));
         BUCKET_API.saveCache(CACHE_ID + id, Staff.toJsonNode(staff));
         return staff;
 
@@ -99,12 +100,12 @@ public class StaffService {
             JsonNode response = notionApiService.fetchDatabase(DEV_DATABASE_ID,
                     NotionServiceFilters.filterBuilder(nextCursor, id.toString(), StaffFilter.STAFF_FILTER_RESPONSIBLE));
 
-            response.get("results").forEach(element -> {
+            response.get(NotionObject.RESULTS).forEach(element -> {
                 devs.add(createConsultantFromNotionPage(element));
             });
 
-            nextCursor = response.get("next_cursor").asText();
-            hasMore = response.get("has_more").asBoolean();
+            nextCursor = response.get(NotionObject.NEXT_CURSOR).asText();
+            hasMore = response.get(NotionObject.HAS_MORE).asBoolean();
         }
         BUCKET_API.saveCache(CACHE_ID_CONSULTANTS + id, Consultant.toJsonNode(devs));
         return devs;
