@@ -1,7 +1,6 @@
 package com.saltpgp.notionproxy.modules.developer.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saltpgp.notionproxy.api.bucket.BucketApiService;
 import com.saltpgp.notionproxy.modules.developer.model.Developer;
 import com.saltpgp.notionproxy.modules.developer.model.DeveloperStatus;
@@ -18,8 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static com.saltpgp.notionproxy.modules.developer.service.DeveloperNotionMapper.*;
-import static com.saltpgp.notionproxy.modules.developer.service.DeveloperNotionProperty.*;
+import static com.saltpgp.notionproxy.modules.developer.service.DeveloperMapper.*;
+import static com.saltpgp.notionproxy.modules.developer.service.DeveloperProperty.*;
 import static com.saltpgp.notionproxy.api.notion.filter.NotionServiceFilters.filterBuilder;
 
 @Service

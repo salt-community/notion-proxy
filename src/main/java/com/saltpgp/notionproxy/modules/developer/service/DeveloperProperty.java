@@ -1,6 +1,6 @@
 package com.saltpgp.notionproxy.modules.developer.service;
 
-class DeveloperNotionProperty {
+class DeveloperProperty {
 
     public static final class NotionObject{
         public static final String RESULTS = "results";
