@@ -83,7 +83,7 @@ public class StaffService {
     }
 
     private static Staff createStaffFromNotionPage(JsonNode element) {
-        JsonNode person = element.get("properties").get("Person").get("people").get(0);
+        JsonNode person = getStaffPerson(element);
         if (person == null) {
             log.debug("Skipped empty person");
             return null;

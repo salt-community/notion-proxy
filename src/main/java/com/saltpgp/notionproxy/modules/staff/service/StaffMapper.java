@@ -14,6 +14,7 @@ class StaffMapper {
             return output;
         }
     }
+
     public static UUID getStaffId(JsonNode person) {
         return UUID.fromString(person.get("id").asText());
     }
@@ -25,7 +26,12 @@ class StaffMapper {
     public static String getStaffName(JsonNode person) {
         return person.get("name").asText();
     }
+
     public static String getStaffRole(JsonNode element) {
         return element.get("properties").get("Guild").get("multi_select").get(0).get("name").asText();
+    }
+
+    public static JsonNode getStaffPerson(JsonNode element) {
+        return element.get("properties").get("Person").get("people").get(0);
     }
 }
