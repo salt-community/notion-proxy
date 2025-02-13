@@ -51,12 +51,10 @@ public class StaffService {
             JsonNode response = notionApiService.fetchDatabase(CORE_DATABASE_ID,
                     NotionServiceFilters.filterBuilder(nextCursor, filter, StaffFilter.STAFF_FILTER));
             response.get("results").elements().forEachRemaining(element -> {
-                JsonNode person = element.get("properties").get("Person").get("people").get(0);
-                if (person == null) {
-                    log.debug("Skipped empty person");
+                Staff staff = createStaffFromNotionPage(element);
+                if(staff == null)
                     return;
-                }
-                staffList.add(createStaffFromNotionPage(person, element));
+                staffList.add(staff);
             });
             nextCursor = response.get("next_cursor").asText();
             hasMore = response.get("has_more").asBoolean();
@@ -65,7 +63,7 @@ public class StaffService {
         return staffList;
     }
 
-    public Staff getStaffById(UUID id) throws NotionException, NotionNotFoundException {
+    public Staff getStaffById(UUID id) throws NotionException {
         NotionPropertyFilter filter = NotionPropertyFilter.peopleFilter(PeopleFilter.CONTAINS, id.toString(), "Person");
         JsonNode cache = BUCKET_API.getCache(CACHE_ID + id);
         try {
@@ -76,20 +74,19 @@ public class StaffService {
         log.debug("Fetching staff by id: {}", filter);
         JsonNode response = notionApiService.fetchDatabase(CORE_DATABASE_ID,
                 NotionServiceFilters.filterBuilder(null, filter));
-        try {
-            JsonNode element = response.get("results").get(0);
-            JsonNode person = element.get("properties").get("Person").get("people").get(0);
-            Staff staff = createStaffFromNotionPage(person, element);
-            BUCKET_API.saveCache(CACHE_ID + id.toString(), Staff.toJsonNode(staff));
-            return staff;
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            throw new NotionNotFoundException();
-        }
+
+        Staff staff = createStaffFromNotionPage(response.get("results").get(0));
+        BUCKET_API.saveCache(CACHE_ID + id, Staff.toJsonNode(staff));
+        return staff;
 
     }
 
-    private static Staff createStaffFromNotionPage(JsonNode person, JsonNode element) {
+    private static Staff createStaffFromNotionPage(JsonNode element) {
+        JsonNode person = element.get("properties").get("Person").get("people").get(0);
+        if (person == null) {
+            log.debug("Skipped empty person");
+            return null;
+        }
         return new Staff(
                 person.get("name").asText(),
                 person.get("person").get("email").asText(),
