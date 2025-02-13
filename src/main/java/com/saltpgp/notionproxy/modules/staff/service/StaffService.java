@@ -9,7 +9,7 @@ import com.saltpgp.notionproxy.api.notion.filter.NotionProperty.NotionPropertyFi
 import com.saltpgp.notionproxy.api.notion.filter.NotionProperty.PeopleFilter;
 import com.saltpgp.notionproxy.api.notion.filter.NotionServiceFilters;
 import com.saltpgp.notionproxy.modules.staff.model.Staff;
-import com.saltpgp.notionproxy.modules.staff.model.StaffDev;
+import com.saltpgp.notionproxy.modules.staff.model.Consultant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,8 +28,8 @@ public class StaffService {
     private final static String CACHE_ID = "staff_";
     private final static String CACHE_ID_CONSULTANTS = "staff_consultants_";
 
-    public StaffService(NotionApiService notionApiService, @Value("${CORE_DATABASE_ID}") String coreDatabaseId, @Value("${DATABASE_ID}") String devDatabaseId
-            , BucketApiService bucketApiService) {
+    public StaffService(NotionApiService notionApiService, @Value("${CORE_DATABASE_ID}") String coreDatabaseId, @Value("${DATABASE_ID}") String devDatabaseId,
+                        BucketApiService bucketApiService) {
         this.notionApiService = notionApiService;
         CORE_DATABASE_ID = coreDatabaseId;
         DEV_DATABASE_ID = devDatabaseId;
@@ -99,15 +99,15 @@ public class StaffService {
 
     }
 
-    public List<StaffDev> getStaffConsultants(UUID id) throws NotionException {
+    public List<Consultant> getStaffConsultants(UUID id) throws NotionException {
         String nextCursor = null;
         boolean hasMore = true;
-        List<StaffDev> devs = new ArrayList<>();
+        List<Consultant> devs = new ArrayList<>();
         JsonNode cache = BUCKET_API.getCache(CACHE_ID_CONSULTANTS + id.toString());
         try {
-            return StaffDev.fromJsonList(cache.toString());
+            return Consultant.fromJsonList(cache.toString());
         } catch (Exception e) {
-            log.warn("Failed to parse cached staffdev for filter: {}. Error: {}", id, e.getMessage());
+            log.warn("Failed to parse cached Consultant for filter: {}. Error: {}", id, e.getMessage());
         }
         log.debug("Fetching staff consultants by id: {}", id);
         while (hasMore) {
@@ -119,15 +119,15 @@ public class StaffService {
             nextCursor = response.get("next_cursor").asText();
             hasMore = response.get("has_more").asBoolean();
         }
-        BUCKET_API.saveCache(CACHE_ID_CONSULTANTS + id, StaffDev.toJsonNode(devs));
+        BUCKET_API.saveCache(CACHE_ID_CONSULTANTS + id, Consultant.toJsonNode(devs));
         return devs;
     }
 
 
-    private StaffDev getStaffFromPage(JsonNode page) {
+    private Consultant getStaffFromPage(JsonNode page) {
         String name = page.get("properties").get("Name").get("title").get(0).get("plain_text").asText();
         String email = StaffMapper.getDevEmail(page);
         UUID id = UUID.fromString(page.get("id").asText());
-        return new StaffDev(name, email, id);
+        return new Consultant(name, email, id);
     }
 }

@@ -13,7 +13,7 @@ import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import com.saltpgp.notionproxy.modules.staff.service.StaffFilter;
 import com.saltpgp.notionproxy.modules.staff.service.StaffService;
 import com.saltpgp.notionproxy.modules.staff.model.Staff;
-import com.saltpgp.notionproxy.modules.staff.model.StaffDev;
+import com.saltpgp.notionproxy.modules.staff.model.Consultant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
@@ -97,7 +97,7 @@ public class StaffServiceTest {
             }
         """;
 
-    private static final String sampleStaffDeveloperJson = """
+    private static final String sampleConsultanteloperJson = """
     {
       "object": "list",
       "results": [
@@ -195,19 +195,19 @@ public class StaffServiceTest {
 
         // Arrange
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode mockResponse = objectMapper.readTree(sampleStaffDeveloperJson);
+        JsonNode mockResponse = objectMapper.readTree(sampleConsultanteloperJson);
 
         UUID testUUID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
-        List<StaffDev> expectedResponse = List.of(
-                new StaffDev("John Doe", "john.doe@example.com", UUID.fromString("550e8400-e29b-41d4-a716-446655440000")),
-                new StaffDev("Jane Smith", "jane.smith@example.com", UUID.fromString("123e4567-e89b-12d3-a456-426614174000"))
+        List<Consultant> expectedResponse = List.of(
+                new Consultant("John Doe", "john.doe@example.com", UUID.fromString("550e8400-e29b-41d4-a716-446655440000")),
+                new Consultant("Jane Smith", "jane.smith@example.com", UUID.fromString("123e4567-e89b-12d3-a456-426614174000"))
         );
 
         String filter = NotionServiceFilters.filterBuilder(null, testUUID.toString() ,StaffFilter.STAFF_FILTER_RESPONSIBLE);
         when(mockApiService.fetchDatabase(mockDeveloperDatabaseId, filter)).thenReturn(mockResponse);
 
         // Act
-        List<StaffDev> result = mockStaffService.getStaffConsultants(testUUID);
+        List<Consultant> result = mockStaffService.getStaffConsultants(testUUID);
 
         // Assert
         Assertions.assertEquals(expectedResponse.getFirst().getName(), result.getFirst().getName());
