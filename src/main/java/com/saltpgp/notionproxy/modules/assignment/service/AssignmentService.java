@@ -26,8 +26,7 @@ public class AssignmentService {
     private final String SCORE_DATABASE_ID;
     private final static String CACHE_ID_DEVELOPER = "assignment_developer_";
     private final static String CACHE_ID_SINGLE = "assignment_";
-
-    public static final String FILTER = """
+    private final static String FILTER = """
             "filter": {
                 "property": "💽 Developer",
                 "relation": {
@@ -44,7 +43,7 @@ public class AssignmentService {
 
     public Assignment getAssignment(String assignmentId, boolean useCache) throws NotionException {
         if (useCache) {
-            JsonNode cache = bucketApiService.getCache(CACHE_ID_SINGLE+ assignmentId);
+            JsonNode cache = bucketApiService.getCache(CACHE_ID_SINGLE + assignmentId);
             try {
                 if (cache != null) {
                     return Assignment.fromJson(cache.toString());
@@ -57,7 +56,7 @@ public class AssignmentService {
         log.debug("Cache miss for assignment ID: {}. Fetching from Notion API.", assignmentId);
         Assignment assignment = extractAssignment(notionApiService.fetchPage(assignmentId));
 
-        bucketApiService.saveCache("CACHE_ID_SINGLE" + assignmentId, Assignment.toJsonNode(assignment));
+        bucketApiService.saveCache(CACHE_ID_SINGLE + assignmentId, Assignment.toJsonNode(assignment));
         return assignment;
     }
 
