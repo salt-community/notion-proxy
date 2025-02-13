@@ -118,7 +118,6 @@ public class StaffService {
         return devs;
     }
 
-
     private Consultant createConsultantFromNotionPage(JsonNode page) {
         String name = page.get("properties").get("Name").get("title").get(0).get("plain_text").asText();
         String email = StaffMapper.getDevEmail(page);
