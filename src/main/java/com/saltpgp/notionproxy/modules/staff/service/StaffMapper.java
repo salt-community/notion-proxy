@@ -6,15 +6,6 @@ import java.util.UUID;
 
 class StaffMapper {
 
-    public static String getDevEmail(JsonNode node) {
-        String output = "No email found";
-        try {
-            return node.get("properties").get("Email").get("email").asText();
-        } catch (NullPointerException e) {
-            return output;
-        }
-    }
-
     public static UUID getStaffId(JsonNode person) {
         return UUID.fromString(person.get("id").asText());
     }
@@ -33,5 +24,22 @@ class StaffMapper {
 
     public static JsonNode getStaffPerson(JsonNode element) {
         return element.get("properties").get("Person").get("people").get(0);
+    }
+
+    public static String getConsultantEmail(JsonNode node) {
+        String output = "No email found";
+        try {
+            return node.get("properties").get("Email").get("email").asText();
+        } catch (NullPointerException e) {
+            return output;
+        }
+    }
+
+    public static UUID getConsultantId(JsonNode page) {
+        return UUID.fromString(page.get("id").asText());
+    }
+
+    public static String getConsultantName(JsonNode page) {
+        return page.get("properties").get("Name").get("title").get(0).get("plain_text").asText();
     }
 }

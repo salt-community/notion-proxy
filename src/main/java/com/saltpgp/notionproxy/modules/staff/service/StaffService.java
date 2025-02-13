@@ -38,25 +38,27 @@ public class StaffService {
     }
 
     public List<Staff> getAllCore(String filter) throws NotionException {
-        String nextCursor = null;
-        boolean hasMore = true;
         JsonNode cache = BUCKET_API.getCache(CACHE_ID + filter);
         try {
             return Staff.fromJsonList(cache.toString());
         } catch (Exception e) {
             log.warn("Failed to parse cached staff for filter: {}. Error: {}", filter, e.getMessage());
         }
+
+        String nextCursor = null;
+        boolean hasMore = true;
         List<Staff> staffList = new ArrayList<>();
         while (hasMore) {
             log.debug("Getting staff list started new loop, using filter {}", filter);
             JsonNode response = notionApiService.fetchDatabase(CORE_DATABASE_ID,
                     NotionServiceFilters.filterBuilder(nextCursor, filter, StaffFilter.STAFF_FILTER));
+
             response.get("results").elements().forEachRemaining(element -> {
                 Staff staff = createStaffFromNotionPage(element);
-                if(staff == null)
-                    return;
-                staffList.add(staff);
+                if(staff != null)
+                    staffList.add(staff);
             });
+
             nextCursor = response.get("next_cursor").asText();
             hasMore = response.get("has_more").asBoolean();
         }
@@ -82,19 +84,6 @@ public class StaffService {
 
     }
 
-    private static Staff createStaffFromNotionPage(JsonNode element) {
-        JsonNode person = getStaffPerson(element);
-        if (person == null) {
-            log.debug("Skipped empty person");
-            return null;
-        }
-        return new Staff(
-                getStaffName(person),
-                getStaffEmail(person),
-                getStaffId(person),
-                getStaffRole(element));
-    }
-
     public List<Consultant> getStaffConsultants(UUID id) throws NotionException {
         String nextCursor = null;
         boolean hasMore = true;
@@ -109,9 +98,11 @@ public class StaffService {
         while (hasMore) {
             JsonNode response = notionApiService.fetchDatabase(DEV_DATABASE_ID,
                     NotionServiceFilters.filterBuilder(nextCursor, id.toString(), StaffFilter.STAFF_FILTER_RESPONSIBLE));
+
             response.get("results").forEach(element -> {
                 devs.add(createConsultantFromNotionPage(element));
             });
+
             nextCursor = response.get("next_cursor").asText();
             hasMore = response.get("has_more").asBoolean();
         }
@@ -119,10 +110,20 @@ public class StaffService {
         return devs;
     }
 
+    private static Staff createStaffFromNotionPage(JsonNode element) {
+        JsonNode person = getStaffPerson(element);
+        if (person == null) {
+            log.debug("Skipped empty person");
+            return null;
+        }
+        return new Staff(
+                getStaffName(person),
+                getStaffEmail(person),
+                getStaffId(person),
+                getStaffRole(element));
+    }
+
     private Consultant createConsultantFromNotionPage(JsonNode page) {
-        String name = page.get("properties").get("Name").get("title").get(0).get("plain_text").asText();
-        String email = StaffMapper.getDevEmail(page);
-        UUID id = UUID.fromString(page.get("id").asText());
-        return new Consultant(name, email, id);
+        return new Consultant(getConsultantName(page), getConsultantEmail(page), getConsultantId(page));
     }
 }
