@@ -1,6 +1,7 @@
 package com.saltpgp.notionproxy.modules.developer.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saltpgp.notionproxy.api.bucket.BucketApiService;
 import com.saltpgp.notionproxy.modules.developer.model.Developer;
 import com.saltpgp.notionproxy.modules.developer.model.DeveloperStatus;
@@ -28,6 +29,8 @@ public class DeveloperService {
     private final NotionApiService notionApiService;
     private final BucketApiService bucketApiService;
     private final String DATABASE_ID;
+    private final static String CACHE_ID = "developer_";
+    private final static String INVALID_FILTER_ERROR_MESSAGE = "Invalid filter value: ";
 
     private static final String FILTER = """
                 "filter": {
@@ -46,11 +49,11 @@ public class DeveloperService {
 
     public List<Developer> getAllDevelopers(String filter, boolean useCache) throws NotionException {
         if (filter != null && !DeveloperStatus.isValid(filter)) {
-            throw new InvalidFilterException("Invalid filter value: " + filter);
+            throw new InvalidFilterException(INVALID_FILTER_ERROR_MESSAGE + filter);
         }
 
         if (useCache) {
-            JsonNode cache = bucketApiService.getCache("developers_" + filter);
+            JsonNode cache = bucketApiService.getCache(CACHE_ID + filter);
             try {
                 if (cache != null) {
                     return Developer.fromJsonList(cache.toString());
@@ -79,13 +82,13 @@ public class DeveloperService {
         }
 
         log.debug("Fetched total {} developers for filter: {}. Saving to cache.", developers.size(), filter);
-        bucketApiService.saveCache("developers_" + filter, Developer.toJsonNode(developers));
+        bucketApiService.saveCache(CACHE_ID + filter, Developer.toJsonNode(developers));
         return developers;
     }
 
     public Developer getDeveloperById(UUID id, boolean useCache) throws NotionException, NotionNotFoundException {
         if (useCache) {
-            JsonNode cache = bucketApiService.getCache("developer_" + id);
+            JsonNode cache = bucketApiService.getCache(CACHE_ID + id);
             try {
                 if (cache != null) {
                     return Developer.fromJson(cache.toString());
@@ -96,13 +99,13 @@ public class DeveloperService {
         }
         log.debug("Cache miss for developer ID: {}. Fetching from Notion API.", id);
         Developer developer = createDeveloperFromNotionPage(notionApiService.fetchPage(id.toString()));
-        bucketApiService.saveCache("developer_" + id, Developer.toJsonNode(developer));
+        bucketApiService.saveCache(CACHE_ID + id, Developer.toJsonNode(developer));
         return developer;
     }
 
     private static Developer createDeveloperFromNotionPage(JsonNode page) {
         log.debug("Create developer with ID: {}", getDeveloperId(page));
-        var properties = page.get("properties");
+        var properties = page.get(Results.PROPERTIES);
         var githubUrl = getDeveloperGithubUrl(properties);
 
         return new Developer(
