@@ -1,6 +1,7 @@
 package com.saltpgp.notionproxy.modules.assignment.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import com.saltpgp.notionproxy.modules.assignment.model.Assignment;
 import com.saltpgp.notionproxy.api.bucket.BucketApiService;
 import com.saltpgp.notionproxy.exceptions.NotionException;
@@ -24,8 +25,9 @@ public class AssignmentService {
     private final NotionApiService notionApiService;
     private final BucketApiService bucketApiService;
     private final String SCORE_DATABASE_ID;
-
-    public static final String FILTER = """
+    private final static String CACHE_ID_DEVELOPER = "assignment_developer_";
+    private final static String CACHE_ID_SINGLE = "assignment_";
+    private final static String FILTER = """
             "filter": {
                 "property": "💽 Developer",
                 "relation": {
@@ -40,9 +42,9 @@ public class AssignmentService {
         SCORE_DATABASE_ID = scoreDatabaseId;
     }
 
-    public Assignment getAssignment(String assignmentId, boolean useCache) throws NotionException {
+    public Assignment getAssignment(String assignmentId, boolean useCache) throws NotionException, NotionNotFoundException {
         if (useCache) {
-            JsonNode cache = bucketApiService.getCache("assignment_" + assignmentId);
+            JsonNode cache = bucketApiService.getCache(CACHE_ID_SINGLE + assignmentId);
             try {
                 if (cache != null) {
                     return Assignment.fromJson(cache.toString());
@@ -55,13 +57,13 @@ public class AssignmentService {
         log.debug("Cache miss for assignment ID: {}. Fetching from Notion API.", assignmentId);
         Assignment assignment = extractAssignment(notionApiService.fetchPage(assignmentId));
 
-        bucketApiService.saveCache("assignment_" + assignmentId, Assignment.toJsonNode(assignment));
+        bucketApiService.saveCache(CACHE_ID_SINGLE + assignmentId, Assignment.toJsonNode(assignment));
         return assignment;
     }
 
-    public List<Assignment> getAssignmentsFromDeveloper(UUID developerId, boolean useCache) throws NotionException {
+    public List<Assignment> getAssignmentsFromDeveloper(UUID developerId, boolean useCache) throws NotionException, NotionNotFoundException {
         if (useCache) {
-            JsonNode cache = bucketApiService.getCache("assignment_developer_" + developerId);
+            JsonNode cache = bucketApiService.getCache(CACHE_ID_DEVELOPER + developerId);
             try {
                 if (cache != null) {
                     return Assignment.fromJsonList(cache.toString());
@@ -92,7 +94,7 @@ public class AssignmentService {
         }
 
         log.debug("Fetched total {} assignments for developer ID: {}. Saving to cache.", assignments.size(), developerId);
-        bucketApiService.saveCache("assignment_developer_" + developerId, Assignment.toJsonNode(assignments));
+        bucketApiService.saveCache(CACHE_ID_DEVELOPER + developerId, Assignment.toJsonNode(assignments));
         return assignments;
     }
 

@@ -33,7 +33,7 @@ class DeveloperServiceTest {
     private final String DATABASE_ID = "DATABASE_ID";
 
     @BeforeEach
-    void setUp() throws JsonProcessingException, NotionException {
+    void setUp() throws JsonProcessingException, NotionException, NotionNotFoundException {
         String databaseResponse;
 
         mockApiService = mock(NotionApiService.class);
@@ -196,7 +196,7 @@ class DeveloperServiceTest {
     }
 
     @Test
-    void shouldGetAllDevelopers() throws NotionException {
+    void shouldGetAllDevelopers() throws NotionException, NotionNotFoundException {
         List<Developer> developers = developerService.getAllDevelopers(null,false);
 
         assertNotNull(developers);

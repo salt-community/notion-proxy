@@ -1,10 +1,11 @@
-package com.saltpgp.notionproxy.modules.staff;
+package com.saltpgp.notionproxy.modules.staff.controller;
 
 
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
-import com.saltpgp.notionproxy.modules.staff.dtos.StaffConsultantDto;
-import com.saltpgp.notionproxy.modules.staff.dtos.StaffDto;
+import com.saltpgp.notionproxy.modules.staff.service.StaffService;
+import com.saltpgp.notionproxy.modules.staff.controller.dtos.StaffConsultantDto;
+import com.saltpgp.notionproxy.modules.staff.controller.dtos.StaffDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -24,7 +25,7 @@ import java.util.UUID;
 @Slf4j
 public class StaffController {
 
-    private StaffService staffService;
+    private final StaffService staffService;
 
     public StaffController(StaffService staffService) {
         this.staffService = staffService;
@@ -41,9 +42,10 @@ public class StaffController {
     @GetMapping("")
     public ResponseEntity<List<StaffDto>> getAllStaff(
             @Parameter(description = "A filter to sort staff by role", required = false, example = "none")
-            @RequestParam(required = false, defaultValue = "none") String role) throws NotionException {
+            @RequestParam(required = false, defaultValue = "none") String role,
+            @RequestParam(value = "useCache", required = false, defaultValue = "true") boolean useCache) throws NotionException, NotionNotFoundException {
         return ResponseEntity.ok(staffService
-                .getAllCore(role)
+                .getAllCore(role, useCache)
                 .stream()
                 .map(StaffDto::fromModel)
                 .toList());
@@ -59,8 +61,10 @@ public class StaffController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<StaffDto> getStaffById(@PathVariable UUID id) throws NotionException, NotionNotFoundException {
-        return ResponseEntity.ok(StaffDto.fromModel(staffService.getStaffById(id)));
+    public ResponseEntity<StaffDto> getStaffById(
+            @PathVariable UUID id,
+            @RequestParam(value = "useCache", required = false, defaultValue = "true") boolean useCache) throws NotionException, NotionNotFoundException {
+        return ResponseEntity.ok(StaffDto.fromModel(staffService.getStaffById(id, useCache)));
     }
 
     @Operation(summary = "Returns consultants the staff is responsible for",
@@ -71,9 +75,11 @@ public class StaffController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping("/{id}/consultants")
-    public ResponseEntity<List<StaffConsultantDto>> getConsultants(@PathVariable UUID id) throws NotionException {
+    public ResponseEntity<List<StaffConsultantDto>> getConsultants(
+            @PathVariable UUID id,
+            @RequestParam(value = "useCache", required = false, defaultValue = "true") boolean useCache) throws NotionException, NotionNotFoundException {
         return ResponseEntity.ok(staffService
-                .getStaffConsultants(id)
+                .getStaffConsultants(id, useCache)
                 .stream()
                 .map(StaffConsultantDto::fromModel)
                 .toList());

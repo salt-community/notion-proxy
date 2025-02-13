@@ -3,13 +3,13 @@ package com.saltpgp.notionproxy.modules.developer.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
 
-import static com.saltpgp.notionproxy.modules.developer.service.DeveloperNotionProperty.*;
+import static com.saltpgp.notionproxy.modules.developer.service.DeveloperProperty.*;
 
 import java.util.UUID;
 import java.util.function.Supplier;
 
 @Slf4j
-class DeveloperNotionMapper {
+class DeveloperMapper {
 
     private static final String STATUS_NONE = "none";
 
