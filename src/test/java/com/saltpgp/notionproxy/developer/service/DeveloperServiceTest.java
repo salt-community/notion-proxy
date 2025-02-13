@@ -2,17 +2,29 @@ package com.saltpgp.notionproxy.developer.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.saltpgp.notionproxy.api.bucket.BucketApiService;
+import com.saltpgp.notionproxy.modules.developer.model.Developer;
+import com.saltpgp.notionproxy.exceptions.InvalidFilterException;
 import com.saltpgp.notionproxy.exceptions.NotionException;
-import com.saltpgp.notionproxy.notionapi.NotionApiService;
-import com.saltpgp.notionproxy.service.NotionServiceFilters;
+import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
+import com.saltpgp.notionproxy.api.notion.NotionApiService;
+import com.saltpgp.notionproxy.api.notion.filter.NotionServiceFilters;
+import com.saltpgp.notionproxy.modules.developer.service.DeveloperService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 
 class DeveloperServiceTest {
 
     NotionApiService mockApiService;
+    BucketApiService mockBucketApiService;
 
     DeveloperService developerService;
 
@@ -25,10 +37,43 @@ class DeveloperServiceTest {
         String databaseResponse;
 
         mockApiService = mock(NotionApiService.class);
+        mockBucketApiService = mock(BucketApiService.class);
 
-        developerService = new DeveloperService(mockApiService, DATABASE_ID);
+        developerService = new DeveloperService(mockApiService, mockBucketApiService,DATABASE_ID);
 
         mapper = new ObjectMapper();
+
+
+            String pageResponse = """
+        {
+            "id": "11111111-1111-1111-1111-111111111111",
+            "properties": {
+                "Name": {
+                    "title": [
+                        {
+                            "plain_text": "Test Saltie 1"
+                        }
+                    ]
+                },
+                "GitHub": {
+                    "url": "https://github.com/saltie1"
+                },
+                "Private Email": {
+                    "email": "saltie@example.com"
+                },
+                "Responsible": {
+                    "people": [
+                        {
+                            "name": "Responsible Person 1",
+                            "person": {
+                                "email": "responsibleperson1@appliedtechnology.se"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    """;
 
         databaseResponse = """
                 {
@@ -127,8 +172,50 @@ class DeveloperServiceTest {
                     "has_more": false
                 }
                 """;
-        //Fix getFilterOnAssignment to use the builder
-        when(mockApiService.fetchDatabase(DATABASE_ID, NotionServiceFilters.getFilterOnAssignment(null))).thenReturn(mapper.readTree(databaseResponse));
 
+        when(mockApiService.fetchDatabase(DATABASE_ID, NotionServiceFilters.getFilterOnAssignment(null))).thenReturn(mapper.readTree(databaseResponse));
+        when(mockApiService.fetchPage("11111111-1111-1111-1111-111111111111")).thenReturn(mapper.readTree(pageResponse));
+        when(mockApiService.fetchDatabase(eq(DATABASE_ID), anyString())).thenReturn(mapper.readTree(databaseResponse));
+
+
+    }
+
+    @Test
+    void shouldGetDeveloperById() throws NotionException, NotionNotFoundException {
+
+        UUID developerId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+        Developer developer = developerService.getDeveloperById(developerId,false);
+
+        assertNotNull(developer);
+        assertEquals("Test Saltie 1", developer.getName());
+        assertEquals(developerId, developer.getId());
+
+        assertEquals("https://github.com/saltie1", developer.getGithubUrl());
+        assertEquals("saltie@example.com", developer.getEmail());
+    }
+
+    @Test
+    void shouldGetAllDevelopers() throws NotionException {
+        List<Developer> developers = developerService.getAllDevelopers(null,false);
+
+        assertNotNull(developers);
+        assertEquals(2, developers.size());
+
+        Developer developer = developers.getFirst();
+        assertEquals("Test Saltie 1", developer.getName());
+        assertEquals(UUID.fromString("11111111-1111-1111-1111-111111111111"), developer.getId());
+        assertEquals("https://github.com/saltie1", developer.getGithubUrl());
+        assertEquals("saltie@example.com", developer.getEmail());
+    }
+    @Test
+    void shouldThrowExceptionForInvalidFilter() {
+        String invalidFilter = "INVALID_STATUS";
+
+        InvalidFilterException exception = assertThrows(InvalidFilterException.class, () -> {
+            developerService.getAllDevelopers(invalidFilter,false);
+        });
+
+        assertEquals("Invalid filter value: " + invalidFilter, exception.getMessage());
     }
 }

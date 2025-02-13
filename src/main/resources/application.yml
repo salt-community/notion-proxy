@@ -10,3 +10,5 @@ spring:
 server:
   servlet:
     context-path: /
+
+CACHE_EXPIRE_IN_MILLISECONDS: 604800000
