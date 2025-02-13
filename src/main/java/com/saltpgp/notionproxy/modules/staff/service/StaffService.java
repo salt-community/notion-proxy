@@ -3,7 +3,6 @@ package com.saltpgp.notionproxy.modules.staff.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.saltpgp.notionproxy.api.bucket.BucketApiService;
 import com.saltpgp.notionproxy.exceptions.NotionException;
-import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import com.saltpgp.notionproxy.api.notion.NotionApiService;
 import com.saltpgp.notionproxy.api.notion.filter.NotionProperty.NotionPropertyFilter;
 import com.saltpgp.notionproxy.api.notion.filter.NotionProperty.PeopleFilter;
@@ -17,6 +16,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static com.saltpgp.notionproxy.modules.staff.service.StaffMapper.*;
 
 @Service
 @Slf4j
@@ -88,10 +89,10 @@ public class StaffService {
             return null;
         }
         return new Staff(
-                person.get("name").asText(),
-                person.get("person").get("email").asText(),
-                UUID.fromString(person.get("id").asText()),
-                element.get("properties").get("Guild").get("multi_select").get(0).get("name").asText());
+                getStaffName(person),
+                getStaffEmail(person),
+                getStaffId(person),
+                getStaffRole(element));
     }
 
     public List<Consultant> getStaffConsultants(UUID id) throws NotionException {

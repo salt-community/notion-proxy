@@ -2,7 +2,9 @@ package com.saltpgp.notionproxy.modules.staff.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-public class StaffMapper {
+import java.util.UUID;
+
+class StaffMapper {
 
     public static String getDevEmail(JsonNode node) {
         String output = "No email found";
@@ -11,5 +13,19 @@ public class StaffMapper {
         } catch (NullPointerException e) {
             return output;
         }
+    }
+    public static UUID getStaffId(JsonNode person) {
+        return UUID.fromString(person.get("id").asText());
+    }
+
+    public static String getStaffEmail(JsonNode person) {
+        return person.get("person").get("email").asText();
+    }
+
+    public static String getStaffName(JsonNode person) {
+        return person.get("name").asText();
+    }
+    public static String getStaffRole(JsonNode element) {
+        return element.get("properties").get("Guild").get("multi_select").get(0).get("name").asText();
     }
 }
