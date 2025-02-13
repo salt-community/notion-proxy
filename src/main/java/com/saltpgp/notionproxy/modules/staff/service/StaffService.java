@@ -27,8 +27,6 @@ public class StaffService {
     private final NotionApiService notionApiService;
     private final String CORE_DATABASE_ID, DEV_DATABASE_ID;
     private final BucketApiService BUCKET_API;
-    private final static String CACHE_ID = "staff_";
-    private final static String CACHE_ID_CONSULTANTS = "staff_consultants_";
 
     public StaffService(NotionApiService notionApiService, @Value("${CORE_DATABASE_ID}") String coreDatabaseId, @Value("${DATABASE_ID}") String devDatabaseId,
                         BucketApiService bucketApiService) {
