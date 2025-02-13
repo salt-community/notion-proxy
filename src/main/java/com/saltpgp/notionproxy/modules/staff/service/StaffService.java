@@ -56,13 +56,7 @@ public class StaffService {
                     log.debug("Skipped empty person");
                     return;
                 }
-
-                staffList.add(new Staff(
-                        person.get("name").asText(),
-                        person.get("person").get("email").asText(),
-                        UUID.fromString(person.get("id").asText()),
-                        element.get("properties").get("Guild").get("multi_select").get(0).get("name").asText()
-                ));
+                staffList.add(getStaff(person, element));
             });
             nextCursor = response.get("next_cursor").asText();
             hasMore = response.get("has_more").asBoolean();
@@ -85,11 +79,7 @@ public class StaffService {
         try {
             JsonNode element = response.get("results").get(0);
             JsonNode person = element.get("properties").get("Person").get("people").get(0);
-            Staff staff = new Staff(
-                    person.get("name").asText(),
-                    person.get("person").get("email").asText(),
-                    UUID.fromString(person.get("id").asText()),
-                    element.get("properties").get("Guild").get("multi_select").get(0).get("name").asText());
+            Staff staff = getStaff(person, element);
             BUCKET_API.saveCache(CACHE_ID + id.toString(), Staff.toJsonNode(staff));
             return staff;
         } catch (Exception e) {
@@ -97,6 +87,14 @@ public class StaffService {
             throw new NotionNotFoundException();
         }
 
+    }
+
+    private static Staff getStaff(JsonNode person, JsonNode element) {
+        return new Staff(
+                person.get("name").asText(),
+                person.get("person").get("email").asText(),
+                UUID.fromString(person.get("id").asText()),
+                element.get("properties").get("Guild").get("multi_select").get(0).get("name").asText());
     }
 
     public List<Consultant> getStaffConsultants(UUID id) throws NotionException {
@@ -114,7 +112,7 @@ public class StaffService {
             JsonNode response = notionApiService.fetchDatabase(DEV_DATABASE_ID,
                     NotionServiceFilters.filterBuilder(nextCursor, id.toString(), StaffFilter.STAFF_FILTER_RESPONSIBLE));
             response.get("results").forEach(element -> {
-                devs.add(getStaffFromPage(element));
+                devs.add(getConsultantFromPage(element));
             });
             nextCursor = response.get("next_cursor").asText();
             hasMore = response.get("has_more").asBoolean();
@@ -124,7 +122,7 @@ public class StaffService {
     }
 
 
-    private Consultant getStaffFromPage(JsonNode page) {
+    private Consultant getConsultantFromPage(JsonNode page) {
         String name = page.get("properties").get("Name").get("title").get(0).get("plain_text").asText();
         String email = StaffMapper.getDevEmail(page);
         UUID id = UUID.fromString(page.get("id").asText());
