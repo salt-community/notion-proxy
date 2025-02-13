@@ -56,7 +56,7 @@ public class StaffService {
                     log.debug("Skipped empty person");
                     return;
                 }
-                staffList.add(getStaff(person, element));
+                staffList.add(createStaffFromNotionPage(person, element));
             });
             nextCursor = response.get("next_cursor").asText();
             hasMore = response.get("has_more").asBoolean();
@@ -79,7 +79,7 @@ public class StaffService {
         try {
             JsonNode element = response.get("results").get(0);
             JsonNode person = element.get("properties").get("Person").get("people").get(0);
-            Staff staff = getStaff(person, element);
+            Staff staff = createStaffFromNotionPage(person, element);
             BUCKET_API.saveCache(CACHE_ID + id.toString(), Staff.toJsonNode(staff));
             return staff;
         } catch (Exception e) {
@@ -89,7 +89,7 @@ public class StaffService {
 
     }
 
-    private static Staff getStaff(JsonNode person, JsonNode element) {
+    private static Staff createStaffFromNotionPage(JsonNode person, JsonNode element) {
         return new Staff(
                 person.get("name").asText(),
                 person.get("person").get("email").asText(),
@@ -112,7 +112,7 @@ public class StaffService {
             JsonNode response = notionApiService.fetchDatabase(DEV_DATABASE_ID,
                     NotionServiceFilters.filterBuilder(nextCursor, id.toString(), StaffFilter.STAFF_FILTER_RESPONSIBLE));
             response.get("results").forEach(element -> {
-                devs.add(getConsultantFromPage(element));
+                devs.add(createConsultantFromNotionPage(element));
             });
             nextCursor = response.get("next_cursor").asText();
             hasMore = response.get("has_more").asBoolean();
@@ -122,7 +122,7 @@ public class StaffService {
     }
 
 
-    private Consultant getConsultantFromPage(JsonNode page) {
+    private Consultant createConsultantFromNotionPage(JsonNode page) {
         String name = page.get("properties").get("Name").get("title").get(0).get("plain_text").asText();
         String email = StaffMapper.getDevEmail(page);
         UUID id = UUID.fromString(page.get("id").asText());
