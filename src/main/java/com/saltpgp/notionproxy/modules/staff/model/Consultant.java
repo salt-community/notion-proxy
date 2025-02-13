@@ -26,11 +26,11 @@ public class Consultant {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static JsonNode toJsonNode(List<Consultant> staffDevs) {
-        Map<String, Object> result = Map.of("staffDevList", staffDevs);
+        Map<String, Object> result = Map.of("consultantList", staffDevs);
         return objectMapper.convertValue(result, JsonNode.class);
     }
 
     public static List<Consultant> fromJsonList(String json) throws JsonProcessingException {
-        return objectMapper.convertValue(objectMapper.readTree(json).get("staffDevList") ,new TypeReference<List<Consultant>>() {});
+        return objectMapper.convertValue(objectMapper.readTree(json).get("consultantList") ,new TypeReference<List<Consultant>>() {});
     }
 }
