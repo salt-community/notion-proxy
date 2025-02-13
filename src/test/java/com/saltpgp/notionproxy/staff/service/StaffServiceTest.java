@@ -157,7 +157,7 @@ public class StaffServiceTest {
         );
 
         // Act
-        List<Staff> result = mockStaffService.getAllCore(filter);
+        List<Staff> result = mockStaffService.getAllCore(filter, false);
 
         // Assert
         Assertions.assertEquals(expectedResponse.getFirst().getName(), result.getFirst().getName());
@@ -181,7 +181,7 @@ public class StaffServiceTest {
         when(mockApiService.fetchDatabase(mockCoreDatabaseId, NotionServiceFilters.filterBuilder(null, filter))).thenReturn(mockResponse);
 
         // Act
-        var result = mockStaffService.getStaffById(testUUID);
+        var result = mockStaffService.getStaffById(testUUID, false);
 
         // Assert
         Assertions.assertEquals(expected.getName(), result.getName());
@@ -207,7 +207,7 @@ public class StaffServiceTest {
         when(mockApiService.fetchDatabase(mockDeveloperDatabaseId, filter)).thenReturn(mockResponse);
 
         // Act
-        List<Consultant> result = mockStaffService.getStaffConsultants(testUUID);
+        List<Consultant> result = mockStaffService.getStaffConsultants(testUUID, false);
 
         // Assert
         Assertions.assertEquals(expectedResponse.getFirst().getName(), result.getFirst().getName());

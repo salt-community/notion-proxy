@@ -36,12 +36,14 @@ public class StaffService {
         BUCKET_API = bucketApiService;
     }
 
-    public List<Staff> getAllCore(String filter) throws NotionException {
-        JsonNode cache = BUCKET_API.getCache(CACHE_ID + filter);
-        try {
-            return Staff.fromJsonList(cache.toString());
-        } catch (Exception e) {
-            log.warn("Failed to parse cached staff for filter: {}. Error: {}", filter, e.getMessage());
+    public List<Staff> getAllCore(String filter, boolean useCache) throws NotionException {
+        if(useCache){
+            JsonNode cache = BUCKET_API.getCache(CACHE_ID + filter);
+            try {
+                return Staff.fromJsonList(cache.toString());
+            } catch (Exception e) {
+                log.warn("Failed to parse cached staff for filter: {}. Error: {}", filter, e.getMessage());
+            }
         }
 
         String nextCursor = null;
@@ -65,13 +67,15 @@ public class StaffService {
         return staffList;
     }
 
-    public Staff getStaffById(UUID id) throws NotionException {
+    public Staff getStaffById(UUID id, boolean useCache) throws NotionException {
         NotionPropertyFilter filter = NotionPropertyFilter.peopleFilter(PeopleFilter.CONTAINS, id.toString(), "Person");
-        JsonNode cache = BUCKET_API.getCache(CACHE_ID + id);
-        try {
-            return Staff.fromJson(cache.toString());
-        } catch (Exception e) {
-            log.warn("Failed to parse cached staff for filter: {}. Error: {}", filter, e.getMessage());
+        if(useCache) {
+            JsonNode cache = BUCKET_API.getCache(CACHE_ID + id);
+            try {
+                return Staff.fromJson(cache.toString());
+            } catch (Exception e) {
+                log.warn("Failed to parse cached staff for filter: {}. Error: {}", filter, e.getMessage());
+            }
         }
         log.debug("Fetching staff by id: {}", filter);
         JsonNode response = notionApiService.fetchDatabase(CORE_DATABASE_ID,
@@ -83,15 +87,17 @@ public class StaffService {
 
     }
 
-    public List<Consultant> getStaffConsultants(UUID id) throws NotionException {
+    public List<Consultant> getStaffConsultants(UUID id, boolean useCache) throws NotionException {
         String nextCursor = null;
         boolean hasMore = true;
         List<Consultant> devs = new ArrayList<>();
-        JsonNode cache = BUCKET_API.getCache(CACHE_ID_CONSULTANTS + id.toString());
-        try {
-            return Consultant.fromJsonList(cache.toString());
-        } catch (Exception e) {
-            log.warn("Failed to parse cached Consultant for filter: {}. Error: {}", id, e.getMessage());
+        if(useCache) {
+            JsonNode cache = BUCKET_API.getCache(CACHE_ID_CONSULTANTS + id.toString());
+            try {
+                return Consultant.fromJsonList(cache.toString());
+            } catch (Exception e) {
+                log.warn("Failed to parse cached Consultant for filter: {}. Error: {}", id, e.getMessage());
+            }
         }
         log.debug("Fetching staff consultants by id: {}", id);
         while (hasMore) {
