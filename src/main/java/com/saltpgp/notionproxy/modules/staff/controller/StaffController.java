@@ -1,10 +1,11 @@
-package com.saltpgp.notionproxy.modules.staff;
+package com.saltpgp.notionproxy.modules.staff.controller;
 
 
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
-import com.saltpgp.notionproxy.modules.staff.dtos.StaffConsultantDto;
-import com.saltpgp.notionproxy.modules.staff.dtos.StaffDto;
+import com.saltpgp.notionproxy.modules.staff.service.StaffService;
+import com.saltpgp.notionproxy.modules.staff.controller.dtos.StaffConsultantDto;
+import com.saltpgp.notionproxy.modules.staff.controller.dtos.StaffDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

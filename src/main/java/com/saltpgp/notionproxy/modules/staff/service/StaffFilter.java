@@ -1,4 +1,4 @@
-package com.saltpgp.notionproxy.modules.staff;
+package com.saltpgp.notionproxy.modules.staff.service;
 
 public class StaffFilter {
 

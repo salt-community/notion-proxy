@@ -1,4 +1,4 @@
-package com.saltpgp.notionproxy.modules.staff.models;
+package com.saltpgp.notionproxy.modules.staff.model;
 
 import java.util.List;
 import java.util.Map;

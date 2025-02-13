@@ -1,4 +1,4 @@
-package com.saltpgp.notionproxy.modules.staff;
+package com.saltpgp.notionproxy.modules.staff.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.saltpgp.notionproxy.api.bucket.BucketApiService;
@@ -8,9 +8,8 @@ import com.saltpgp.notionproxy.api.notion.NotionApiService;
 import com.saltpgp.notionproxy.api.notion.filter.NotionProperty.NotionPropertyFilter;
 import com.saltpgp.notionproxy.api.notion.filter.NotionProperty.PeopleFilter;
 import com.saltpgp.notionproxy.api.notion.filter.NotionServiceFilters;
-import com.saltpgp.notionproxy.modules.developer.model.Developer;
-import com.saltpgp.notionproxy.modules.staff.models.Staff;
-import com.saltpgp.notionproxy.modules.staff.models.StaffDev;
+import com.saltpgp.notionproxy.modules.staff.model.Staff;
+import com.saltpgp.notionproxy.modules.staff.model.StaffDev;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
