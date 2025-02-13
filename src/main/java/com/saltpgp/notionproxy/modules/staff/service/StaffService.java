@@ -25,9 +25,8 @@ public class StaffService {
     private final NotionApiService notionApiService;
     private final String CORE_DATABASE_ID, DEV_DATABASE_ID;
     private final BucketApiService BUCKET_API;
-    private final String BUCKET_ID_ALL = "staff_getAll_filter_";
-    private final String BUCKET_ID_DEV = "staff_getAll_dev_id_";
-    private final String BUCKET_ID_SINGLE = "staff_getAll_single";
+    private final static String CACHE_ID = "staff_";
+    private final static String CACHE_ID_CONSULTANTS = "staff_consultants_";
 
     public StaffService(NotionApiService notionApiService, @Value("${CORE_DATABASE_ID}") String coreDatabaseId, @Value("${DATABASE_ID}") String devDatabaseId
             , BucketApiService bucketApiService) {
@@ -40,7 +39,7 @@ public class StaffService {
     public List<Staff> getAllCore(String filter) throws NotionException {
         String nextCursor = null;
         boolean hasMore = true;
-        JsonNode cache = BUCKET_API.getCache(BUCKET_ID_ALL + filter);
+        JsonNode cache = BUCKET_API.getCache(CACHE_ID + filter);
         try {
             return Staff.fromJsonList(cache.toString());
         } catch (Exception e) {
@@ -68,13 +67,13 @@ public class StaffService {
             nextCursor = response.get("next_cursor").asText();
             hasMore = response.get("has_more").asBoolean();
         }
-        BUCKET_API.saveCache(BUCKET_ID_ALL + filter, Staff.toJsonNode(staffList));
+        BUCKET_API.saveCache(CACHE_ID + filter, Staff.toJsonNode(staffList));
         return staffList;
     }
 
     public Staff getStaffById(UUID id) throws NotionException, NotionNotFoundException {
         NotionPropertyFilter filter = NotionPropertyFilter.peopleFilter(PeopleFilter.CONTAINS, id.toString(), "Person");
-        JsonNode cache = BUCKET_API.getCache(BUCKET_ID_SINGLE + id.toString());
+        JsonNode cache = BUCKET_API.getCache(CACHE_ID + id);
         try {
             return Staff.fromJson(cache.toString());
         } catch (Exception e) {
@@ -91,7 +90,7 @@ public class StaffService {
                     person.get("person").get("email").asText(),
                     UUID.fromString(person.get("id").asText()),
                     element.get("properties").get("Guild").get("multi_select").get(0).get("name").asText());
-            BUCKET_API.saveCache(BUCKET_ID_SINGLE + id.toString(), Staff.toJsonNode(staff));
+            BUCKET_API.saveCache(CACHE_ID + id.toString(), Staff.toJsonNode(staff));
             return staff;
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -104,11 +103,11 @@ public class StaffService {
         String nextCursor = null;
         boolean hasMore = true;
         List<StaffDev> devs = new ArrayList<>();
-        JsonNode cache = BUCKET_API.getCache(BUCKET_ID_DEV + id.toString());
+        JsonNode cache = BUCKET_API.getCache(CACHE_ID_CONSULTANTS + id.toString());
         try {
             return StaffDev.fromJsonList(cache.toString());
         } catch (Exception e) {
-            log.warn("Failed to parse cached staffdev for filter: {}. Error: {}", id.toString(), e.getMessage());
+            log.warn("Failed to parse cached staffdev for filter: {}. Error: {}", id, e.getMessage());
         }
         log.debug("Fetching staff consultants by id: {}", id);
         while (hasMore) {
@@ -120,7 +119,7 @@ public class StaffService {
             nextCursor = response.get("next_cursor").asText();
             hasMore = response.get("has_more").asBoolean();
         }
-        BUCKET_API.saveCache(BUCKET_ID_DEV + id.toString(), StaffDev.toJsonNode(devs));
+        BUCKET_API.saveCache(CACHE_ID_CONSULTANTS + id, StaffDev.toJsonNode(devs));
         return devs;
     }
 
