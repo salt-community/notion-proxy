@@ -15,8 +15,8 @@ public class IdCardService {
 
     private static final String FILTER = """
                 "filter": {
-                    "property": "Status",
-                    "select": {
+                    "property": "Email",
+                    "email": {
                         "equals": "%s"
                     }
                 }
