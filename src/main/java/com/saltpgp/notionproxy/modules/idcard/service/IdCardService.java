@@ -6,7 +6,6 @@ import com.saltpgp.notionproxy.api.notion.NotionApiService;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import com.saltpgp.notionproxy.modules.idcard.model.User;
-import com.saltpgp.notionproxy.modules.staff.model.Staff;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -40,7 +39,9 @@ public class IdCardService {
         if (useCache) {
             JsonNode cache = bucketApiService.getCache(CACHE_ID + email);
             try {
-                return User.fromJson(cache.toString());
+                if (cache != null) {
+                    return User.fromJson(cache.toString());
+                }
             } catch (Exception e) {
                 log.warn("Failed to parse cached user for email: {}. Error: {}", email, e.getMessage());
             }
