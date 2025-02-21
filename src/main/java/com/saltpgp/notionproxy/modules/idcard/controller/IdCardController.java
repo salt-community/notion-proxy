@@ -7,16 +7,16 @@ import com.saltpgp.notionproxy.modules.idcard.service.IdCardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping("api/id-cards")
 @CrossOrigin
 @Slf4j
+@Tag(name = "Id Card", description = "APIs for getting user to id card")
 public class IdCardController {
     private final IdCardService idCardService;
 
