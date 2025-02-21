@@ -14,7 +14,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class User {
-    private String name, course, endDate, status, image;
+    private String name, course, endDate, status, gitHub;
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
