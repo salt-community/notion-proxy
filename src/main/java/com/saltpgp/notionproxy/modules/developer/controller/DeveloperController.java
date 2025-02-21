@@ -44,7 +44,7 @@ public class DeveloperController {
             @Parameter(description = "A filter to sort devs by current status(On Assignment, PGP, etc) It is case sensitive",
                     example = "none")
             @RequestParam(required = false, defaultValue = "none") String status,
-            @RequestParam(value = "useCache", required = false, defaultValue = "true") boolean useCache) throws NotionException {
+            @RequestParam(value = "useCache", required = false, defaultValue = "true") boolean useCache) throws NotionException, NotionNotFoundException {
         log.info("Request received to get developers list with filter: {}", status);
         return ResponseEntity.ok(DeveloperDto.fromModelList(developerService.getAllDevelopers(status, useCache)));
     }

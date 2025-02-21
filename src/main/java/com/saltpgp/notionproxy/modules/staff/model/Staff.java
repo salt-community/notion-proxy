@@ -1,11 +1,10 @@
-package com.saltpgp.notionproxy.modules.staff.models;
+package com.saltpgp.notionproxy.modules.staff.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.saltpgp.notionproxy.modules.developer.model.Developer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

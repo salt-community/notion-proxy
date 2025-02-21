@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.saltpgp.notionproxy.exceptions.NotionException;
+import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
 import org.junit.jupiter.api.Test;
+import org.mockito.internal.matchers.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
@@ -36,7 +38,7 @@ class NotionApiServiceTest {
 
 
     @Test
-    void fetchPage_Success() throws NotionException {
+    void fetchPage_Success() throws NotionException, NotionNotFoundException {
         String pageId = "12345";
         String mockResponse = "{\"id\":\"12345\", \"object\":\"page\", \"properties\":{}}";
 
@@ -62,7 +64,7 @@ class NotionApiServiceTest {
                 .andExpect(header("Notion-Version", NOTION_VERSION))
                 .andRespond(withStatus(HttpStatus.NOT_FOUND));
 
-        NotionException exception = assertThrows(NotionException.class, () -> notionApiService.fetchPage(pageId));
+        NotionNotFoundException exception = assertThrows(NotionNotFoundException.class, () -> notionApiService.fetchPage(pageId));
 
         assertEquals("Page ID didn't exist in Notion: " + pageId, exception.getMessage());
     }
@@ -147,7 +149,7 @@ class NotionApiServiceTest {
     }
 
     @Test
-    void fetchDatabase_Success() throws NotionException {
+    void fetchDatabase_Success() throws NotionException, NotionNotFoundException {
         String databaseId = "abc123";
         String mockDatabaseResponse = "{\"results\":[]}";
 

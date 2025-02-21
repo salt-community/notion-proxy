@@ -12,19 +12,21 @@ import java.util.NoSuchElementException;
 @Slf4j
 public class GlobalExceptionHandler {
 
+    /**
+     * Handle InvalidFilterException - Returns 400 BAD REQUEST
+     */
+    @ExceptionHandler({InvalidFilterException.class})
+    public ResponseEntity<String> handleInvalidFilterException(InvalidFilterException e) {
+        log.debug("InvalidFilterException was thrown: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+
     /***
      * Handle NotionNotFoundException - Returns 404 NOT FOUND
      */
     @ExceptionHandler({NotionNotFoundException.class})
     public ResponseEntity<String> handleNotionNotFoundException(NotionNotFoundException e) {
         log.debug("NotionNotFoundException was thrown: Resource not found");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    }
-
-    //TODO:Is it use?
-    @ExceptionHandler({NoSuchElementException.class})
-    public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException e) {
-        log.debug("NoSuchElementException was thrown: {}", e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 
@@ -47,15 +49,6 @@ public class GlobalExceptionHandler {
         log.error("Generic exception encountered: {}", e.getMessage(), e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("An unexpected error occurred: " + e.getMessage());
-    }
-
-    /**
-     * Handle InvalidFilterException - Returns 400 BAD REQUEST
-     */
-    @ExceptionHandler({InvalidFilterException.class})
-    public ResponseEntity<String> handleInvalidFilterException(InvalidFilterException e) {
-        log.debug("InvalidFilterException was thrown: {}", e.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
 }

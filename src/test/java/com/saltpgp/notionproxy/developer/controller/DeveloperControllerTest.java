@@ -31,7 +31,7 @@ class DeveloperControllerTest {
     }
 
     @Test
-    void getDevelopersList() throws NotionException {
+    void getDevelopersList() throws NotionException, NotionNotFoundException {
         // Arrange
         String status = "none";
         List<Developer> mockDevelopers = new ArrayList<>();
