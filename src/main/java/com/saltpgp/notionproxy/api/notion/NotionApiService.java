@@ -79,7 +79,7 @@ public class NotionApiService {
         } catch (ResourceAccessException e) {
             throw new NotionException(ErrorNotionMessage.CANT_ACCESS);
         } catch (Exception e) {
-            throw new NotionException(ErrorNotionMessage.UNKNOWN_ERROR_WHEN_SEND_REQUEST);
+            throw new NotionException(ErrorNotionMessage.UNKNOWN_ERROR_WHEN_SEND_REQUEST + e.getMessage());
         }
         return null;
     }
