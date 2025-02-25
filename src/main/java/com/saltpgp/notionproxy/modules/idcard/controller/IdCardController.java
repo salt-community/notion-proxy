@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("api/id-cards")
 @CrossOrigin
@@ -65,7 +67,7 @@ public class IdCardController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     public ResponseEntity<UserDto> getIdCardUuid(
-            @PathVariable String uuid,
+            @PathVariable UUID uuid,
             @RequestParam(value = "useCache", required = false, defaultValue = "true") boolean useCache)
             throws NotionException, NotionNotFoundException {
         log.info("Request received to get user with uuid: {}", uuid);
