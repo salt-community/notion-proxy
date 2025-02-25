@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 import static com.saltpgp.notionproxy.api.notion.filter.NotionServiceFilters.filterBuilder;
 import static com.saltpgp.notionproxy.modules.staff.service.StaffProperty.CACHE_ID;
 
@@ -77,6 +79,24 @@ public class IdCardService {
         JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, filterBuilder(null, privateEmail, FILTER_PRIVATE_EMAIL));
         User user = createUserFromNotionPage(response.get("result").get(0));
         bucketApiService.saveCache(CACHE_ID + privateEmail, User.toJsonNode(user));
+        return user;
+    }
+
+    public User getIdCardUuid(UUID id, boolean useCache) throws NotionException, NotionNotFoundException {
+        if (useCache) {
+            JsonNode cache = bucketApiService.getCache(CACHE_ID + id);
+            try {
+                if (cache != null) {
+                    return User.fromJson(cache.toString());
+                }
+            } catch (Exception e) {
+                log.warn("Failed to parse cached user for private uuid: {}. Error: {}", id, e.getMessage());
+            }
+        }
+        log.debug("Fetching dev by private uuid: {}", id);
+        JsonNode response = notionApiService.fetchPage(id.toString());
+        User user = createUserFromNotionPage(response.get("result").get(0));
+        bucketApiService.saveCache(CACHE_ID + id, User.toJsonNode(user));
         return user;
     }
 
