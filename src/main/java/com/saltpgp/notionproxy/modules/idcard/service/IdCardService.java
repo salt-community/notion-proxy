@@ -50,10 +50,10 @@ public class IdCardService {
         JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, filterBuilder(null, email, FILTER));
         JsonNode properties = response.get("result").get(0).get("properties");
         User user = new User(
+                response.get("result").get(0).get("id").asText(),
                 properties.get("Name").get("title").get("text").get("content").asText(),
                 properties.get("Course").get("select").get("name").asText(),
-                properties.get("Payroll End Date").get("date").asText(),
-                properties.get("Status").get("select").get("name").asText(),
+                properties.get("Email").get("email").asText(),
                 properties.get("GitHub").get("url").asText()
         );
         bucketApiService.saveCache(CACHE_ID + email, User.toJsonNode(user));
