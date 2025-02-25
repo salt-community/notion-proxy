@@ -94,16 +94,15 @@ public class IdCardService {
             }
         }
         log.debug("Fetching dev by private uuid: {}", id);
-        JsonNode response = notionApiService.fetchPage(id.toString());
-        User user = createUserFromNotionPage(response.get("result").get(0));
+        User user = createUserFromNotionPage(notionApiService.fetchPage(id.toString()));
         bucketApiService.saveCache(CACHE_ID + id, User.toJsonNode(user));
         return user;
     }
 
-    private User createUserFromNotionPage(JsonNode result) {
-        JsonNode properties = result.get("properties");
+    private User createUserFromNotionPage(JsonNode page) {
+        JsonNode properties = page.get("properties");
         return new User(
-                result.get(0).get("id").asText(),
+                page.get(0).get("id").asText(),
                 properties.get("Name").get("title").get("text").get("content").asText(),
                 properties.get("Course").get("select").get("name").asText(),
                 properties.get("Email").get("email").asText(),
