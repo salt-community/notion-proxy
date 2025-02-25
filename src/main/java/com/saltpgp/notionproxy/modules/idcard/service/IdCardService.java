@@ -20,9 +20,18 @@ public class IdCardService {
     private final BucketApiService bucketApiService;
     private final String DATABASE_ID;
 
-    private static final String FILTER = """
+    private static final String FILTER_EMAIL = """
                 "filter": {
                     "property": "Email",
+                    "email": {
+                        "equals": "%s"
+                    }
+                }
+            """;
+
+    private static final String FILTER_PRIVATE_EMAIL = """
+                "filter": {
+                    "property": "Private Email",
                     "email": {
                         "equals": "%s"
                     }
@@ -35,7 +44,7 @@ public class IdCardService {
         this.DATABASE_ID = DATABASE_ID;
     }
 
-    public User getIdCard(String email, boolean useCache) throws NotionException, NotionNotFoundException {
+    public User getIdCardEmail(String email, boolean useCache) throws NotionException, NotionNotFoundException {
         if (useCache) {
             JsonNode cache = bucketApiService.getCache(CACHE_ID + email);
             try {
@@ -47,9 +56,27 @@ public class IdCardService {
             }
         }
         log.debug("Fetching dev by email: {}", email);
-        JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, filterBuilder(null, email, FILTER));
+        JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, filterBuilder(null, email, FILTER_EMAIL));
         User user = createUserFromNotionPage(response.get("result").get(0));
         bucketApiService.saveCache(CACHE_ID + email, User.toJsonNode(user));
+        return user;
+    }
+
+    public User getIdCardPrivateEmail(String privateEmail, boolean useCache) throws NotionException, NotionNotFoundException {
+        if (useCache) {
+            JsonNode cache = bucketApiService.getCache(CACHE_ID + privateEmail);
+            try {
+                if (cache != null) {
+                    return User.fromJson(cache.toString());
+                }
+            } catch (Exception e) {
+                log.warn("Failed to parse cached user for private email: {}. Error: {}", privateEmail, e.getMessage());
+            }
+        }
+        log.debug("Fetching dev by private email: {}", privateEmail);
+        JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, filterBuilder(null, privateEmail, FILTER_PRIVATE_EMAIL));
+        User user = createUserFromNotionPage(response.get("result").get(0));
+        bucketApiService.saveCache(CACHE_ID + privateEmail, User.toJsonNode(user));
         return user;
     }
 
