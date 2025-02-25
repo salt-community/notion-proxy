@@ -39,7 +39,7 @@ public class IdCardController {
             @RequestParam(value = "useCache", required = false, defaultValue = "true") boolean useCache)
             throws NotionException, NotionNotFoundException {
         log.info("Request received to get user with email: {}", email);
-        return ResponseEntity.ok(UserDto.fromModel(idCardService.getIdCard(email, useCache)));
+        return ResponseEntity.ok(UserDto.fromModel(idCardService.getIdCardEmail(email, useCache)));
     }
 
     @GetMapping("private-email/{private-email}")
@@ -55,7 +55,7 @@ public class IdCardController {
             @RequestParam(value = "useCache", required = false, defaultValue = "true") boolean useCache)
             throws NotionException, NotionNotFoundException {
         log.info("Request received to get user with private email: {}", privateEmail);
-        return ResponseEntity.ok(UserDto.fromModel(idCardService.getIdCard(privateEmail, useCache)));
+        return ResponseEntity.ok(UserDto.fromModel(idCardService.getIdCardPrivateEmail(privateEmail, useCache)));
     }
 
     @GetMapping("uuid/{uuid}")
@@ -71,6 +71,6 @@ public class IdCardController {
             @RequestParam(value = "useCache", required = false, defaultValue = "true") boolean useCache)
             throws NotionException, NotionNotFoundException {
         log.info("Request received to get user with uuid: {}", uuid);
-        return ResponseEntity.ok(UserDto.fromModel(idCardService.getIdCard(uuid, useCache)));
+        return ResponseEntity.ok(UserDto.fromModel(idCardService.getIdCardUuid(uuid, useCache)));
     }
 }
