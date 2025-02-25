@@ -102,8 +102,8 @@ public class IdCardService {
     private User createUserFromNotionPage(JsonNode page) {
         JsonNode properties = page.get("properties");
         return new User(
-                page.get(0).get("id").asText(),
-                properties.get("Name").get("title").get("text").get("content").asText(),
+                page.get("id").asText(),
+                properties.get("Name").get("title").get(0).get("text").get("content").asText(),
                 properties.get("Course").get("select").get("name").asText(),
                 properties.get("Email").get("email").asText(),
                 properties.get("GitHub").get("url").asText()
