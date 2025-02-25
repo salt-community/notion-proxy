@@ -8,13 +8,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class User {
-    private String name, course, endDate, status, gitHub;
+    private String uuid, name, course, email, gitHub;
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
