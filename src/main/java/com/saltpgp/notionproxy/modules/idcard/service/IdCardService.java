@@ -31,15 +31,6 @@ public class IdCardService {
                 }
             """;
 
-    private static final String FILTER_PRIVATE_EMAIL = """
-                "filter": {
-                    "property": "Private Email",
-                    "email": {
-                        "equals": "%s"
-                    }
-                }
-            """;
-
     public IdCardService(NotionApiService notionApiService, BucketApiService bucketApiService, @Value("${DATABASE_ID}") String DATABASE_ID) {
         this.notionApiService = notionApiService;
         this.bucketApiService = bucketApiService;
@@ -61,24 +52,6 @@ public class IdCardService {
         JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, filterBuilder(null, email, FILTER_EMAIL));
         User user = createUserFromNotionPage(response.get("result").get(0));
         bucketApiService.saveCache(CACHE_ID + email, User.toJsonNode(user));
-        return user;
-    }
-
-    public User getIdCardPrivateEmail(String privateEmail, boolean useCache) throws NotionException, NotionNotFoundException {
-        if (useCache) {
-            JsonNode cache = bucketApiService.getCache(CACHE_ID + privateEmail);
-            try {
-                if (cache != null) {
-                    return User.fromJson(cache.toString());
-                }
-            } catch (Exception e) {
-                log.warn("Failed to parse cached user for private email: {}. Error: {}", privateEmail, e.getMessage());
-            }
-        }
-        log.debug("Fetching dev by private email: {}", privateEmail);
-        JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, filterBuilder(null, privateEmail, FILTER_PRIVATE_EMAIL));
-        User user = createUserFromNotionPage(response.get("result").get(0));
-        bucketApiService.saveCache(CACHE_ID + privateEmail, User.toJsonNode(user));
         return user;
     }
 
