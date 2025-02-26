@@ -7,10 +7,14 @@ import com.saltpgp.notionproxy.api.notion.NotionApiService;
 import com.saltpgp.notionproxy.api.notion.filter.NotionServiceFilters;
 import com.saltpgp.notionproxy.exceptions.NotionException;
 import com.saltpgp.notionproxy.exceptions.NotionNotFoundException;
+import com.saltpgp.notionproxy.modules.idcard.model.User;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -71,9 +75,9 @@ class IdCardServiceTest {
                                 "id": "course",
                                 "type": "select",
                                 "select": {
-                                    "name": "jfs-sthlm-2024-09-06",
+                                    "name": "jfs-sthlm-2024-09-06"
                                 }
-                            },
+                            }
                         }
                     }
                 """;
@@ -110,19 +114,45 @@ class IdCardServiceTest {
                                     "id": "course",
                                     "type": "select",
                                     "select": {
-                                        "name": "jfs-sthlm-2024-09-06",
+                                        "name": "jfs-sthlm-2024-09-06"
                                     }
-                                },
+                                }
                             }
-                        },
+                        }
                     ],
                     "next_cursor": null,
                     "has_more": false
                 }
                 """;
 
-        when(mockApiService.fetchDatabase(DATABASE_ID, FILTER_EMAIL)).thenReturn(mapper.readTree(databaseResponse));
+        when(mockApiService.fetchDatabase(DATABASE_ID, NotionServiceFilters.filterBuilder(null, "saltie@example.com", FILTER_EMAIL))).thenReturn(mapper.readTree(databaseResponse));
         when(mockApiService.fetchPage("11111111-1111-1111-1111-111111111111")).thenReturn(mapper.readTree(pageResponse));
     }
 
+    @Test
+    void shouldGetUserById() throws NotionException, NotionNotFoundException {
+
+        UUID userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+        User user = idCardService.getIdCardUuid(userId,false);
+
+        assertNotNull(user);
+        assertEquals("Test Saltie 1", user.getName());
+        assertEquals(userId.toString(), user.getUuid());
+        assertEquals("jfs-sthlm-2024-09-06",user.getCourse());
+        assertEquals("https://github.com/saltie1", user.getGitHub());
+        assertEquals("saltie@example.com", user.getEmail());
+    }
+
+    @Test
+    void shouldGetAllDevelopers() throws NotionException, NotionNotFoundException {
+        User user = idCardService.getIdCardEmail("saltie@example.com",false);
+
+        assertNotNull(user);
+        assertEquals("Test Saltie 1", user.getName());
+        assertEquals("11111111-1111-1111-1111-111111111111", user.getUuid());
+        assertEquals("jfs-sthlm-2024-09-06",user.getCourse());
+        assertEquals("https://github.com/saltie1", user.getGitHub());
+        assertEquals("saltie@example.com", user.getEmail());
+    }
 }
