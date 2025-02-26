@@ -39,6 +39,7 @@ public class IdCardService {
 
     public User getIdCardEmail(String email, boolean useCache) throws NotionException, NotionNotFoundException {
         if (useCache) {
+            log.debug("Fetching cache user by email: {}", email);
             JsonNode cache = bucketApiService.getCache(CACHE_ID + email);
             try {
                 if (cache != null) {
@@ -50,6 +51,7 @@ public class IdCardService {
         }
         log.debug("Fetching dev by email: {}", email);
         JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, filterBuilder(null, email, FILTER_EMAIL));
+        log.debug("Response for dev by email: {}", email);
         User user = createUserFromNotionPage(response.get("result").get(0));
         bucketApiService.saveCache(CACHE_ID + email, User.toJsonNode(user));
         return user;
@@ -57,17 +59,19 @@ public class IdCardService {
 
     public User getIdCardUuid(UUID id, boolean useCache) throws NotionException, NotionNotFoundException {
         if (useCache) {
+            log.debug("Fetching cache user by id: {}", id);
             JsonNode cache = bucketApiService.getCache(CACHE_ID + id);
             try {
                 if (cache != null) {
                     return User.fromJson(cache.toString());
                 }
             } catch (Exception e) {
-                log.warn("Failed to parse cached user for private uuid: {}. Error: {}", id, e.getMessage());
+                log.warn("Failed to parse cached user for uuid: {}. Error: {}", id, e.getMessage());
             }
         }
-        log.debug("Fetching dev by private uuid: {}", id);
+        log.debug("Fetching dev by id: {}", id);
         User user = createUserFromNotionPage(notionApiService.fetchPage(id.toString()));
+        log.debug("Response for dev by id: {}", id);
         bucketApiService.saveCache(CACHE_ID + id, User.toJsonNode(user));
         return user;
     }

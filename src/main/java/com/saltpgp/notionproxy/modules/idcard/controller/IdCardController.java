@@ -42,7 +42,6 @@ public class IdCardController {
         return ResponseEntity.ok(UserDto.fromModel(idCardService.getIdCardEmail(email, useCache)));
     }
 
-
     @GetMapping("uuid/{uuid}")
     @Operation(summary = "Get a specific user by uuid",
             description = "Retrieve details of a user by their unique uuid.")
