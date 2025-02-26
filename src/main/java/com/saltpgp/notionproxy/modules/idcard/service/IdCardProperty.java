@@ -12,12 +12,10 @@ class IdCardProperty {
     }
 
     public static final class Properties {
-        public static final String STATUS = "Status";
         public static final String COURSE = "Course";
         public static final String NAME = "Name";
         public static final String GITHUB = "GitHub";
         public static final String EMAIL = "Email";
-        public static final String RESPONSIBLE = "Responsible";
     }
 
     public static final class Course {
@@ -27,15 +25,6 @@ class IdCardProperty {
     public static final class Select {
         public static final String NAME = "name";
     }
-
-    public static final class TotalScore {
-        public static final String FORMULA = "formula";
-    }
-
-    public static final class Formula {
-        public static final String NUMBER = "number";
-    }
-
     public static final class Name {
         public static final String TITLE = "title";
     }
@@ -51,11 +40,4 @@ class IdCardProperty {
     public static final class Email {
         public static final String EMAIL = "email";
     }
-
-    public static final class NotionResponsible {
-        public static final String PEOPLE = "people";
-        public static final String PERSON = "person";
-        public static final String EMAIL = "email";
-    }
-
 }
