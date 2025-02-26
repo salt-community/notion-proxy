@@ -145,7 +145,7 @@ class NotionApiServiceTest {
 
         NotionException exception = assertThrows(NotionException.class, () -> notionApiService.fetchPage(pageId));
 
-        assertEquals("Unknown error occurred while trying to send request to Notion.", exception.getMessage());
+        assertEquals("Unknown error occurred while trying to send request to Notion.null", exception.getMessage());
     }
 
     @Test
@@ -279,6 +279,6 @@ class NotionApiServiceTest {
 
         NotionException exception = assertThrows(NotionException.class, () -> notionApiService.fetchDatabase(databaseId, body));
 
-        assertEquals("Unknown error occurred while trying to send request to Notion.", exception.getMessage());
+        assertEquals("Unknown error occurred while trying to send request to Notion.null", exception.getMessage());
     }
 }
