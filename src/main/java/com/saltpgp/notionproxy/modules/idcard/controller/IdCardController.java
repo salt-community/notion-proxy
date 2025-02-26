@@ -42,21 +42,6 @@ public class IdCardController {
         return ResponseEntity.ok(UserDto.fromModel(idCardService.getIdCardEmail(email, useCache)));
     }
 
-    @GetMapping("private-email/{private-email}")
-    @Operation(summary = "Get a specific user by private email",
-            description = "Retrieve details of a user by their unique private email.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved user"),
-            @ApiResponse(responseCode = "404", description = "Developer not found"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
-    })
-    public ResponseEntity<UserDto> getIdCardPrivateEmail(
-            @PathVariable("private-email") String privateEmail,
-            @RequestParam(value = "useCache", required = false, defaultValue = "true") boolean useCache)
-            throws NotionException, NotionNotFoundException {
-        log.info("Request received to get user with private email: {}", privateEmail);
-        return ResponseEntity.ok(UserDto.fromModel(idCardService.getIdCardPrivateEmail(privateEmail, useCache)));
-    }
 
     @GetMapping("uuid/{uuid}")
     @Operation(summary = "Get a specific user by uuid",
