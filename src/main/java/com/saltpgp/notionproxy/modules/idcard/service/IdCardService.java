@@ -14,6 +14,7 @@ import java.util.UUID;
 
 import static com.saltpgp.notionproxy.api.notion.filter.NotionServiceFilters.filterBuilder;
 import static com.saltpgp.notionproxy.modules.idcard.service.IdCardMapper.*;
+import static com.saltpgp.notionproxy.modules.idcard.service.IdCardProperty.*;
 import static com.saltpgp.notionproxy.modules.staff.service.StaffProperty.CACHE_ID;
 
 @Service
@@ -53,7 +54,7 @@ public class IdCardService {
         log.debug("Fetching dev by email: {}", email);
         JsonNode response = notionApiService.fetchDatabase(DATABASE_ID, filterBuilder(null, email, FILTER_EMAIL));
         log.debug("Response for dev by email: {}", email);
-        User user = createUserFromNotionPage(response.get("result").get(0));
+        User user = createUserFromNotionPage(response.get(NotionObject.RESULTS).get(0));
         bucketApiService.saveCache(CACHE_ID + email, User.toJsonNode(user));
         return user;
     }
@@ -78,7 +79,7 @@ public class IdCardService {
     }
 
     private User createUserFromNotionPage(JsonNode page) {
-        JsonNode properties = page.get("properties");
+        JsonNode properties = page.get(Results.PROPERTIES);
         return new User(
                 getId(page),
                 getText(properties),
