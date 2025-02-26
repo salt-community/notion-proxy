@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 import static com.saltpgp.notionproxy.api.notion.filter.NotionServiceFilters.filterBuilder;
+import static com.saltpgp.notionproxy.modules.idcard.service.IdCardMapper.*;
 import static com.saltpgp.notionproxy.modules.staff.service.StaffProperty.CACHE_ID;
 
 @Service
@@ -79,12 +80,11 @@ public class IdCardService {
     private User createUserFromNotionPage(JsonNode page) {
         JsonNode properties = page.get("properties");
         return new User(
-                page.get("id").asText(),
-                properties.get("Name").get("title").get(0).get("text").get("content").asText(),
-                properties.get("Course").get("select").get("name").asText(),
-                properties.get("Email").get("email").asText(),
-                properties.get("GitHub").get("url").asText()
+                getId(page),
+                getText(properties),
+                getCourse(properties),
+                getEmail(properties),
+                getGitHub(properties)
         );
     }
-
 }
