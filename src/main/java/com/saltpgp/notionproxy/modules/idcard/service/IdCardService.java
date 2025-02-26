@@ -24,15 +24,6 @@ public class IdCardService {
     private final BucketApiService bucketApiService;
     private final String DATABASE_ID;
 
-    private static final String FILTER_EMAIL = """
-                "filter": {
-                    "property": "Email",
-                    "email": {
-                        "equals": "%s"
-                    }
-                }
-            """;
-
     public IdCardService(NotionApiService notionApiService, BucketApiService bucketApiService, @Value("${DATABASE_ID}") String DATABASE_ID) {
         this.notionApiService = notionApiService;
         this.bucketApiService = bucketApiService;

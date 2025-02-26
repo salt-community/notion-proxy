@@ -2,6 +2,15 @@ package com.saltpgp.notionproxy.modules.idcard.service;
 
 class IdCardProperty {
 
+    public static final String FILTER_EMAIL = """
+                "filter": {
+                    "property": "Email",
+                    "email": {
+                        "equals": "%s"
+                    }
+                }
+            """;
+
     public static final class NotionObject {
         public static final String RESULTS = "results";
     }
