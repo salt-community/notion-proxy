@@ -212,9 +212,8 @@ Retrieve details of a specific user by its email
   "uuid": "123e4567-e89b-12d3-a456-426614174000",
   "name": "John Doe",
   "course": "jfs-sthlm-2024-09-06",
-  "endDate": "2026-09-06",
   "email": "johndoe@appliedtechnology.se",
-  "image": "https://avatars.githubusercontent.com/johndoe"
+  "github": "https://github.com/johndoe"
 }
 ```
 
@@ -235,9 +234,8 @@ Retrieve details of a specific user by its unique ID
   "uuid": "123e4567-e89b-12d3-a456-426614174000",
   "name": "John Doe",
   "course": "jfs-sthlm-2024-09-06",
-  "endDate": "2026-09-06",
   "email": "johndoe@appliedtechnology.se",
-  "image": "https://avatars.githubusercontent.com/johndoe"
+  "github": "https://github.com/johndoe"
 }
 ```
 
