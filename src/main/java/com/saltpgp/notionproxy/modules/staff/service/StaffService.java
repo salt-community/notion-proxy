@@ -29,7 +29,7 @@ public class StaffService {
     private final String CORE_DATABASE_ID, DEV_DATABASE_ID;
     private final BucketApiService BUCKET_API;
 
-    public StaffService(NotionApiService notionApiService, @Value("${CORE_DATABASE_ID}") String coreDatabaseId, @Value("${DATABASE_ID}") String devDatabaseId,
+    public StaffService(NotionApiService notionApiService, @Value("${CORE_DATABASE_ID}") String coreDatabaseId, @Value("${DEV_DATABASE_ID}") String devDatabaseId,
                         BucketApiService bucketApiService) {
         this.notionApiService = notionApiService;
         CORE_DATABASE_ID = coreDatabaseId;
