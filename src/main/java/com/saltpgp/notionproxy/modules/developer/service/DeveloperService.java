@@ -39,7 +39,7 @@ public class DeveloperService {
                 }
             """;
 
-    public DeveloperService(NotionApiService notionApiService, BucketApiService bucketApiService, @Value("${DATABASE_ID}") String DATABASE_ID) {
+    public DeveloperService(NotionApiService notionApiService, BucketApiService bucketApiService, @Value("${DEV_DATABASE_ID}") String DATABASE_ID) {
         this.notionApiService = notionApiService;
         this.bucketApiService = bucketApiService;
         this.DATABASE_ID = DATABASE_ID;

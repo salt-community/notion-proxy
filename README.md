@@ -194,7 +194,6 @@ Retrieve details of a specific assignment by its unique ID
   "comment": "Great improvements in code efficiency and readability."
 }
 ```
-
 ---
 
 ### 8. **`GET /api/id-cards/email/{email}`**
@@ -248,3 +247,62 @@ Retrieve details of a specific user by its unique ID
 - **400 Bad Request**: Returned if the provided parameters are invalid.
 
 ---
+## Running Locally
+
+To run the `notion-proxy` project locally, follow the steps below. This project includes a backend with specific environment configurations.
+
+### 1. Clone the Repository
+First, clone the repository to your local machine:
+
+```bash
+git clone git@github.com:salt-community/notion-proxy.git
+cd notion-proxy
+```
+
+## 2. Backend Setup (Spring Boot)
+
+The backend requires some environment variables to be set in a `.env` file.
+
+### a. Create `.env`
+In the root of the backend directory, create a `.env` file with the following content:
+
+```env
+NOTION_API_KEY=notion_key
+NOTION_URL=notion_url
+NOTION_VERSION=notion_version
+
+DEV_DATABASE_ID=dev_database_uuid
+SCORE_DATABASE_ID=score_database_uuid
+CORE_DATABASE_ID=core_database_uuid
+
+CUSTOM_API_KEY=custom_key
+API_KEY_HEADER=api_header
+
+SUPABASE_URL=supabase_url
+SUPABASE_ANON_KEY=supabase_key
+```
+
+- Replace `notion_key` with the API key for your Notion.
+- Replace `notion_url` with the API url for your Notion.
+- Replace `notion_version` with the API version for your Notion.
+---
+- Replace `dev_database_uuid` with the uuid for your dev database.
+- Replace `score_database_uuid` with the uuid for your dev score.
+- Replace `core_database_uuid` with the uuid for your dev core.
+---
+- Replace `custom_key` with the key to acces this api.
+- Replace `api_header` with the header for the CUSTOM_API_KEY.
+---
+- Replace `supabase_url` with the API url for your supabase.
+- Replace `supabase_key` with the API key for your supabase.
+
+### b. Run the Backend
+To run your Spring Boot application, navigate to the backend directory and use Maven or Gradle to run the application.
+
+For Maven, run:
+
+```bash
+mvn spring-boot:run
+```
+
+Your backend should now be running at http://localhost:8080.
