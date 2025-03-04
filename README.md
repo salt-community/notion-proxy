@@ -195,6 +195,51 @@ Retrieve details of a specific assignment by its unique ID
 }
 ```
 ---
+
+### 8. **`GET /api/id-cards/email/{email}`**
+Retrieve details of a specific user by its email
+
+**Path Parameters**:
+- `email` (string, Email): The identifier for the user.
+
+**Query Parameters**:
+- `useCache` (optional, default: `true`): When `true`, use a cache up to 7 days old.
+
+**Sample Response**:
+```json
+{
+  "uuid": "123e4567-e89b-12d3-a456-426614174000",
+  "name": "John Doe",
+  "course": "jfs-sthlm-2024-09-06",
+  "email": "johndoe@appliedtechnology.se",
+  "github": "https://github.com/johndoe"
+}
+```
+
+---
+
+### 9. **`GET /api/id-cards/uuid/{uuid}`**
+Retrieve details of a specific user by its unique ID
+
+**Path Parameters**:
+- `uuid` (string, UUID): The identifier for the user.
+
+**Query Parameters**:
+- `useCache` (optional, default: `true`): When `true`, use a cache up to 7 days old.
+
+**Sample Response**:
+```json
+{
+  "uuid": "123e4567-e89b-12d3-a456-426614174000",
+  "name": "John Doe",
+  "course": "jfs-sthlm-2024-09-06",
+  "email": "johndoe@appliedtechnology.se",
+  "github": "https://github.com/johndoe"
+}
+```
+
+---
+
 ## Error Handling
 
 - **500 Internal Server Error**: Returned when there is an issue processing the request or if a request to notion failes.
